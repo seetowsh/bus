@@ -48,8 +48,8 @@ footer {
   <!-- CSS  -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link href="https://cdn.rawgit.com/Hi1307/ltabus/b896c394/flaticon.css" rel="stylesheet">
-  <link href="https://cdn.rawgit.com/Hi1307/website/990ddbd1/seetow.me/htdocs/css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
-  <link href="https://cdn.rawgit.com/Hi1307/website/73507e0d/seetow.me/htdocs/css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link href="https://cdn.rawgit.com/Hi1307/website/990ddbd1/seetow.sg/htdocs/css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link href="https://cdn.rawgit.com/Hi1307/website/73507e0d/seetow.sg/htdocs/css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
 </head>
 <body>
 <div class="navbar-fixed">
@@ -57,7 +57,7 @@ footer {
     <div class="nav-wrapper container"><a id="logo-container" href="/" class="brand-logo"><i class="material-icons">arrow_back</i></a>
       <ul class="right hide-on-med-and-down">
               <li><a href="#" onClick="window.location.reload()"><i class="material-icons">refresh</i></a></li>
-      <li><a href="https://translate.google.com/translate?sl=en&tl=ja&js=y&prev=_t&hl=en&ie=UTF-8&u=bus.seetow.me&edit-text=&act=url" target="_blank"><i class="material-icons">translate</i></a></li>
+      <li><a href="https://translate.google.com/translate?sl=en&tl=ja&js=y&prev=_t&hl=en&ie=UTF-8&u=bus.seetow.sg&edit-text=&act=url" target="_blank"><i class="material-icons">translate</i></a></li>
       </ul>
   </nav>
 </div>
@@ -664,7 +664,7 @@ echo '<td style=min-width:50px><a href="https://www.google.com.sg/maps/search/'.
 
     <div class="footer-copyright">
       <div class="container">
-      © 2015-<?php echo date("Y");?> <a class="orange-text text-lighten-3" href="https://seetow.me">See Tow.</a> All Rights Reserved. <a class="orange-text text-lighten-3" href="/en/attribution">Attribution</a>. <? echo $_SERVER["HTTP_CF_CONNECTING_IP"]; ?>
+      © 2015-<?php echo date("Y");?> <a class="orange-text text-lighten-3" href="https://seetow.sg">See Tow.</a> All Rights Reserved. <a class="orange-text text-lighten-3" href="/en/attribution">Attribution</a>. <? echo $_SERVER["HTTP_CF_CONNECTING_IP"]; ?>
       <div id="google_translate_element"></div><script type="text/javascript">
 function googleTranslateElementInit() {
   new google.translate.TranslateElement({pageLanguage: 'en', includedLanguages: 'ja,ko,ms,ta,zh-CN', layout: google.translate.TranslateElement.FloatPosition.TOP_LEFT}, 'google_translate_element');
@@ -677,7 +677,7 @@ function googleTranslateElementInit() {
 
   <!--  Scripts-->
   <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-  <script src="https://cdn.rawgit.com/Hi1307/website/990ddbd1/seetow.me/htdocs/js/materialize.js"></script>
+  <script src="https://cdn.rawgit.com/Hi1307/website/990ddbd1/seetow.sg/htdocs/js/materialize.js"></script>
   <script src="https://cdn.rawgit.com/Hi1307/seetowcdn/903f5ebd/init.js"></script>
 
   </body>

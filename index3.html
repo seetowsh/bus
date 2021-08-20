@@ -243,7 +243,7 @@ $("#btn18").click(function () {
 
     <div class="footer-copyright">
       <div class="container">
-      © 2014-<?php echo date("Y"); ?> <a class="orange-text text-lighten-3" href="https://seetow.me">See Tow.</a> All Rights Reserved.  <? echo $_SERVER["HTTP_CF_CONNECTING_IP"]; ?>
+      © 2014-<?php echo date("Y"); ?> <a class="orange-text text-lighten-3" href="https://seetow.sg">See Tow.</a> All Rights Reserved.  <? echo $_SERVER["HTTP_CF_CONNECTING_IP"]; ?>
       <div id="google_translate_element"></div><script type="text/javascript">
 function googleTranslateElementInit() {
   new google.translate.TranslateElement({pageLanguage: 'en', includedLanguages: 'ja,ko,ms,ta,zh-CN', layout: google.translate.TranslateElement.FloatPosition.TOP_LEFT}, 'google_translate_element');
@@ -283,7 +283,7 @@ function googleTranslateElementInit() {
         map.data.addListener('click', function(event) {
           busstopcode = event.feature.getProperty('busstopcode');
           description = event.feature.getProperty('description');
-          document.getElementById('info-box').innerHTML = '<a href="https://bus.seetow.me/results?stop='+busstopcode+'">'+busstopcode+': '+description+'</a>'; });
+          document.getElementById('info-box').innerHTML = '<a href="https://bus.seetow.sg/results?stop='+busstopcode+'">'+busstopcode+': '+description+'</a>'; });
         infoWindow = new google.maps.InfoWindow;
         // Try HTML5 geolocation.
         if (navigator.geolocation) {
@@ -331,7 +331,7 @@ for(i=1; i<fav.length; i++){
 jQuery("#topbar").prepend('<h6>Your favourite bus stops:</h6>')
 
 function redir(code){
-  window.location = 'https://bus.seetow.me/results?stop='+code
+  window.location = 'https://bus.seetow.sg/results?stop='+code
 }
 
     </script>
