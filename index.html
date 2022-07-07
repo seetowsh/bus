@@ -471,20 +471,20 @@
                 } else {
                   let busno = nusservices[i]["name"];
                   let nusarrtime0 = nusservices[i]["_etas"][0]["eta_s"]
-                  let nusarrtime0 = new Date(nusarrtime0 * 1000).toISOString().substr(14, 5);
+                  let anusarrtime0 = new Date(nusarrtime0 * 1000).toISOString().substr(14, 5);
                   let nusarrtime1 = nusservices[i]["_etas"][1]["eta_s"]
-                  let nusarrtime1 = new Date(nusarrtime1 * 1000).toISOString().substr(14, 5);
-                  if (nusarrtime0.charAt(0) == "-") {
-                      nusarrtime0 = "Very soon!";
+                  let anusarrtime1 = new Date(nusarrtime1 * 1000).toISOString().substr(14, 5);
+                  if (anusarrtime0.charAt(0) == "-") {
+                      anusarrtime0 = "Very soon!";
                   } else {
-                      nusarrtime0 = nusarrtime0 + "&nbsp;mins";
+                      anusarrtime0 = anusarrtime0 + "&nbsp;mins";
                   };
-                  if (nusarrtime1 == "NaN:NaN") {
-                      nusarrtime1 = "";
-                  } else if (nusarrtime1.charAt(0) == "-") {
-                      nusarrtime1 = "Very&nbsp;soon!";
+                  if (anusarrtime1 == "NaN:NaN") {
+                      anusarrtime1 = "";
+                  } else if (anusarrtime1.charAt(0) == "-") {
+                      anusarrtime1 = "Very&nbsp;soon!";
                   } else {
-                      nusarrtime1 = nusarrtime1 + "&nbsp;mins";
+                      anusarrtime1 = anusarrtime1 + "&nbsp;mins";
                   }
                   if (arrtime3 == "NaN:NaN") {
                       arrtime3 = "";
