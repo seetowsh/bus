@@ -259,7 +259,7 @@
         map.locate({setView: true, minZoom: 15});
       
       function onEachFeature(feature, layer) {
-      var popupContent = '<a href="#tableofresults" class="modal-trigger" onClick="javascript: stopno='+feature.properties.busstopcode+';redir()">' +
+      var popupContent = '<a href="#tableofresults" class="modal-trigger" onClick="javascript: stopno='+feature.properties.busstopcode+';nusno='+feature.properties.nuscode+';redir()">' +
         feature.properties.description + ' ('+feature.properties.busstopcode+')</a>';
       
       layer.bindPopup(popupContent);
@@ -341,6 +341,16 @@
         let timenow = Date.now();
       
       });
+        
+      nusurl = "https://stbus.azurewebsites.net/datahandler/arrival.php?id="+nusno;
+        
+        if(nusno.length !== 0){
+      $.getJSON(nusurl, function (json) {
+        nusservices = json["ShuttleServiceResult"]["shuttles"];
+      
+        let timenow = Date.now();
+      
+      });};
       
       
       setInterval(function () {
@@ -348,7 +358,7 @@
           $("#time").empty();
           let timenow = Date.now();
       
-          if (services.length == 0) {
+          if (services.length == 0 && nussservices.length == 0) {
               $("#time").append('<tr><td colspan="5"><p style="text-align:center">Looks like we didn\'t get any buses. This could be because of 1 of several reasons:</p> <ul><li><p>The central server is down. <a href="https://www.lta.gov.sg/content/ltagov/en/contact_us.html" target="_blank">Report issues here</a>.</p></li><p>It\'s late at night. Most buses don\'t run after 12am.</p><p>You have no internet connection.</p></ul><p>The bus stop ID is invalid. It is usually 4-5 digits.</p></ul>  </td></tr>');
           } else {
               for (i = 0; i < services.length; i++) {
@@ -454,6 +464,37 @@
                   }
                   $("#time").append('<tr><td id="bus' + i + '"><a href="https://busrouter.sg/#/services/'+busno+'" target="_blank">' + busno + '</a></td><td>' + wab + load + deck + '<a target="_blank" href="https://www.google.com.sg/maps/search/' + services[i]["NextBus"]["Latitude"] + ',' + services[i]["NextBus"]["Longitude"] + '">' + arrtime + '</a></td><td>' + wab2 + load2 + deck2 + '<a target="_blank" href="https://www.google.com.sg/maps/search/' + services[i]["NextBus2"]["Latitude"] + ',' + services[i]["NextBus2"]["Longitude"] + '">' + arrtime2 + '</a></td><td>' + wab3 + load3 + deck3 + '<a target="_blank" href="https://www.google.com.sg/maps/search/' + services[i]["NextBus3"]["Latitude"] + ',' + services[i]["NextBus3"]["Longitude"] + '">' + arrtime3 + '</a></td></tr>');
       
+              }
+              for (i = 0; i < nusservices.length; i++) {
+                if (nusservices[i]["name"].charAt(0) == "P"){
+                //ignore
+                } else {
+                  let busno = nusservices[i]["name"];
+                  let nusarrtime0 = nusservices[i]["_etas"][0]["eta_s"]
+                  let nusarrtime0 = new Date(nusarrtime0 * 1000).toISOString().substr(14, 5);
+                  let nusarrtime1 = nusservices[i]["_etas"][1]["eta_s"]
+                  let nusarrtime1 = new Date(nusarrtime1 * 1000).toISOString().substr(14, 5);
+                  if (nusarrtime0.charAt(0) == "-") {
+                      nusarrtime0 = "Very soon!";
+                  } else {
+                      nusarrtime0 = nusarrtime0 + "&nbsp;mins";
+                  };
+                  if (nusarrtime1 == "NaN:NaN") {
+                      nusarrtime1 = "";
+                  } else if (nusarrtime1.charAt(0) == "-") {
+                      nusarrtime1 = "Very&nbsp;soon!";
+                  } else {
+                      nusarrtime1 = nusarrtime1 + "&nbsp;mins";
+                  }
+                  if (arrtime3 == "NaN:NaN") {
+                      arrtime3 = "";
+                  } else if (arrtime.charAt(0) == "-") {
+                      arrtime3 = "Very&nbsp;soon!";
+                  } else {
+                      arrtime3 = arrtime3 + "&nbsp;mins";
+                  }
+                  $("#time").append('<tr><td id="bus' + i + '"><a href="https://busrouter.sg/#/services/'+busno+'" target="_blank">' + busno + '</a></td><td><p>' + arrtime + '</p></td><td><p>' + arrtime2 + '</p></td><td><p>' + arrtime3 + '</p></td></tr>');
+                }
               }
           }
       
