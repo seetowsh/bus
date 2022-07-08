@@ -259,7 +259,9 @@ See Tow Bus
         map.locate({setView: true, minZoom: 15});
       
       function onEachFeature(feature, layer) {
-      var popupContent = '<a href="#tableofresults" class="modal-trigger" onClick="stopno='+feature.properties.busstopcode+';nuscode1='+feature.properties.busstopcode+';redir()">' + feature.properties.description + ' ('+feature.properties.busstopcode+')</a>';
+
+      var popupContent = '<a href="#tableofresults" class="modal-trigger" onClick="javascript: stopno='+feature.properties.busstopcode+';nusno="'+feature.properties.nuscode+'";redir()">' +
+        feature.properties.description + ' ('+feature.properties.busstopcode+')</a>';
       layer.bindPopup(popupContent);
       }
       
