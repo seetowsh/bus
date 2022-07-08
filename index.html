@@ -291,14 +291,7 @@
       var value = re.exec(document.cookie);
       return (value != null) ? unescape(value[1]) : null;
       }
-      fav1 = getCookie("fav");
-      fav = fav1.split(",")
-      for(i=1; i<fav.length; i++){
-      stopno = fav[i]
-      stopname = bus_dict[parseInt(stopno)]
-      jQuery("#topbar").prepend('<a class="waves-effect waves-light btn modal-trigger brown" href="#tableofresults" onclick="javascript:stopno='+stopno+';redir()">'+stopname+'</a>')
-      }
-      jQuery("#topbar").prepend('<h6>Your favourite bus stops:</h6>')
+
       
       
       function redirlegacy(code){
@@ -592,6 +585,16 @@
             });
         }
       }
+    </script>
+    <script>
+      fav1 = getCookie("fav");
+      fav = fav1.split(",")
+      for(i=1; i<fav.length; i++){
+      stopno = fav[i]
+      stopname = bus_dict[parseInt(stopno)]
+      jQuery("#topbar").prepend('<a class="waves-effect waves-light btn modal-trigger brown" href="#tableofresults" onclick="javascript:stopno='+stopno+';redir()">'+stopname+'</a>')
+      }
+      jQuery("#topbar").prepend('<h6>Your favourite bus stops:</h6>');
     </script>
   </body>
 </html>
