@@ -260,7 +260,7 @@
       
       function onEachFeature(feature, layer) {
       var popupContent = '<a href="#tableofresults" class="modal-trigger" onClick="javascript: stopno='+feature.properties.busstopcode+';nusno="'+feature.properties.nuscode+'";redir()">' +
-        feature.properties.description + ' ('+feature.properties.busstopcode+'/'+feature.properties.nuscode+')</a>';
+        feature.properties.description + ' ('+feature.properties.busstopcode+')</a>';
       
       layer.bindPopup(popupContent);
       }
@@ -343,7 +343,8 @@
       });
         
       nusurl = "https://stbus.azurewebsites.net/datahandler/nus.php?id="+nusno;
-        
+      console.log(nusurl)  
+
         if(nusno.length !== 0){
       $.getJSON(nusurl, function (json) {
         nusservices = json["ShuttleServiceResult"]["shuttles"];
