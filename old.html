@@ -261,7 +261,7 @@ See Tow Bus
       function onEachFeature(feature, layer) {
       var popupContent = '<a href="#tableofresults" class="modal-trigger" onClick="javascript: stopno='+feature.properties.busstopcode+';redir()">' +
         feature.properties.description + ' ('+feature.properties.busstopcode+')</a>';
-      
+      console.log(feature.properties.nuscode)
       layer.bindPopup(popupContent);
       }
       
