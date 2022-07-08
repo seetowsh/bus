@@ -223,7 +223,7 @@ See Tow Bus
 </div>
 <script src="https://rawcdn.githack.com/Hi1307/epic-website/fbc9b31fb17e548df6a03ca793361c6e2d1dc676/templates/busapp.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-<script src="/geojson2.js"></script>
+<script src="/static/geojson2.js"></script>
 <script src="https://rawcdn.githack.com/Hi1307/epic-website/fbc9b31fb17e548df6a03ca793361c6e2d1dc676/templates/busapp.js"></script>
 <script src="https://rawcdn.githack.com/Hi1307/epic-website/145e340a90c74b45467bb1a4706621f63afd3e30/templates/busapp2.js"></script>
 <script>
@@ -259,7 +259,7 @@ See Tow Bus
         map.locate({setView: true, minZoom: 15});
       
       function onEachFeature(feature, layer) {
-        var popupContent = '<a href="#tableofresults" class="modal-trigger" onClick="javascript: stopno='+feature.properties.busstopcode+';nusno="'+feature.properties.nuscode+'";redir()">' +
+      var popupContent = '<a href="#tableofresults" class="modal-trigger" onClick="javascript: stopno='+feature.properties.busstopcode+';redir()">' +
         feature.properties.description + ' ('+feature.properties.busstopcode+')</a>';
       
       layer.bindPopup(popupContent);
