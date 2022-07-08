@@ -317,7 +317,7 @@
       document.cookie = "fav="+fav1+","+stopno+";expires="+now.toUTCString()+";path=/";
       alert("The bus stop "+bus_dict[parseInt(stopno)]+" has been added!")
       }
-      
+      console.log("checking shit here")
       
       
       function populatetable(){
@@ -511,6 +511,8 @@
           }
       }, 1000);
       }
+
+
       function onSignIn() {
       const googleUser = gapi.auth2.getAuthInstance().currentUser.get();
       const profile = googleUser.getBasicProfile();
