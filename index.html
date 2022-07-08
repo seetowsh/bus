@@ -260,7 +260,7 @@
       
       function onEachFeature(feature, layer) {
       var popupContent = '<a href="#tableofresults" class="modal-trigger" onClick="javascript: stopno='+feature.properties.busstopcode+';nusno="'+feature.properties.nuscode+'";redir()">' +
-        feature.properties.description + ' ('+feature.properties.busstopcode+')</a>';
+        feature.properties.description + ' ('+feature.properties.busstopcode+'/'+feature.properties.nuscode+')</a>';
       
       layer.bindPopup(popupContent);
       }
