@@ -326,7 +326,7 @@
       $("#locbutton").html('<a class="btn waves-effect waves-light modal-trigger" href="https://www.google.com/maps/@?api=1&map_action=pano&viewpoint='+bus_dict2[parseInt(stopno)][0]+','+bus_dict2[parseInt(stopno)][1]+'" target="_blank">location</a>');
       
       
-      url = "https://stbus.azurewebsites.net/datahandler/arrival.php?id="+stopno;
+      globalThis.url = "https://stbus.azurewebsites.net/datahandler/arrival.php?id="+stopno;
       $("#hm").text(bus_dict[parseInt(stopno)]+' ('+stopno+')');
       $.getJSON(url, function (json) {
         services = json["Services"];
@@ -335,16 +335,16 @@
       
       });
         
-      nusurl = "https://stbus.azurewebsites.net/datahandler/nus.php?id="+nusno;
-      console.log(nusurl)  
+      globalThis.nusurl = "https://stbus.azurewebsites.net/datahandler/nus.php?id="+nusno;
+      console.log(nusurl);  
 
-        if(nusno.length !== 0){
+        if (nusno.length !== 0) {
       $.getJSON(nusurl, function (json) {
         nusservices = json["ShuttleServiceResult"]["shuttles"];
       
         let timenow = Date.now();
       
-      });};
+      })};
       
       
       setInterval(function () {
@@ -458,11 +458,9 @@
                   }
                   $("#time").append('<tr><td id="bus' + i + '"><a href="https://busrouter.sg/#/services/'+busno+'" target="_blank">' + busno + '</a></td><td>' + wab + load + deck + '<a target="_blank" href="https://www.google.com.sg/maps/search/' + services[i]["NextBus"]["Latitude"] + ',' + services[i]["NextBus"]["Longitude"] + '">' + arrtime + '</a></td><td>' + wab2 + load2 + deck2 + '<a target="_blank" href="https://www.google.com.sg/maps/search/' + services[i]["NextBus2"]["Latitude"] + ',' + services[i]["NextBus2"]["Longitude"] + '">' + arrtime2 + '</a></td><td>' + wab3 + load3 + deck3 + '<a target="_blank" href="https://www.google.com.sg/maps/search/' + services[i]["NextBus3"]["Latitude"] + ',' + services[i]["NextBus3"]["Longitude"] + '">' + arrtime3 + '</a></td></tr>');
       
-              }
+              };
               for (i = 0; i < nusservices.length; i++) {
-                if (nusservices[i]["name"].charAt(0) == "P"){
-                //ignore
-                } else {
+                if (nusservices[i]["name"].charAt(0) !== "P"){
                   let busno = nusservices[i]["name"];
                   let nusarrtime0 = nusservices[i]["_etas"][0]["eta_s"]
                   let anusarrtime0 = new Date(nusarrtime0 * 1000).toISOString().substr(14, 5);
