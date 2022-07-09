@@ -359,7 +359,7 @@ See Tow Bus
           $("#time").empty();
           let timenow = Date.now();
       
-          if (services.length == 0 && nussservices.length == 0) {
+          if (services.length == 0 && nusservices.length == 0) {
               $("#time").append('<tr><td colspan="5"><p style="text-align:center">Looks like we didn\'t get any buses. This could be because of 1 of several reasons:</p> <ul><li><p>The central server is down. <a href="https://www.lta.gov.sg/content/ltagov/en/contact_us.html" target="_blank">Report issues here</a>.</p></li><p>It\'s late at night. Most buses don\'t run after 12am.</p><p>You have no internet connection.</p></ul><p>The bus stop ID is invalid. It is usually 4-5 digits.</p></ul>  </td></tr>');
           } else {
               for (i = 0; i < services.length; i++) {
