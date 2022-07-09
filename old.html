@@ -133,7 +133,6 @@ See Tow Bus
 <p>Hey, See Tow Bus has been SOUPED UP</p>
 <p>This app is now fully compliant with the Personal Data Protection Act (Amendments) 2021 with the new Google Analytics options.</p>
 <p>We've included NUS campus buses (BETA) for selected bus stops, with NTU buses coming soon.</p>
-<p>As all buses are now wheelchair accessible, the indicator has been removed.</p>
 </div>
 </div>
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -249,7 +248,7 @@ See Tow Bus
           minZoom: 14,
           layers: new L.TileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",{
       bounds: [[1.506417, 103.552020], [1.199572, 104.058765]],
-      attribution: '&copy; 2021 Singapore Land Authority, OneEMap (CARTO), Land Transport Authority'
+      attribution: '&copy; 2022 LTA, SLA, OpenStreetMap'
       }),
       
       
@@ -466,6 +465,35 @@ See Tow Bus
                   }
                   $("#time").append('<tr><td id="bus' + i + '"><a href="https://busrouter.sg/#/services/'+busno+'" target="_blank">' + busno + '</a></td><td>' + wab + load + deck + '<a target="_blank" href="https://www.google.com.sg/maps/search/' + services[i]["NextBus"]["Latitude"] + ',' + services[i]["NextBus"]["Longitude"] + '">' + arrtime + '</a></td><td>' + wab2 + load2 + deck2 + '<a target="_blank" href="https://www.google.com.sg/maps/search/' + services[i]["NextBus2"]["Latitude"] + ',' + services[i]["NextBus2"]["Longitude"] + '">' + arrtime2 + '</a></td><td>' + wab3 + load3 + deck3 + '<a target="_blank" href="https://www.google.com.sg/maps/search/' + services[i]["NextBus3"]["Latitude"] + ',' + services[i]["NextBus3"]["Longitude"] + '">' + arrtime3 + '</a></td></tr>');
       
+                };
+              for (i = 0; i < nusservices.length; i++) {
+                if (nusservices[i]["name"].charAt(0) !== "P"){
+                  let busno = nusservices[i]["name"];
+                  let nusarrtime0 = nusservices[i]["_etas"][0]["eta_s"]
+                  let anusarrtime0 = new Date(nusarrtime0 * 1000).toISOString().substr(14, 5);
+                  let nusarrtime1 = nusservices[i]["_etas"][1]["eta_s"]
+                  let anusarrtime1 = new Date(nusarrtime1 * 1000).toISOString().substr(14, 5);
+                  if (anusarrtime0.charAt(0) == "-") {
+                      anusarrtime0 = "Very soon!";
+                  } else {
+                      anusarrtime0 = anusarrtime0 + "&nbsp;mins";
+                  };
+                  if (anusarrtime1 == "NaN:NaN") {
+                      anusarrtime1 = "";
+                  } else if (anusarrtime1.charAt(0) == "-") {
+                      anusarrtime1 = "Very&nbsp;soon!";
+                  } else {
+                      anusarrtime1 = anusarrtime1 + "&nbsp;mins";
+                  }
+                  if (arrtime3 == "NaN:NaN") {
+                      arrtime3 = "";
+                  } else if (arrtime.charAt(0) == "-") {
+                      arrtime3 = "Very&nbsp;soon!";
+                  } else {
+                      arrtime3 = arrtime3 + "&nbsp;mins";
+                  }
+                  $("#time").append('<tr><td id="bus' + i + '"><a href="https://busrouter.sg/#/services/'+busno+'" target="_blank">' + busno + '</a></td><td><p>' + arrtime + '</p></td><td><p>' + arrtime2 + '</p></td><td><p>' + arrtime3 + '</p></td></tr>');
+                }
               }
           }
       
@@ -481,6 +509,8 @@ See Tow Bus
           }
       }, 1000);
       }
+
+
       function onSignIn() {
       const googleUser = gapi.auth2.getAuthInstance().currentUser.get();
       const profile = googleUser.getBasicProfile();
@@ -561,6 +591,5 @@ See Tow Bus
         }
       }
     </script>
-<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v652eace1692a40cfa3763df669d7439c1639079717194" integrity="sha512-Gi7xpJR8tSkrpF7aordPZQlW2DLtzUlZcumS8dMQjwDHEnw9I7ZLyiOj/6tZStRBGtGgN6ceN6cMH8z7etPGlw==" data-cf-beacon='{"rayId":"727a592e2f5b4947","version":"2022.6.0","r":1,"token":"80ed83f8166a43b9aea9eb6b59c69ab8","si":100}' crossorigin="anonymous"></script>
 </body>
 </html>
