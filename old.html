@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-52921261-6"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-JRBX99XR10"></script>
 <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'UA-52921261-6');
-    </script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-JRBX99XR10');
+</script>
 <meta name="description" content="The best bus time app.">
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#FFFFFF">
@@ -112,7 +113,7 @@
 <title>See Tow Bus</title>
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <link href="https://rawcdn.githack.com/Hi1307/ltabus/b896c394/flaticon.css" rel="stylesheet">
-<link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+<link href="/static/materialize.js" rel="stylesheet">
 </head>
 <body>
 <div class="container">
@@ -129,10 +130,10 @@ See Tow Bus
 <span class="card-title">
 <div class="grid-example col s12 m4"><a href="https://b2.seetow.sg/file/blackblaze-cdn/base+(2).apk"><img style='height: auto; width: 100%; object-fit: contain' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png' /></a></div>
 </span>
-<p>Hey, See Tow here with some updates make See Tow Bus even better!</p>
-<p>We've fixed favourite bus stops so they no longer disappear when you log out of Google.</p>
-<p>We've increased the accuracy of the estimations by applying machine learning to existing data collected. These improvements should see buses arrive within 30 seconds of estimations twice as often.</p>
-<p>We've also made some small bug fixes to make the experience smoother. Thank you for your support, and stay safe out there!</p>
+<p>Hey, See Tow Bus has been SOUPED UP</p>
+<p>This app is now fully compliant with the Personal Data Protection Act (Amendments) 2021 with the new Google Analytics options.</p>
+<p>We've included NUS campus buses (BETA) for selected bus stops, with NTU buses coming soon.</p>
+<p>As all buses are now wheelchair accessible, the indicator has been removed.</p>
 </div>
 </div>
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -221,11 +222,10 @@ See Tow Bus
 <a class="modal-close waves-effect waves-green btn-flat">Close</a>
 </div>
 </div>
-<script src="https://rawcdn.githack.com/Hi1307/epic-website/fbc9b31fb17e548df6a03ca793361c6e2d1dc676/templates/busapp.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+<script src="/static/nusdict.js"></script>
+<script src="/static/materialize.js"></script>
 <script src="/static/geojson2.js"></script>
-<script src="https://rawcdn.githack.com/Hi1307/epic-website/fbc9b31fb17e548df6a03ca793361c6e2d1dc676/templates/busapp.js"></script>
-<script src="https://rawcdn.githack.com/Hi1307/epic-website/145e340a90c74b45467bb1a4706621f63afd3e30/templates/busapp2.js"></script>
+<script src="/static/stopdata.js"></script>
 <script>
       var panorama;
       function initialize() {
@@ -259,11 +259,10 @@ See Tow Bus
         map.locate({setView: true, minZoom: 15});
       
       function onEachFeature(feature, layer) {
-
-      var popupContent = '<a href="#tableofresults" class="modal-trigger" onClick="javascript: stopno='+feature.properties.busstopcode+';nusno="'+feature.properties.nuscode+'";redir()">' +
-        feature.properties.description + ' ('+feature.properties.busstopcode+')</a>';
+        var popupContent = '<a href="#tableofresults" class="modal-trigger" onClick="javascript: stopno='+feature.properties.busstopcode+';redir()">'+feature.properties.description+'('+feature.properties.busstopcode+')</a>';
       layer.bindPopup(popupContent);
       }
+
       
       L.geoJSON(seetowbusgeojson, {
       
@@ -321,6 +320,8 @@ See Tow Bus
 
       
       function populatetable(){
+
+      nuscode = nusstopdict[stopno]
       
       function minTommss(minutes){
         var sign = minutes < 0 ? "-" : "";
@@ -345,7 +346,7 @@ See Tow Bus
       nusurl = "https://stbus.azurewebsites.net/datahandler/nus.php?id="+nuscode;
       console.log(nusurl);  
 
-        if (nuscode.length !== 0) {
+        if (nuscode !== undefined) {
       $.getJSON(nusurl, function (json) {
         nusservices = json["ShuttleServiceResult"]["shuttles"];
       
