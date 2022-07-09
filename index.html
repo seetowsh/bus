@@ -1,15 +1,15 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-52921261-6"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-JRBX99XR10"></script>
 <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'UA-52921261-6');
-    </script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-JRBX99XR10');
+</script>
 <meta name="description" content="The best bus time app.">
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#FFFFFF">
@@ -113,7 +113,7 @@
 <title>See Tow Bus</title>
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <link href="https://rawcdn.githack.com/Hi1307/ltabus/b896c394/flaticon.css" rel="stylesheet">
-<link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+<link href="/static/materialize.css" rel="stylesheet">
 </head>
 <body>
 <div class="container">
@@ -130,10 +130,9 @@ See Tow Bus
 <span class="card-title">
 <div class="grid-example col s12 m4"><a href="https://b2.seetow.sg/file/blackblaze-cdn/base+(2).apk"><img style='height: auto; width: 100%; object-fit: contain' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png' /></a></div>
 </span>
-<p>Hey, See Tow here with some updates make See Tow Bus even better!</p>
-<p>We've fixed favourite bus stops so they no longer disappear when you log out of Google.</p>
-<p>We've increased the accuracy of the estimations by applying machine learning to existing data collected. These improvements should see buses arrive within 30 seconds of estimations twice as often.</p>
-<p>We've also made some small bug fixes to make the experience smoother. Thank you for your support, and stay safe out there!</p>
+<p>Hey, See Tow Bus has been SOUPED UP</p>
+<p>This app is now fully compliant with the Personal Data Protection Act (Amendments) 2021 with the new Google Analytics options.</p>
+<p>We've included NUS campus buses (BETA) for selected bus stops, with NTU buses coming soon.</p>
 </div>
 </div>
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -222,11 +221,10 @@ See Tow Bus
 <a class="modal-close waves-effect waves-green btn-flat">Close</a>
 </div>
 </div>
-<script src="https://rawcdn.githack.com/Hi1307/epic-website/fbc9b31fb17e548df6a03ca793361c6e2d1dc676/templates/busapp.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-<script src="/geojson2.js"></script>
-<script src="https://rawcdn.githack.com/Hi1307/epic-website/fbc9b31fb17e548df6a03ca793361c6e2d1dc676/templates/busapp.js"></script>
-<script src="https://rawcdn.githack.com/Hi1307/epic-website/145e340a90c74b45467bb1a4706621f63afd3e30/templates/busapp2.js"></script>
+<script src="/static/nusdict.js"></script>
+<script src="/static/materialize.js"></script>
+<script src="/static/geojson2.js"></script>
+<script src="/static/stopdata.js"></script>
 <script>
       var panorama;
       function initialize() {
@@ -250,7 +248,7 @@ See Tow Bus
           minZoom: 14,
           layers: new L.TileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",{
       bounds: [[1.506417, 103.552020], [1.199572, 104.058765]],
-      attribution: '&copy; 2021 Singapore Land Authority, OneEMap (CARTO), Land Transport Authority'
+      attribution: '&copy; 2022 LTA, SLA, OpenStreetMap'
       }),
       
       
@@ -260,11 +258,10 @@ See Tow Bus
         map.locate({setView: true, minZoom: 15});
       
       function onEachFeature(feature, layer) {
-      var popupContent = '<a href="#tableofresults" class="modal-trigger" onClick="javascript: stopno='+feature.properties.busstopcode+';redir()">' +
-        feature.properties.description + ' ('+feature.properties.busstopcode+')</a>';
-      
+        var popupContent = '<a href="#tableofresults" class="modal-trigger" onClick="javascript: stopno='+feature.properties.busstopcode+';redir()">'+feature.properties.description+'('+feature.properties.busstopcode+')</a>';
       layer.bindPopup(popupContent);
       }
+
       
       L.geoJSON(seetowbusgeojson, {
       
@@ -318,10 +315,12 @@ See Tow Bus
       document.cookie = "fav="+fav1+","+stopno+";expires="+now.toUTCString()+";path=/";
       alert("The bus stop "+bus_dict[parseInt(stopno)]+" has been added!")
       }
-      
-      
+      console.log("checking shit here")
+
       
       function populatetable(){
+
+      nuscode = nusstopdict[stopno]
       
       function minTommss(minutes){
         var sign = minutes < 0 ? "-" : "";
@@ -343,14 +342,25 @@ See Tow Bus
       
       });
       
+      nusurl = "https://stbus.azurewebsites.net/datahandler/nus.php?id="+nuscode;
+      console.log(nusurl);  
+
+        if (nuscode !== undefined) {
+      $.getJSON(nusurl, function (json) {
+        nusservices = json["ShuttleServiceResult"]["shuttles"];
+      
+        let timenow = Date.now();
+      
+      })};
+      
       
       setInterval(function () {
           $("#fetching").remove();
           $("#time").empty();
           let timenow = Date.now();
       
-          if (services.length == 0) {
-              $("#time").append('<tr><td colspan="5"><p style="text-align:center">Looks like we didn\'t get any buses. This could be because of 1 of several reasons:</p> <ul><li><p>The central server is down. <a href="https://www.lta.gov.sg/content/ltagov/en/contact_us.html" target="_blank">Report issues here</a>.</p></li><p>It\'s late at night. Most buses don\'t run after 12am.</p><p>You have no internet connection.</p></ul><p>The bus stop ID is invalid. It is usually 4-5 digits.</p></ul>  </td></tr>');
+          if (services.length == 0 && nusservices.length == 0) {
+              $("#time").append('<tr><td colspan="5"><p style="text-align:center" id="nightalert ">Looks like we didn\'t get any buses. This could be because of 1 of several reasons:</p> <ul><li><p>The central server is down. <a href="https://www.lta.gov.sg/content/ltagov/en/contact_us.html" target="_blank">Report issues here</a>.</p></li><p>It\'s late at night. Most buses don\'t run after 12am.</p><p>You have no internet connection.</p></ul><p>The bus stop ID is invalid. It is usually 4-5 digits.</p></ul>  </td></tr>');
           } else {
               for (i = 0; i < services.length; i++) {
                   let busno = services[i]["ServiceNo"];
@@ -453,8 +463,40 @@ See Tow Bus
                   } else {
                       deck3 = ""
                   }
-                  $("#time").append('<tr><td id="bus' + i + '"><a href="https://busrouter.sg/#/services/'+busno+'" target="_blank">' + busno + '</a></td><td>' + wab + load + deck + '<a target="_blank" href="https://www.google.com.sg/maps/search/' + services[i]["NextBus"]["Latitude"] + ',' + services[i]["NextBus"]["Longitude"] + '">' + arrtime + '</a></td><td>' + wab2 + load2 + deck2 + '<a target="_blank" href="https://www.google.com.sg/maps/search/' + services[i]["NextBus2"]["Latitude"] + ',' + services[i]["NextBus2"]["Longitude"] + '">' + arrtime2 + '</a></td><td>' + wab3 + load3 + deck3 + '<a target="_blank" href="https://www.google.com.sg/maps/search/' + services[i]["NextBus3"]["Latitude"] + ',' + services[i]["NextBus3"]["Longitude"] + '">' + arrtime3 + '</a></td></tr>');
+                  $("#time").append('<tr><td id="bus' + i + '"><a href="https://landtransportguru.net/nus-isb-'+busno+'/" target="_blank">' + busno + '</a></td><td>' + wab + load + deck + '<a target="_blank" href="https://www.google.com.sg/maps/search/' + services[i]["NextBus"]["Latitude"] + ',' + services[i]["NextBus"]["Longitude"] + '">' + arrtime + '</a></td><td>' + wab2 + load2 + deck2 + '<a target="_blank" href="https://www.google.com.sg/maps/search/' + services[i]["NextBus2"]["Latitude"] + ',' + services[i]["NextBus2"]["Longitude"] + '">' + arrtime2 + '</a></td><td>' + wab3 + load3 + deck3 + '<a target="_blank" href="https://www.google.com.sg/maps/search/' + services[i]["NextBus3"]["Latitude"] + ',' + services[i]["NextBus3"]["Longitude"] + '">' + arrtime3 + '</a></td></tr>');
       
+                };
+              for (i = 0; i < nusservices.length; i++) {
+                if (nusservices[i]["name"].charAt(0) !== "P"){
+                  let busno = nusservices[i]["name"];
+                  let nusarrtime0 = nusservices[i]["_etas"][0]["eta_s"]
+                  console.log(nusarrtime0)
+                  let anusarrtime0 = new Date(nusarrtime0 * 1000).toISOString().substr(11, 8);
+                  let nusarrtime1 = nusservices[i]["_etas"][1]["eta_s"]
+                  let anusarrtime1 = new Date(nusarrtime1 * 1000).toISOString().substr(11, 8);
+                  let nusarrtime2 = nusservices[i]["_etas"][2]["eta_s"]
+                  let anusarrtime2 = new Date(nusarrtime1 * 1000).toISOString().substr(11, 8);
+                  if (anusarrtime0.charAt(0) == "-") {
+                      anusarrtime0 = "Very soon!";
+                  } else {
+                      anusarrtime0 = anusarrtime0 + "&nbsp;hrs";
+                  };
+                  if (anusarrtime1 == "NaN:NaN") {
+                      anusarrtime1 = "";
+                  } else if (anusarrtime1.charAt(0) == "-") {
+                      anusarrtime1 = "Very&nbsp;soon!";
+                  } else {
+                      anusarrtime1 = anusarrtime1 + "&nbsp;hrs";
+                  }
+                  if (anusarrtime2 == "NaN:NaN") {
+                    anusarrtime2 = "";
+                  } else if (anusarrtime2.charAt(0) == "-") {
+                    anusarrtime2 = "Very&nbsp;soon!";
+                  } else {
+                    anusarrtime2 = anusarrtime2 + "&nbsp;hrs";
+                  }
+                  $("#time").append('<tr><td id="bus' + i + '"><a href="https://busrouter.sg/#/services/'+busno+'" target="_blank">' + busno + '</a></td><td><p>' + anusarrtime0 + '</p></td><td><p>' + anusarrtime1 + '</p></td><td><p>' + anusarrtime2 + '</p></td></tr>');   
+                }
               }
           }
       
@@ -470,6 +512,8 @@ See Tow Bus
           }
       }, 1000);
       }
+
+
       function onSignIn() {
       const googleUser = gapi.auth2.getAuthInstance().currentUser.get();
       const profile = googleUser.getBasicProfile();
@@ -550,6 +594,5 @@ See Tow Bus
         }
       }
     </script>
-<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v652eace1692a40cfa3763df669d7439c1639079717194" integrity="sha512-Gi7xpJR8tSkrpF7aordPZQlW2DLtzUlZcumS8dMQjwDHEnw9I7ZLyiOj/6tZStRBGtGgN6ceN6cMH8z7etPGlw==" data-cf-beacon='{"rayId":"7279a3acfaaf18a3","version":"2022.6.0","r":1,"token":"80ed83f8166a43b9aea9eb6b59c69ab8","si":100}' crossorigin="anonymous"></script>
 </body>
 </html>
