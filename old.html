@@ -469,7 +469,7 @@ See Tow Bus
               for (i = 0; i < nusservices.length; i++) {
                 if (nusservices[i]["name"].charAt(0) !== "P"){
                   let busno = nusservices[i]["name"];
-                  let nusarrtime0 = nusservices[i]["_etas"][0]["eta_s"]
+                  window.nusarrtime0 = nusservices[i]["_etas"][0]["eta_s"]
                   console.log(nusarrtime0)
                   let anusarrtime0 = new Date(nusarrtime0 * 1000).toISOString().substr(14, 5);
                   let nusarrtime1 = nusservices[i]["_etas"][1]["eta_s"]
