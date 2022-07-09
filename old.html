@@ -470,6 +470,7 @@ See Tow Bus
                 if (nusservices[i]["name"].charAt(0) !== "P"){
                   let busno = nusservices[i]["name"];
                   let nusarrtime0 = nusservices[i]["_etas"][0]["eta_s"]
+                  console.log(nusarrtime0)
                   let anusarrtime0 = new Date(nusarrtime0 * 1000).toISOString().substr(14, 5);
                   let nusarrtime1 = nusservices[i]["_etas"][1]["eta_s"]
                   let anusarrtime1 = new Date(nusarrtime1 * 1000).toISOString().substr(14, 5);
@@ -477,7 +478,7 @@ See Tow Bus
                   let anusarrtime2 = new Date(nusarrtime1 * 1000).toISOString().substr(14, 5);
                   if (nusarrtime0 >= 3600) {
                     $("#time").append('<tr><td colspan="5"><p style="text-align:center">Looks like we didn\'t get any NUS buses. This could be because of 1 of several reasons:</p> <ul><li><p>The central server is down. <a href="https://play.google.com/store/apps/details?id=nus.ais.mobile.android.shuttlebus" target="_blank">Report issues here</a>.</p></li><p>It\'s late at night. Most buses don\'t run after 12am.</p><p>You have no internet connection.</p></ul><p>The bus stop ID is invalid. It is usually 4-5 digits.</p></ul>  </td></tr>');
-                  }
+                  } else {
                   if (anusarrtime0.charAt(0) == "-") {
                       anusarrtime0 = "Very soon!";
                   } else {
@@ -499,6 +500,7 @@ See Tow Bus
                   }
                   $("#time").append('<tr><td id="bus' + i + '"><a href="https://busrouter.sg/#/services/'+busno+'" target="_blank">' + busno + '</a></td><td><p>' + anusarrtime0 + '</p></td><td><p>' + anusarrtime1 + '</p></td><td><p>' + anusarrtime2 + '</p></td></tr>');
                 }
+              }
               }
           }
       
