@@ -360,7 +360,7 @@ See Tow Bus
           $("#time").empty();
           let timenow = Date.now();
       
-          if (services.length == 0 && nusservices.length == 0) {
+          if (services.length == 0) {
               $("#time").append('<tr><td colspan="5"><p style="text-align:center" id="nightalert ">Looks like we didn\'t get any buses. This could be because of 1 of several reasons:</p> <ul><li><p>The central server is down. <a href="https://www.lta.gov.sg/content/ltagov/en/contact_us.html" target="_blank">Report issues here</a>.</p></li><p>It\'s late at night. Most buses don\'t run after 12am.</p><p>You have no internet connection.</p></ul><p>The bus stop ID is invalid. It is usually 4-5 digits.</p></ul>  </td></tr>');
           } else {
               for (i = 0; i < services.length; i++) {
@@ -466,7 +466,14 @@ See Tow Bus
                   }
                   $("#time").append('<tr><td id="bus' + i + '"><a href="https://busrouter.sg/#/services/'+busno+'" target="_blank">' + busno + '</a></td><td>' + wab + load + deck + '<a target="_blank" href="https://www.google.com.sg/maps/search/' + services[i]["NextBus"]["Latitude"] + ',' + services[i]["NextBus"]["Longitude"] + '">' + arrtime + '</a></td><td>' + wab2 + load2 + deck2 + '<a target="_blank" href="https://www.google.com.sg/maps/search/' + services[i]["NextBus2"]["Latitude"] + ',' + services[i]["NextBus2"]["Longitude"] + '">' + arrtime2 + '</a></td><td>' + wab3 + load3 + deck3 + '<a target="_blank" href="https://www.google.com.sg/maps/search/' + services[i]["NextBus3"]["Latitude"] + ',' + services[i]["NextBus3"]["Longitude"] + '">' + arrtime3 + '</a></td></tr>');
       
-                };
+                }
+          };
+
+                if (nusservices.length == 0) {
+              $("#time").append('<tr><td colspan="5"><p style="text-align:center" id="nightalert ">Looks like we didn\'t get any NUS buses. This could be because of 1 of several reasons:</p> <ul><li><p>The central server is down. <a href="https://www.lta.gov.sg/content/ltagov/en/contact_us.html" target="_blank">Report issues here</a>.</p></li><p>It\'s late at night. Most buses don\'t run after 12am.</p><p>You have no internet connection.</p></ul><p>The bus stop ID is invalid. It is usually 4-5 digits.</p></ul>  </td></tr>');
+          } else if (typeof variable !== 'undefined') { 
+          
+          } else {
               for (i = 0; i < nusservices.length; i++) {
                 if (nusservices[i]["name"].charAt(0) !== "P"){
                   let busno = nusservices[i]["name"];
@@ -499,6 +506,7 @@ See Tow Bus
                 }
               }
           }
+          
       
           if (stopno == "66271" && services.length !== 0) {
               jQuery("#bus0").append("<br>To Ang Mo Kio");
