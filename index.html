@@ -246,11 +246,10 @@ See Tow Bus
           center: {lat: 1.290270, lng: 103.851959},
           zoom: 17,
           minZoom: 14,
-          layers: new L.TileLayer("https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}/?access_token=pk.eyJ1IjoiaGkxMzA3IiwiYSI6ImNsNWY3bjMzZDE4ZjUzZmwxbGg1MTZ4ZXcifQ.Sua88vnFJW0Kr2SVUC0yGA",{
+          layers: new L.TileLayer("http://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}",{
       bounds: [[1.506417, 103.552020], [1.199572, 104.058765]],
-      attribution: '&copy; 2022 Mapbox, SLA, OpenStreetMap',          
-      tileSize: 512,
-      zoomOffset: -1
+      subdomains:['mt0','mt1','mt2','mt3'],
+      attribution: '&copy; 2022 Google, SLA',          
       }),
       
       
@@ -515,6 +514,11 @@ See Tow Bus
       }
 
 
+
+        navigator.geolocation.getCurrentPosition(function(position) {
+  var marker = L.marker([position.coords.latitude,position.coords.longitude]).addTo(mymap);
+      });
+  
       function onSignIn() {
       const googleUser = gapi.auth2.getAuthInstance().currentUser.get();
       const profile = googleUser.getBasicProfile();
