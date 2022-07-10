@@ -246,9 +246,11 @@ See Tow Bus
           center: {lat: 1.290270, lng: 103.851959},
           zoom: 17,
           minZoom: 14,
-          layers: new L.TileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",{
+          tileSize: 512,
+          zoomOffset: -1,
+          layers: new L.TileLayer("https://api.mapbox.com/styles/v1/mapbox/streets-v9/tiles/{z}/{x}/{y}/?access_token=pk.eyJ1IjoiaGkxMzA3IiwiYSI6ImNsNWY3bjMzZDE4ZjUzZmwxbGg1MTZ4ZXcifQ.Sua88vnFJW0Kr2SVUC0yGA",{
       bounds: [[1.506417, 103.552020], [1.199572, 104.058765]],
-      attribution: '&copy; 2022 LTA, SLA, OpenStreetMap'
+      attribution: '&copy; 2022 Mapbox, SLA, OpenStreetMap'
       }),
       
       
