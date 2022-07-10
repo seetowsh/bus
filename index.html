@@ -246,7 +246,7 @@ See Tow Bus
           center: {lat: 1.290270, lng: 103.851959},
           zoom: 17,
           minZoom: 14,
-          layers: new L.TileLayer("http://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}",{
+          layers: new L.TileLayer("https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}",{
       bounds: [[1.506417, 103.552020], [1.199572, 104.058765]],
       subdomains:['mt0','mt1','mt2','mt3'],
       attribution: '&copy; 2022 Google, SLA',          
@@ -515,9 +515,7 @@ See Tow Bus
 
 
 
-        navigator.geolocation.getCurrentPosition(function(position) {
-  var marker = L.marker([position.coords.latitude,position.coords.longitude]).addTo(mymap);
-      });
+
   
       function onSignIn() {
       const googleUser = gapi.auth2.getAuthInstance().currentUser.get();
@@ -598,6 +596,11 @@ See Tow Bus
             });
         }
       }
+    </script>
+    <script>
+              navigator.geolocation.getCurrentPosition(function(position) {
+  var marker = L.marker([position.coords.latitude,position.coords.longitude]).addTo(map);
+      });
     </script>
 </body>
 </html>
