@@ -230,7 +230,7 @@ See Tow Bus
       function initialize() {
         panorama = new google.maps.StreetViewPanorama(document.getElementById('street-view'),
           {
-            position: {lat: bus_dict2[parseInt(stopno)][0], lng: bus_dict2[parseInt(stopno)][1]},
+            position: {lat: bus_dict[parseInt(stopno)][0], lng: bus_dict[parseInt(stopno)][1]},
             pov: {heading: 0, pitch: 0},
             zoom: 1
           });
@@ -292,8 +292,8 @@ See Tow Bus
       fav1 = getCookie("fav");
       fav = fav1.split(",")
       for(i=1; i<fav.length; i++){
-      stopno = fav[i]
-      stopname = bus_dict[parseInt(stopno)]
+      stopno = fav[i];
+      stopname = bus_dict[parseInt(stopno)][2];
       jQuery("#topbar").prepend('<a class="waves-effect waves-light btn modal-trigger brown" href="#tableofresults" onclick="javascript:stopno='+stopno+';redir()">'+stopname+'</a>')
       }
       jQuery("#topbar").prepend('<h6>Your favourite bus stops:</h6>')
@@ -334,7 +334,7 @@ See Tow Bus
       
       
       url = "https://stbus.azurewebsites.net/datahandler/arrival.php?id="+stopno;
-      $("#hm").text(bus_dict[parseInt(stopno)]+' ('+stopno+')');
+      $("#hm").text(bus_dict[parseInt(stopno)][2]+' ('+stopno+')');
       $.getJSON(url, function (json) {
         services = json["Services"];
       
