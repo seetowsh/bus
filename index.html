@@ -313,7 +313,7 @@ See Tow Bus
       var expireTime = time + 5000000*36000;
       now.setTime(expireTime);
       document.cookie = "fav="+fav1+","+stopno+";expires="+now.toUTCString()+";path=/";
-      alert("The bus stop "+bus_dict[parseInt(stopno)]+" has been added!")
+      alert("The bus stop "+bus_dict[parseInt(stopno)][2]+" has been added!")
       }
       console.log("checking shit here")
 
@@ -330,7 +330,7 @@ See Tow Bus
       };
       updateresults();
       
-      $("#locbutton").html('<a class="btn waves-effect waves-light modal-trigger" href="https://www.google.com/maps/@?api=1&map_action=pano&viewpoint='+bus_dict2[parseInt(stopno)][0]+','+bus_dict2[parseInt(stopno)][1]+'" target="_blank">location</a>');
+      $("#locbutton").html('<a class="btn waves-effect waves-light modal-trigger" href="https://www.google.com/maps/@?api=1&map_action=pano&viewpoint='+bus_dict[parseInt(stopno)][0]+','+bus_dict[parseInt(stopno)][1]+'" target="_blank">location</a>');
       
       
       url = "https://stbus.azurewebsites.net/datahandler/arrival.php?id="+stopno;
