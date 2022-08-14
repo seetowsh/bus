@@ -17,7 +17,7 @@ nusstopdict = {
     18331:"KR-MRT",
     18339:"KR-MRT-OPP",
     41021:"BG-MRT",
-    41029:"BG-MRT-OPP",
+    41029:"CG",
     100001:"UTOWN",
     100002:"PGPR",
     100003:"COM2",
