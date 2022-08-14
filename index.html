@@ -505,6 +505,7 @@ See Tow Bus
                   let busno = nusservices[i]["name"];
                   let nusarrtime0 = fancyTimeFormat(nusservices[i]["_etas"][0]["eta_s"])
                   let nusarrtime1 = fancyTimeFormat(nusservices[i]["_etas"][1]["eta_s"])
+                  let nusarrtime2 = fancyTimeFormat(nusservices[i]["_etas"][2]["eta_s"])
                   if (nusarrtime0.charAt(0) == "-") {
                       nusarrtime0 = "Very soon!";
                   } else {
