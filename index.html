@@ -231,7 +231,7 @@ See Tow Bus
       function initialize() {
         panorama = new google.maps.StreetViewPanorama(document.getElementById('street-view'),
           {
-            position: {lat: bus_dict2[parseInt(stopno)][0], lng: bus_dict2[parseInt(stopno)][1]},
+            position: {lat: bus_dict[parseInt(stopno)][0], lng: bus_dict[parseInt(stopno)][1]},
             pov: {heading: 0, pitch: 0},
             zoom: 1
           });
@@ -294,8 +294,8 @@ See Tow Bus
       fav1 = getCookie("fav");
       fav = fav1.split(",")
       for(i=1; i<fav.length; i++){
-      stopno = fav[i]
-      stopname = bus_dict[parseInt(stopno)]
+      stopno = fav[i];
+      stopname = bus_dict[parseInt(stopno)][2];
       jQuery("#topbar").prepend('<a class="waves-effect waves-light btn modal-trigger brown" href="#tableofresults" onclick="javascript:stopno='+stopno+';redir()">'+stopname+'</a>')
       }
       jQuery("#topbar").prepend('<h6>Your favourite bus stops:</h6>')
@@ -315,7 +315,7 @@ See Tow Bus
       var expireTime = time + 5000000*36000;
       now.setTime(expireTime);
       document.cookie = "fav="+fav1+","+stopno+";expires="+now.toUTCString()+";path=/";
-      alert("The bus stop "+bus_dict[parseInt(stopno)]+" has been added!")
+      alert("The bus stop "+bus_dict[parseInt(stopno)][2]+" has been added!")
       }
       console.log("checking shit here")
 
@@ -332,7 +332,7 @@ See Tow Bus
       };
       updateresults();
       
-      $("#locbutton").html('<a class="btn waves-effect waves-light modal-trigger" href="https://www.google.com/maps/@?api=1&map_action=pano&viewpoint='+bus_dict2[parseInt(stopno)][0]+','+bus_dict2[parseInt(stopno)][1]+'" target="_blank">location</a>');
+      $("#locbutton").html('<a class="btn waves-effect waves-light modal-trigger" href="https://www.google.com/maps/@?api=1&map_action=pano&viewpoint='+bus_dict[parseInt(stopno)][0]+','+bus_dict[parseInt(stopno)][1]+'" target="_blank">location</a>');
       
       
       url = "https://bus.api.seetow.sg/LTA?id="+stopno;
@@ -343,7 +343,7 @@ See Tow Bus
         stopid = stopno  
         }
           
-      $("#hm").text(bus_dict[parseInt(stopno)]+' ('+stopid+')');
+      $("#hm").text(bus_dict[parseInt(stopno)][2]+' ('+stopno+')');
       $.getJSON(url, function (json) {
         services = json["Services"];
       
