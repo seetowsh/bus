@@ -336,7 +336,14 @@ See Tow Bus
       
       
       url = "https://bus.api.seetow.sg/LTA?id="+stopno;
-      $("#hm").text(bus_dict[parseInt(stopno)]+' ('+stopno+')');
+        
+        if (stopno > 100000) {
+        stopid = "NUS buses only"
+        } else {
+        stopid = stopno  
+        }
+          
+      $("#hm").text(bus_dict[parseInt(stopno)]+' ('+stopid+')');
       $.getJSON(url, function (json) {
         services = json["Services"];
       
@@ -363,6 +370,8 @@ See Tow Bus
       
           if (services.length == 0) {
               $("#time").append('<tr><td colspan="5"><p style="text-align:center" id="nightalert ">Looks like we didn\'t get any buses. This could be because of 1 of several reasons:</p> <ul><li><p>The central server is down. <a href="https://www.lta.gov.sg/content/ltagov/en/contact_us.html" target="_blank">Report issues here</a>.</p></li><p>It\'s late at night. Most buses don\'t run after 12am.</p><p>You have no internet connection.</p></ul><p>The bus stop ID is invalid. It is usually 4-5 digits.</p></ul>  </td></tr>');
+          } else if (typeof services == 'undefined') {
+            
           } else {
               for (i = 0; i < services.length; i++) {
                   let busno = services[i]["ServiceNo"];
@@ -572,14 +581,11 @@ See Tow Bus
               services = json["Services"];
               updateresults();
               });
-                }, 30000)
-
-setInterval(function(){
-    $.getJSON(nusurl, function (json) {
-        nusservices = json["ShuttleServiceResult"]["shuttles"];
-        updateresults();
-        });
-        }, 10000)
+            $.getJSON(nusurl, function (json) {
+              nusservices = json["ShuttleServiceResult"]["shuttles"];
+               updateresults();
+              });
+        }, 30000)
       
       function updateresults() {
       todayresult = new Date();
