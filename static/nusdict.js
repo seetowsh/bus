@@ -1,4 +1,5 @@
 nusstopdict = {
+    16009:"KRB",
     16141:"SDE3-OPP",
     16151:"JP-SCH-16151",
     16161:"MUSEUM",
@@ -14,5 +15,19 @@ nusstopdict = {
     18321:"UHC-OPP",
     18329:"UHC",
     18331:"KR-MRT",
-    18339:"KR-MRT-OPP"
+    18339:"KR-MRT-OPP",
+    41021:"BG-MRT",
+    41029:"BG-MRT-OPP",
+    100001:"UTOWN",
+    100002:"PGPR",
+    100003:"COM2",
+    100004:"LT13-OPP",
+    100005:"LT13",
+    100006:"AS5",
+    100007:"BIZ2",
+    100008:"HSSML-OPP",
+    100009:"NUSS-OPP",
+    100010:"TCOMS",
+    100011:"PGP",
+    100012:"TCOMS-OPP"
 }
