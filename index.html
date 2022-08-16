@@ -565,31 +565,6 @@ See Tow Bus
       */
       navigator.geolocation.getCurrentPosition(function(position) {
 
-$.get('https://bus.api.seetow.sg/TS?lat='+position.coords.latitude+'&long='+position.coords.longitude, function(html) {
-
-window.crazy = $.parseHTML(html)
-window.htmlhtml = html
-window.data = { html: html }
-
-
-for (i=0; i < crazy.length; i++){
-$("#mehmeh").append('<div class="listofstops">'+crazy[i]+'</div>')
-}
-
-mehmeh = document.getElementsByClassName("listofstops")
-for (i=0; i < crazy.length; i++){
-    stopno = mehmeh[i].innerHTML.substring(23)
-    stopno = Number(stopno)
-    console.log(stopno)
-
-    if (isNaN(stopno) == false){
-    stopname = bus_dict[parseInt(stopno)][2];
-    jQuery("#locationlive").prepend('<a class="waves-effect waves-light btn modal-trigger brown" href="#tableofresults" onclick="javascript:stopno='+stopno+';redir()">'+stopname+'</a>')
-    }
-}
-
-});
-
       jQuery.ajax({
         url:'https://stbus.azurewebsites.net/datahandler/index.php',
         type:'post',
@@ -659,6 +634,33 @@ for (i=0; i < crazy.length; i++){
               navigator.geolocation.getCurrentPosition(function(position) {
   var marker = L.marker([position.coords.latitude,position.coords.longitude]).addTo(map);
       });
+    </script>
+    <script>
+        navigator.geolocation.getCurrentPosition(function(position) {
+          $.get('https://bus.api.seetow.sg/TS?lat='+position.coords.latitude+'&long='+position.coords.longitude, function(html) {
+
+window.crazy = $.parseHTML(html)
+window.htmlhtml = html
+window.data = { html: html }
+
+
+for (i=0; i < crazy.length; i++){
+$("#mehmeh").append('<div class="listofstops">'+crazy[i]+'</div>')
+}
+
+mehmeh = document.getElementsByClassName("listofstops")
+for (i=0; i < crazy.length; i++){
+    stopno = mehmeh[i].innerHTML.substring(23)
+    stopno = Number(stopno)
+    console.log(stopno)
+
+    if (isNaN(stopno) == false){
+    stopname = bus_dict[parseInt(stopno)][2];
+    jQuery("#locationlive").prepend('<a class="waves-effect waves-light btn modal-trigger brown" href="#tableofresults" onclick="javascript:stopno='+stopno+';redir()">'+stopname+'</a>')
+    }
+}
+
+});      });
     </script>
 </body>
 </html>
