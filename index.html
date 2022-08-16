@@ -509,7 +509,7 @@ See Tow Bus
                   } else {
                       nusarrtime0 = nusarrtime0;
                   };
-                  if (nusarrtime1 == "NaN:NaN") {
+                  if (typeof nusarrtime1 == 'undefined') {
                       nusarrtime1 = "";
                   } else if (nusarrtime1.charAt(0) == "-") {
                       nusarrtime1 = "Very&nbsp;soon!";
