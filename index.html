@@ -650,8 +650,7 @@ $("#mehmeh").append('<div class="listofstops">'+crazy[i]+'</div>')
 
 mehmeh = document.getElementsByClassName("listofstops")
 for (i=0; i < crazy.length; i++){
-    stopno = mehmeh[i].innerHTML.substring(10)
-    console.log(stopno)
+    stopno = mehmeh[i].innerHTML.substring(26)
     stopno = Number(stopno)
 
     if (isNaN(stopno) == false){
