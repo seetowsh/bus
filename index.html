@@ -650,9 +650,9 @@ $("#mehmeh").append('<div class="listofstops">'+crazy[i]+'</div>')
 
 mehmeh = document.getElementsByClassName("listofstops")
 for (i=0; i < crazy.length; i++){
-    stopno = mehmeh[i].innerHTML.substring(23)
-    stopno = Number(stopno)
+    stopno = mehmeh[i].innerHTML.substring(10)
     console.log(stopno)
+    stopno = Number(stopno)
 
     if (isNaN(stopno) == false){
     stopname = bus_dict[parseInt(stopno)][2];
