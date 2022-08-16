@@ -151,6 +151,8 @@ See Tow Bus
 <p>Click or tap on the red markers to get the results</p>
 <div id="map"></div>
 <div id="topbar"></div>
+<div id="locationlive"></div>
+<div id="mehmeh" style="display:none;"></div>
 </div>
 </div>
 </div>
@@ -562,6 +564,32 @@ See Tow Bus
       });
       */
       navigator.geolocation.getCurrentPosition(function(position) {
+
+$.get('https://bus.api.seetow.sg/TS?lat='+position.coords.latitude+'&long='+position.coords.longitude, function(html) {
+
+window.crazy = $.parseHTML(html)
+window.htmlhtml = html
+window.data = { html: html }
+
+
+for (i=0; i < crazy.length; i++){
+$("#mehmeh").append('<div class="listofstops">'+crazy[i]+'</div>')
+}
+
+mehmeh = document.getElementsByClassName("listofstops")
+for (i=0; i < crazy.length; i++){
+    stopno = mehmeh[i].innerHTML.substring(23)
+    stopno = Number(stopno)
+    console.log(stopno)
+
+    if (isNaN(stopno) == false){
+    stopname = bus_dict[parseInt(stopno)][2];
+    jQuery("#locationlive").prepend('<a class="waves-effect waves-light btn modal-trigger brown" href="#tableofresults" onclick="javascript:stopno='+stopno+';redir()">'+stopname+'</a>')
+    }
+}
+
+});
+
       jQuery.ajax({
         url:'https://stbus.azurewebsites.net/datahandler/index.php',
         type:'post',
@@ -597,7 +625,10 @@ See Tow Bus
       timeresult = todayresult.toLocaleTimeString();
       $("#resultupdate").text(timeresult)
       }
-          
+       
+      
+
+
     </script>
 <script src="https://apis.google.com/js/platform.js" async defer></script>
 <script>
