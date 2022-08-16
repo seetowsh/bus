@@ -508,16 +508,14 @@ See Tow Bus
                       nusarrtime0 = nusarrtime0;
                   };
                   if (typeof nusservices[i]["_etas"][1] == 'undefined') {
-                      nusarrtime1 = "";
+                    nusarrtime1 = "";
                   } else {
-                      let nusarrtime1 = fancyTimeFormat(nusservices[i]["_etas"][1]["eta_s"])
-                      nusarrtime1 = nusarrtime1;
+                    nusarrtime1 = fancyTimeFormat(nusservices[i]["_etas"][1]["eta_s"]);
                   }
                   if (typeof nusservices[i]["_etas"][2] == 'undefined') {
                     nusarrtime2 = "";
                   } else {
-                    let nusarrtime2 = fancyTimeFormat(nusservices[i]["_etas"][2]["eta_s"])
-                    nusarrtime2 = nusarrtime2;
+                    nusarrtime2 = fancyTimeFormat(nusservices[i]["_etas"][2]["eta_s"]);
                   }
                   $("#time").append('<tr><td id="bus' + i + '"><a href="https://landtransportguru.net/nus-isb-'+busno+'/" target="_blank">' + busno + '</a></td><td><p>' + nusarrtime0 + '</p></td><td><p>' + nusarrtime1 + '</p></td><td><p>' + nusarrtime2 + '</p></td></tr>');   
                 }
