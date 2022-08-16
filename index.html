@@ -651,7 +651,7 @@ $("#mehmeh").append('<div class="listofstops">'+crazy[i]+'</div>')
 }
 
 mehmeh = document.getElementsByClassName("listofstops")
-for (i=0; i < crazy.length; i++){
+for (i=crazy.length; i > 0; i--){
     stopno = mehmeh[i].innerHTML.substring(34)
     console.log(stopno)
     stopno = Number(stopno)
