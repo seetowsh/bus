@@ -654,7 +654,7 @@ $("#mehmeh").append('<div class="listofstops">'+crazy[i]+'</div>')
 
 mehmeh = document.getElementsByClassName("listofstops");
 
-jQuery( '#locationcheck' ).text("Checking, please wait...");
+jQuery( '#nearbycheck' ).text("Checking, please wait...");
 for (i=0; i < crazy.length; i++){
     stopno = mehmeh[i].innerHTML.substring(34)
     console.log(stopno)
@@ -665,7 +665,7 @@ for (i=0; i < crazy.length; i++){
     jQuery("#locationlive").append('<a class="waves-effect waves-light btn modal-trigger brown" href="#tableofresults" onclick="javascript:stopno='+stopno+';redir()">'+stopname+'</a>')
     }
 }
-jQuery( '#locationcheck' ).remove();
+jQuery( '#nearbycheck' ).remove();
 
 
 });      });
