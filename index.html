@@ -640,6 +640,9 @@ See Tow Bus
     <script>
  
 function activatenearby(){ 
+
+  jQuery( '#nearbycheck' ).text("Checking, please wait...");
+
         navigator.geolocation.getCurrentPosition(function(position) {
           $.get('https://bus.api.seetow.sg/TS?lat='+position.coords.latitude+'&long='+position.coords.longitude, function(html) {
 
@@ -654,7 +657,6 @@ $("#mehmeh").append('<div class="listofstops">'+crazy[i]+'</div>')
 
 mehmeh = document.getElementsByClassName("listofstops");
 
-jQuery( '#nearbycheck' ).text("Checking, please wait...");
 for (i=0; i < crazy.length; i++){
     stopno = mehmeh[i].innerHTML.substring(34)
     console.log(stopno)
