@@ -153,7 +153,7 @@ See Tow Bus
 <div id="topbar"></div>
 <br />
 <h6>Nearby bus stops (nearest to furthest):</h6>
-<div id="locationlive"><a class="waves-effect waves-light btn modal-trigger brown" onclick="javascript:activatenearby()"><span id="nearbycheck">Find nearby bus stops</span></a></div>
+<div id="locationlive"><a class="waves-effect waves-light btn modal-trigger brown" id="nearbycheck2" onclick="javascript:activatenearby()"><span id="nearbycheck">Find nearby bus stops</span></a></div>
 <div id="mehmeh" style="display:none;"></div>
 </div>
 </div>
@@ -665,8 +665,9 @@ for (i=0; i < crazy.length; i++){
     jQuery("#locationlive").append('<a class="waves-effect waves-light btn modal-trigger brown" href="#tableofresults" onclick="javascript:stopno='+stopno+';redir()">'+stopname+'</a>')
     }
 }
-jQuery( '#nearbycheck' ).remove();
-
+setTimeout(function() {
+jQuery( '#nearbycheck2' ).remove();
+}, 2000);
 
 });      });
 }
