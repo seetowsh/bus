@@ -358,8 +358,8 @@
       return (value != null) ? unescape(value[1]) : null;
       }
       fav1 = getCookie("fav");
+      if (fav1 !== null){
       fav = fav1.split(",")
-      if (typeof fav !== 'undefined'){
       for(i=1; i<fav.length; i++){
       stopno = fav[i];
       stopname = bus_dict[parseInt(stopno)][2];
