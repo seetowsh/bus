@@ -1,24 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-JRBX99XR10"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-JRBX99XR10');
-</script>
-<meta name="description" content="The best bus time app.">
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#FFFFFF">
-<link rel="apple-touch-icon" href="https://i.imgur.com/9tVaenz.png">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="google-signin-client_id" content="35800995045-u54nb2hltd3kl9vuhrhjq3eca2k5110u.apps.googleusercontent.com">
-<script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" />
-<script>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-JRBX99XR10"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      
+      gtag('config', 'G-JRBX99XR10');
+    </script>
+    <meta name="description" content="The best bus time app.">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#FFFFFF">
+    <link rel="apple-touch-icon" href="https://i.imgur.com/9tVaenz.png">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="google-signin-client_id" content="35800995045-u54nb2hltd3kl9vuhrhjq3eca2k5110u.apps.googleusercontent.com">
+    <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" />
+    <script>
       var OneSignal = window.OneSignal || [];
       OneSignal.push(function() {
         OneSignal.init({
@@ -26,19 +28,19 @@
         });
       });
     </script>
-<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-<script>
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
       (adsbygoogle = window.adsbygoogle || []).push({
         google_ad_client: "ca-pub-9218984794093639",
         enable_page_level_ads: true
       });
     </script>
-<script>
+    <script>
       function goBack() {
           window.history.back();
       }
     </script>
-<style type="text/css">
+    <style type="text/css">
       .instagram-media{
       margin: 15px auto !important;
       }
@@ -84,12 +86,15 @@
       .modal .modal-content {
       background-color: #333;
       }
+      .collapsible-header{
+        background-color: #333 !important;
+      }
       }
     </style>
-<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.css" />
-<link href="https://fonts.googleapis.com/css?family=Livvic|Nunito+Sans&display=swap" rel="stylesheet">
-<script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.js"></script>
-<script>
+    <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.css" />
+    <link href="https://fonts.googleapis.com/css?family=Livvic|Nunito+Sans&display=swap" rel="stylesheet">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.js"></script>
+    <script>
       window.addEventListener("load", function(){
       window.cookieconsent.initialise({
         "palette": {
@@ -108,132 +113,183 @@
         }
       })});
     </script>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>See Tow Bus</title>
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-<link href="https://rawcdn.githack.com/Hi1307/ltabus/b896c394/flaticon.css" rel="stylesheet">
-<link href="/static/materialize.css" rel="stylesheet">
-</head>
-<body>
-<div class="container">
-<div class="section">
-<div class="row">
-<h4 class="center">Welcome<span id="welmsg"></span> to</h4>
-<h3 class="center" style="font-family:Livvic">
-See Tow Bus
-</h3>
-<div class="g-signin2" data-onsuccess="onSignIn"></div>
-<span id="signout"></span>
-<div class="card blue-grey darken-1">
-<div class="card-content white-text">
-<p>Hey, See Tow Bus has been SOUPED UP</p>
-<p>This app is now fully compliant with the Personal Data Protection Act (Amendments) 2021 with the new Google Analytics options.</p>
-<p>We've included NUS campus buses (BETA) for selected bus stops, with NTU buses coming soon.</p>
-</div>
-</div>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<div id="stopsearch">
-<p class="center">Enter a bus stop ID to view the next buses</p>
-<div class="input-field col s6 offset-s3">
-<form action="bus.php" method="POST">
-<input placeholder="Bus Stop ID (4 or 5 digits)" id="field1" name="field1" type="number">
-<a class="waves-effect waves-light btn modal-trigger" href="#tableofresults" onClick="javascript: stopno=document.getElementById('field1').value;redir()">Search</a>
-</form>
-</div>
-<div class="input-field col s12">
-<hr>
-<h6>Bus stop map</h6>
-<p>Click or tap on the red markers to get the results</p>
-<div id="map"></div>
-<div id="topbar"></div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<footer class="page-footer black">
-<div class="footer-copyright">
-<div class="container">
-&copy; 2014-2022 <a class="orange-text text-lighten-3" href="https://seetow.sg">See Tow.</a> All Rights Reserved.
-<div id="google_translate_element"></div>
-<script type="text/javascript">
+    <title>See Tow Bus</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://rawcdn.githack.com/Hi1307/ltabus/b896c394/flaticon.css" rel="stylesheet">
+    <link href="/static/materialize.css" rel="stylesheet">
+  </head>
+  <body>
+    <div class="container">
+      <div class="section">
+        <div class="row">
+          <h4 class="center">Welcome<span id="welmsg"></span> to</h4>
+          <h3 class="center" style="font-family:Livvic">
+            See Tow Bus
+          </h3>
+          <div class="g-signin2" data-onsuccess="onSignIn"></div>
+          <span id="signout"></span>
+          <div class="card blue-grey darken-1">
+            <div class="card-content white-text">
+              <span class="card-title">
+                <div class="grid-example col s12 m4"></div>
+              </span>
+              <p>Hey, See Tow Bus has been SOUPED UP</p>
+              <p>This app is now fully compliant with the Personal Data Protection Act (Amendments) 2021 with the new Google Analytics options.</p>
+              <p>We also fully migrated away from PHP, with backend handled by Node on Cloudflare Workers.</p>
+              <p>We've included NUS campus buses (BETA) for selected bus stops, with NTU buses coming soon.</p>
+            </div>
+          </div>
+          <meta name="viewport" content="width=device-width, initial-scale=1">
+          <div id="stopsearch">
+            <p class="center">Enter a bus stop ID to view the next buses</p>
+            <div class="input-field col s6 offset-s3">
+              <input placeholder="Bus Stop ID (4 or 5 digits)" id="field1" name="field1" type="number">
+              <a class="waves-effect waves-light btn modal-trigger" id="field1btn" href="#tableofresults" onClick="javascript: stopno=document.getElementById('field1').value;redir()">Search</a>
+            </div>
+            <div class="input-field col s12">
+              <hr>
+              <h6>Bus stop map</h6>
+              <p>Click or tap on the red markers to get the results</p>
+              <div id="map"></div>
+              <div id="topbar"></div>
+              <br />
+              <h6>Nearby bus stops (nearest to furthest):</h6>
+              <div id="locationlive"><a class="waves-effect waves-light btn modal-trigger brown" id="nearbycheck2" onclick="javascript:activatenearby()"><span id="nearbycheck">Find nearby bus stops</span></a></div>
+              <div id="mehmeh" style="display:none;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <footer class="page-footer black">
+      <div class="footer-copyright">
+        <div class="container">
+          &copy; 2014-2022 <a class="orange-text text-lighten-3" href="https://seetow.sg">See Tow</a> Technologies (CRN: 202258286G).
+          <br />
+          <a class="orange-text text-lighten-3 modal-trigger" href="#licenses">OSS Licenses</a>
+          <div id="google_translate_element"></div>
+          <script type="text/javascript">
             function googleTranslateElementInit() {
               new google.translate.TranslateElement({pageLanguage: 'en', includedLanguages: 'ja,ko,ms,ta,zh-CN', layout: google.translate.TranslateElement.FloatPosition.TOP_LEFT}, 'google_translate_element');
             }
           </script><script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-<div id="outdated"></div>
-</div>
-</div>
-</footer>
-<div id="legend" class="modal">
-<div class="modal-content">
-<table class="striped responsive-table">
-<br />
-<thead>
-<th>Legend</th>
-</thead>
-<tr>
-<td>Space</td>
-<td><i class="material-icons">airline_seat_recline_normal</i>Seating available</td>
-<td><i class="material-icons">directions_walk</i>Standing space</td>
-<td><i class="material-icons">wc</i>Limited standing space</td>
-</tr>
-<tr>
-<td>Type of bus</td>
-<td><i class="material-icons">filter_1</i> Single decker</td>
-<td><i class="material-icons">filter_2</i> Double decker</td>
-<td>🅱️ Bendy/Articulated bus</td>
-</tr>
-</table>
-</div>
-<div class="modal-footer">
-<a class="modal-close waves-effect waves-green btn-flat">Close</a>
-</div>
-</div>
-<div id="tableofresults" class="modal">
-<div class="modal-content">
-<div id="resultstable">
-<h2 class="center"><span id="hm"></span></h2>
-<p class="center"><a class="btn waves-effect waves-light modal-close"><i class="material-icons">arrow_back</i></a><span id="locbutton"></span><a class="btn waves-effect waves-light modal-trigger" href="#legend">legend</a><a class="btn waves-effect waves-light" onClick="updatecookie();"><i class="material-icons">star</i></a></p>
-<p class="center">Results were last fetched from the server at <span id="resultupdate"></span></p>
-<table>
-<thead>
-<th style=min-width:90px>Bus Number</th>
-<th style=min-width:90px>Time (1)</th>
-<th style=min-width:90px>Time (2)</th>
-<th style=min-width:90px>Time (3)</th>
-</thead>
-<tbody id="time">
-<tr id="fetching">
-<td colspan="5">
-<p style="text-align:center">Calculating timings. Please wait.</p>
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<div class="modal-footer">
-<a class="modal-close waves-effect waves-green btn-flat">Close</a>
-</div>
-</div>
-<script src="/static/nusdict.js"></script>
-<script src="/static/materialize.js"></script>
-<script src="/static/geojson2.js"></script>
-<script src="/static/stopdata.js"></script>
-<script>
+          <div id="outdated"></div>
+        </div>
+      </div>
+    </footer>
+    <div id="legend" class="modal">
+      <div class="modal-content">
+        <table class="striped responsive-table">
+          <br />
+          <thead>
+            <th>Legend</th>
+          </thead>
+          <tr>
+            <td>Space</td>
+            <td><i class="material-icons">airline_seat_recline_normal</i>Seating available</td>
+            <td><i class="material-icons">directions_walk</i>Standing space</td>
+            <td><i class="material-icons">wc</i>Limited standing space</td>
+          </tr>
+          <tr>
+            <td>Type of bus</td>
+            <td><i class="material-icons">filter_1</i> Single decker</td>
+            <td><i class="material-icons">filter_2</i> Double decker</td>
+            <td>🅱️ Bendy/Articulated bus</td>
+          </tr>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <a class="modal-close waves-effect waves-green btn-flat">Close</a>
+      </div>
+    </div>
+    <div id="licenses" class="modal">
+      <div class="modal-content">
+        <ul class="collapsible">
+          <li>
+            <div class="collapsible-header">Cookie Consent</div>
+            <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+          </li>
+          <li>
+            <div class="collapsible-header">Data.gov.sg</div>
+            <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+          </li>
+          <li>
+            <div class="collapsible-header">Electron</div>
+            <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+          </li>
+          <li>
+            <div class="collapsible-header">Google Fonts</div>
+            <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+          </li>
+          <li>
+            <div class="collapsible-header">jQuery</div>
+            <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+          </li>
+          <li>
+            <div class="collapsible-header">Leaflet</div>
+            <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+          </li>
+          <li>
+            <div class="collapsible-header">Materialize</div>
+            <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+          </li>
+          <li>
+            <div class="collapsible-header">Open Government Products</div>
+            <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+          </li>
+          <li>
+            <div class="collapsible-header">OpenStreetMap</div>
+            <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+          </li>
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <a class="modal-close waves-effect waves-green btn-flat">Close</a>
+      </div>
+    </div>
+    <div id="tableofresults" class="modal">
+      <div class="modal-content">
+        <div id="resultstable">
+          <h2 class="center"><span id="hm"></span></h2>
+          <p class="center"><a class="btn waves-effect waves-light modal-close"><i class="material-icons">arrow_back</i></a><span id="locbutton"></span><a class="btn waves-effect waves-light modal-trigger" href="#legend">legend</a><a class="btn waves-effect waves-light" onClick="updatecookie();"><i class="material-icons">star</i></a></p>
+          <p class="center">Results were last fetched from the server at <span id="resultupdate"></span></p>
+          <table>
+            <thead>
+              <th style=min-width:90px>Bus Number</th>
+              <th style=min-width:90px>Time (1)</th>
+              <th style=min-width:90px>Time (2)</th>
+              <th style=min-width:90px>Time (3)</th>
+            </thead>
+            <tbody id="time">
+              <tr id="fetching">
+                <td colspan="5">
+                  <p style="text-align:center">Calculating timings. Please wait.</p>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <a class="modal-close waves-effect waves-green btn-flat">Close</a>
+      </div>
+    </div>
+    <script src="/static/nusdict.js"></script>
+    <script src="/static/materialize.js"></script>
+    <script src="/static/geojson2.js"></script>
+    <script src="/static/stopdata.js"></script>
+    <script>
       var panorama;
       function initialize() {
         panorama = new google.maps.StreetViewPanorama(document.getElementById('street-view'),
           {
-            position: {lat: bus_dict2[parseInt(stopno)][0], lng: bus_dict2[parseInt(stopno)][1]},
+            position: {lat: bus_dict[parseInt(stopno)][0], lng: bus_dict[parseInt(stopno)][1]},
             pov: {heading: 0, pitch: 0},
             zoom: 1
           });
       }
     </script>
-<script>
+    <script>
       $(document).ready(function(){
         $('.modal').modal();
       });
@@ -243,9 +299,10 @@ See Tow Bus
           center: {lat: 1.290270, lng: 103.851959},
           zoom: 17,
           minZoom: 14,
-          layers: new L.TileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",{
+          layers: new L.TileLayer("https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}",{
       bounds: [[1.506417, 103.552020], [1.199572, 104.058765]],
-      attribution: '&copy; 2022 LTA, SLA, OpenStreetMap'
+      subdomains:['mt0','mt1','mt2','mt3'],
+      attribution: '&copy; 2022 Google, SLA',          
       }),
       
       
@@ -258,7 +315,7 @@ See Tow Bus
         var popupContent = '<a href="#tableofresults" class="modal-trigger" onClick="javascript: stopno='+feature.properties.busstopcode+';redir()">'+feature.properties.description+'('+feature.properties.busstopcode+')</a>';
       layer.bindPopup(popupContent);
       }
-
+      
       
       L.geoJSON(seetowbusgeojson, {
       
@@ -289,8 +346,8 @@ See Tow Bus
       fav1 = getCookie("fav");
       fav = fav1.split(",")
       for(i=1; i<fav.length; i++){
-      stopno = fav[i]
-      stopname = bus_dict[parseInt(stopno)]
+      stopno = fav[i];
+      stopname = bus_dict[parseInt(stopno)][2];
       jQuery("#topbar").prepend('<a class="waves-effect waves-light btn modal-trigger brown" href="#tableofresults" onclick="javascript:stopno='+stopno+';redir()">'+stopname+'</a>')
       }
       jQuery("#topbar").prepend('<h6>Your favourite bus stops:</h6>')
@@ -310,13 +367,29 @@ See Tow Bus
       var expireTime = time + 5000000*36000;
       now.setTime(expireTime);
       document.cookie = "fav="+fav1+","+stopno+";expires="+now.toUTCString()+";path=/";
-      alert("The bus stop "+bus_dict[parseInt(stopno)]+" has been added!")
+      alert("The bus stop "+bus_dict[parseInt(stopno)][2]+" has been added!")
       }
-      console.log("checking shit here")
-
+      function fancyTimeFormat(duration) {   
+      // Hours, minutes and seconds
+      var hrs = ~~(duration / 3600);
+      var mins = ~~((duration % 3600) / 60);
+      var secs = ~~duration % 60;
+      
+      // Output like "1:01" or "4:03:59" or "123:03:59"
+      var ret = "";
+      
+      if (hrs > 0) {
+        ret += "" + hrs + ":" + (mins < 10 ? "0" : "");
+      }
+      
+      ret += "" + mins + ":" + (secs < 10 ? "0" : "");
+      ret += "" + secs;
+      return ret;
+      }
+      
       
       function populatetable(){
-
+      
       nuscode = nusstopdict[stopno]
       
       function minTommss(minutes){
@@ -327,11 +400,18 @@ See Tow Bus
       };
       updateresults();
       
-      $("#locbutton").html('<a class="btn waves-effect waves-light modal-trigger" href="https://www.google.com/maps/@?api=1&map_action=pano&viewpoint='+bus_dict2[parseInt(stopno)][0]+','+bus_dict2[parseInt(stopno)][1]+'" target="_blank">location</a>');
+      $("#locbutton").html('<a class="btn waves-effect waves-light modal-trigger" href="https://www.google.com/maps/@?api=1&map_action=pano&viewpoint='+bus_dict[parseInt(stopno)][0]+','+bus_dict[parseInt(stopno)][1]+'" target="_blank">location</a>');
       
       
-      url = "https://stbus.azurewebsites.net/datahandler/arrival.php?id="+stopno;
-      $("#hm").text(bus_dict[parseInt(stopno)]+' ('+stopno+')');
+      url = "https://bus.api.seetow.sg/LTA?id="+stopno;
+        
+        if (stopno > 100000) {
+        stopid = "NUS"
+        } else {
+        stopid = stopno  
+        }
+          
+      $("#hm").text(bus_dict[parseInt(stopno)][2]+' ('+stopid+')');
       $.getJSON(url, function (json) {
         services = json["Services"];
       
@@ -339,9 +419,9 @@ See Tow Bus
       
       });
       
-      nusurl = "https://stbus.azurewebsites.net/datahandler/nus.php?id="+nuscode;
+      nusurl = "https://bus.api.seetow.sg/NUS?id="+nuscode;
       console.log(nusurl);  
-
+      
         if (nuscode !== undefined) {
       $.getJSON(nusurl, function (json) {
         nusservices = json["ShuttleServiceResult"]["shuttles"];
@@ -356,8 +436,10 @@ See Tow Bus
           $("#time").empty();
           let timenow = Date.now();
       
-          if (services.length == 0 && nusservices.length == 0) {
-              $("#time").append('<tr><td colspan="5"><p style="text-align:center" id="nightalert ">Looks like we didn\'t get any buses. This could be because of 1 of several reasons:</p> <ul><li><p>The central server is down. <a href="https://www.lta.gov.sg/content/ltagov/en/contact_us.html" target="_blank">Report issues here</a>.</p></li><p>It\'s late at night. Most buses don\'t run after 12am.</p><p>You have no internet connection.</p></ul><p>The bus stop ID is invalid. It is usually 4-5 digits.</p></ul>  </td></tr>');
+          if (stopid !== stopno) {
+      
+          } else if (services.length == 0) {
+            $("#time").append('<tr><td colspan="5"><p style="text-align:center" id="nightalert ">Looks like we didn\'t get any buses. This could be because of 1 of several reasons:</p> <ul><li><p>The central server is down. <a href="https://www.lta.gov.sg/content/ltagov/en/contact_us.html" target="_blank">Report issues here</a>.</p></li><p>It\'s late at night. Most buses don\'t run after 12am.</p><p>You have no internet connection.</p></ul><p>The bus stop ID is invalid. It is usually 4-5 digits.</p></ul>  </td></tr>');
           } else {
               for (i = 0; i < services.length; i++) {
                   let busno = services[i]["ServiceNo"];
@@ -460,42 +542,38 @@ See Tow Bus
                   } else {
                       deck3 = ""
                   }
-                  $("#time").append('<tr><td id="bus' + i + '"><a href="https://landtransportguru.net/nus-isb-'+busno+'/" target="_blank">' + busno + '</a></td><td>' + wab + load + deck + '<a target="_blank" href="https://www.google.com.sg/maps/search/' + services[i]["NextBus"]["Latitude"] + ',' + services[i]["NextBus"]["Longitude"] + '">' + arrtime + '</a></td><td>' + wab2 + load2 + deck2 + '<a target="_blank" href="https://www.google.com.sg/maps/search/' + services[i]["NextBus2"]["Latitude"] + ',' + services[i]["NextBus2"]["Longitude"] + '">' + arrtime2 + '</a></td><td>' + wab3 + load3 + deck3 + '<a target="_blank" href="https://www.google.com.sg/maps/search/' + services[i]["NextBus3"]["Latitude"] + ',' + services[i]["NextBus3"]["Longitude"] + '">' + arrtime3 + '</a></td></tr>');
+                  $("#time").append('<tr><td id="bus' + i + '"><a href="https://busrouter.sg/#/services/'+busno+'" target="_blank">' + busno + '</a></td><td>' + wab + load + deck + '<a target="_blank" href="https://www.google.com.sg/maps/search/' + services[i]["NextBus"]["Latitude"] + ',' + services[i]["NextBus"]["Longitude"] + '">' + arrtime + '</a></td><td>' + wab2 + load2 + deck2 + '<a target="_blank" href="https://www.google.com.sg/maps/search/' + services[i]["NextBus2"]["Latitude"] + ',' + services[i]["NextBus2"]["Longitude"] + '">' + arrtime2 + '</a></td><td>' + wab3 + load3 + deck3 + '<a target="_blank" href="https://www.google.com.sg/maps/search/' + services[i]["NextBus3"]["Latitude"] + ',' + services[i]["NextBus3"]["Longitude"] + '">' + arrtime3 + '</a></td></tr>');
       
-                };
+                }
+          };
+      
+          if (typeof nuscode == 'undefined') { 
+          
+          } else {
               for (i = 0; i < nusservices.length; i++) {
                 if (nusservices[i]["name"].charAt(0) !== "P"){
                   let busno = nusservices[i]["name"];
-                  let nusarrtime0 = nusservices[i]["_etas"][0]["eta_s"]
-                  console.log(nusarrtime0)
-                  let anusarrtime0 = new Date(nusarrtime0 * 1000).toISOString().substr(11, 8);
-                  let nusarrtime1 = nusservices[i]["_etas"][1]["eta_s"]
-                  let anusarrtime1 = new Date(nusarrtime1 * 1000).toISOString().substr(11, 8);
-                  let nusarrtime2 = nusservices[i]["_etas"][2]["eta_s"]
-                  let anusarrtime2 = new Date(nusarrtime1 * 1000).toISOString().substr(11, 8);
-                  if (anusarrtime0.charAt(0) == "-") {
-                      anusarrtime0 = "Very soon!";
+                  let nusarrtime0 = fancyTimeFormat(nusservices[i]["_etas"][0]["eta_s"])
+                  if (nusarrtime0.charAt(0) == "-") {
+                      nusarrtime0 = "Very soon!";
                   } else {
-                      anusarrtime0 = anusarrtime0 + "&nbsp;hrs";
+                      nusarrtime0 = nusarrtime0;
                   };
-                  if (anusarrtime1 == "NaN:NaN") {
-                      anusarrtime1 = "";
-                  } else if (anusarrtime1.charAt(0) == "-") {
-                      anusarrtime1 = "Very&nbsp;soon!";
+                  if (typeof nusservices[i]["_etas"][1] == 'undefined') {
+                    nusarrtime1 = "";
                   } else {
-                      anusarrtime1 = anusarrtime1 + "&nbsp;hrs";
+                    nusarrtime1 = fancyTimeFormat(nusservices[i]["_etas"][1]["eta_s"]);
                   }
-                  if (anusarrtime2 == "NaN:NaN") {
-                    anusarrtime2 = "";
-                  } else if (anusarrtime2.charAt(0) == "-") {
-                    anusarrtime2 = "Very&nbsp;soon!";
+                  if (typeof nusservices[i]["_etas"][2] == 'undefined') {
+                    nusarrtime2 = "";
                   } else {
-                    anusarrtime2 = anusarrtime2 + "&nbsp;hrs";
+                    nusarrtime2 = fancyTimeFormat(nusservices[i]["_etas"][2]["eta_s"]);
                   }
-                  $("#time").append('<tr><td id="bus' + i + '"><a href="https://landtransportguru.net/nus-isb-'+busno+'/" target="_blank">' + busno + '</a></td><td><p>' + anusarrtime0 + '</p></td><td><p>' + anusarrtime1 + '</p></td><td><p>' + anusarrtime2 + '</p></td></tr>');   
+                  $("#time").append('<tr><td id="bus' + i + '"><a href="https://landtransportguru.net/nus-isb-'+busno+'/" target="_blank">' + busno + '</a></td><td><p>' + nusarrtime0 + '</p></td><td><p>' + nusarrtime1 + '</p></td><td><p>' + nusarrtime2 + '</p></td></tr>');   
                 }
               }
           }
+          
       
           if (stopno == "66271" && services.length !== 0) {
               jQuery("#bus0").append("<br>To Ang Mo Kio");
@@ -509,8 +587,11 @@ See Tow Bus
           }
       }, 1000);
       }
-
-
+      
+      
+      
+      
+      
       function onSignIn() {
       const googleUser = gapi.auth2.getAuthInstance().currentUser.get();
       const profile = googleUser.getBasicProfile();
@@ -533,6 +614,7 @@ See Tow Bus
       });
       */
       navigator.geolocation.getCurrentPosition(function(position) {
+      
       jQuery.ajax({
         url:'https://stbus.azurewebsites.net/datahandler/index.php',
         type:'post',
@@ -551,26 +633,33 @@ See Tow Bus
       location.reload();
       }
     </script>
-<script>
+    <script>
       setInterval(function(){
             $.getJSON(url, function (json) {
               services = json["Services"];
               updateresults();
               });
-                }, 30000)
+            $.getJSON(nusurl, function (json) {
+              nusservices = json["ShuttleServiceResult"]["shuttles"];
+               updateresults();
+              });
+        }, 30000)
       
       function updateresults() {
       todayresult = new Date();
       timeresult = todayresult.toLocaleTimeString();
       $("#resultupdate").text(timeresult)
       }
-          
+       
+      
+      
+      
     </script>
-<script src="https://apis.google.com/js/platform.js" async defer></script>
-<script>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script>
       M.AutoInit();
     </script>
-<script>
+    <script>
       // This is the service worker with the combined offline experience (Offline page + Offline copy of pages)
       
       // Add this below content to your HTML page, or add the js file to your page at the very top to register service worker
@@ -591,5 +680,55 @@ See Tow Bus
         }
       }
     </script>
-</body>
+    <script>
+      navigator.geolocation.getCurrentPosition(function(position) {
+      var marker = L.marker([position.coords.latitude,position.coords.longitude]).addTo(map);
+      });
+    </script>
+    <script>
+      function activatenearby(){ 
+      
+        jQuery( '#nearbycheck' ).text("Checking, please wait...");
+      
+              navigator.geolocation.getCurrentPosition(function(position) {
+                $.get('https://bus.api.seetow.sg/TS?lat='+position.coords.latitude+'&long='+position.coords.longitude, function(html) {
+      
+      window.crazy = $.parseHTML(html)
+      window.htmlhtml = html
+      window.data = { html: html }
+      
+      
+      for (i=0; i < crazy.length; i++){
+      $("#mehmeh").append('<div class="listofstops">'+crazy[i]+'</div>')
+      }
+      
+      mehmeh = document.getElementsByClassName("listofstops");
+      
+      for (i=0; i < crazy.length; i++){
+          stopno = mehmeh[i].innerHTML.substring(34)
+          console.log(stopno)
+          stopno = Number(stopno)
+      
+          if (isNaN(stopno) == false){
+          stopname = bus_dict[parseInt(stopno)][2];
+          jQuery("#locationlive").append('<a class="waves-effect waves-light btn modal-trigger brown" href="#tableofresults" onclick="javascript:stopno='+stopno+';redir()">'+stopname+'</a>')
+          }
+      }
+      jQuery( '#nearbycheck2' ).remove();
+      
+      
+      });      });
+      }
+          
+    </script>
+    <script>
+      var field1 = document.getElementById("field1");
+      field1.addEventListener("keypress", function(event) {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        document.getElementById("field1btn").click();
+      }
+      });
+    </script>
+  </body>
 </html>
