@@ -359,7 +359,7 @@
       }
       fav1 = getCookie("fav");
       fav = fav1.split(",")
-      if (typeof fav == 'undefined'){
+      if (typeof fav !== 'undefined'){
       for(i=1; i<fav.length; i++){
       stopno = fav[i];
       stopname = bus_dict[parseInt(stopno)][2];
