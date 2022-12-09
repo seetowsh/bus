@@ -451,6 +451,12 @@
       
       
       setInterval(function () {
+        const sortedServiceNo = services.sort((a, b) => (a.NextBus.EstimatedArrival > b.NextBus.EstimatedArrival ? 1 : -1));
+
+        for (i=0; i<sortedServiceNo.length; i++) {
+          console.log(sortedServiceNo[i]["ServiceNo"])
+        }
+
           $("#fetching").remove();
           $("#time").empty();
           let timenow = Date.now();
