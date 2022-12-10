@@ -440,7 +440,7 @@ if (stopno > 100000) {
     stopid = stopno  
 }      
 
-url = "https://bus.api.seetow.sg/" + stopid;
+url = "https://bus.api.seetow.sg/LTA?id=" + stopid;
 nuscode = bus_dict[parseInt(stopno)][3];
 nusurl = "https://bus.api.seetow.sg/NUS?id=" + nuscode;
 
