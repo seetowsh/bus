@@ -433,16 +433,18 @@ function fancyTimeFormat(duration) {
       
       $("#locbutton").html('<a class="btn waves-effect waves-light modal-trigger" href="https://www.google.com/maps/@?api=1&map_action=pano&viewpoint='+bus_dict[parseInt(stopno)][0]+','+bus_dict[parseInt(stopno)][1]+'" target="_blank">location</a>');
       
-      
-url = "https://bus.api.seetow.sg/" + stopid;
-nuscode = bus_dict[parseInt(stopno)][3];
-nusurl = "https://bus.api.seetow.sg/NUS?id=" + nuscode;
-
+   
 if (stopno > 100000) {
     stopid = "NUS"
 } else {
     stopid = stopno  
-}
+}      
+
+url = "https://bus.api.seetow.sg/" + stopid;
+nuscode = bus_dict[parseInt(stopno)][3];
+nusurl = "https://bus.api.seetow.sg/NUS?id=" + nuscode;
+
+
   
 $("#hm").text(bus_dict[parseInt(stopno)][2] + " (" + stopid + ")");
 $.getJSON(url, function (json) {
