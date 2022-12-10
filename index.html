@@ -458,14 +458,6 @@ if (nuscode !== undefined) {
         let timenow = Date.now();
     });
 }
-
-function busorder() {
-  const sortedServiceNo = services.sort((a, b) => (a.NextBus.EstimatedArrival > b.NextBus.EstimatedArrival ? 1 : -1));
-
-  for (i=0; i<sortedServiceNo.length; i++) {
-          console.log(sortedServiceNo[i]["ServiceNo"])
-  }
-}
       
       
       setInterval(function () {
@@ -613,6 +605,14 @@ function busorder() {
                 }
               }
           }
+
+function busorder() {
+  sortedServiceNo = services.sort((a, b) => (a.NextBus.EstimatedArrival > b.NextBus.EstimatedArrival ? 1 : -1));
+
+  for (i=0; i<sortedServiceNo.length; i++) {
+          console.log(sortedServiceNo[i]["ServiceNo"])
+  }
+}
           
       
           if (stopno == "66271" && services.length !== 0) {
