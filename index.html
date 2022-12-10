@@ -351,17 +351,9 @@
       }
       }).addTo(map);
 
-      </script><script>
+      </script>
+      <script>
 
-        function busorder() {
-  sortedServiceNo = services.sort((a, b) => (a.NextBus.EstimatedArrival > b.NextBus.EstimatedArrival ? 1 : -1));
-
-  for (i=0; i<sortedServiceNo.length; i++) {
-          console.log(sortedServiceNo[i]["ServiceNo"])
-  }
-}
-      </script><script>
-        
       function getCookie(name)
       {
       var re = new RegExp(name + "=([^;]+)");
@@ -470,7 +462,14 @@ if (nuscode !== undefined) {
     });
 }
       
-busorder();
+setInterval(function () {
+  sortedServiceNo = services.sort((a, b) => (a.NextBus.EstimatedArrival > b.NextBus.EstimatedArrival ? 1 : -1));
+
+  for (i=0; i<sortedServiceNo.length; i++) {
+          console.log(sortedServiceNo[i]["ServiceNo"])
+  }
+}, 30000);
+
 
       setInterval(function () {
 
@@ -685,7 +684,6 @@ busorder();
             $.getJSON(url, function (json) {
               services = json["Services"];
               updateresults();
-              busorder();
               });
             $.getJSON(nusurl, function (json) {
               nusservices = json["ShuttleServiceResult"]["shuttles"];
