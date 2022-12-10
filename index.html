@@ -462,19 +462,7 @@ if (nuscode !== undefined) {
     });
 }
   
-function busorder() {
-  sortedServiceNo = services.sort((a, b) => (a.NextBus.EstimatedArrival > b.NextBus.EstimatedArrival ? 1 : -1));
 
-for (i=0; i<sortedServiceNo.length; i++) {
-        console.log(sortedServiceNo[i]["ServiceNo"])
-}
-}
-
-busorder();
-
-setInterval(function () {
-busorder();
-}, 30000);
 
 
       setInterval(function () {
@@ -637,7 +625,19 @@ busorder();
       }, 1000);
       }
       
-      
+function busorder() {
+  sortedServiceNo = services.sort((a, b) => (a.NextBus.EstimatedArrival > b.NextBus.EstimatedArrival ? 1 : -1));
+
+for (i=0; i<sortedServiceNo.length; i++) {
+        console.log(sortedServiceNo[i]["ServiceNo"])
+}
+}
+
+busorder();
+
+setInterval(function () {
+busorder();
+}, 30000);
       
       
       
