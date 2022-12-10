@@ -350,7 +350,18 @@
       });
       }
       }).addTo(map);
-      
+
+      </script><script>
+
+        function busorder() {
+  sortedServiceNo = services.sort((a, b) => (a.NextBus.EstimatedArrival > b.NextBus.EstimatedArrival ? 1 : -1));
+
+  for (i=0; i<sortedServiceNo.length; i++) {
+          console.log(sortedServiceNo[i]["ServiceNo"])
+  }
+}
+      </script><script>
+        
       function getCookie(name)
       {
       var re = new RegExp(name + "=([^;]+)");
@@ -459,7 +470,8 @@ if (nuscode !== undefined) {
     });
 }
       
-      
+busorder();
+
       setInterval(function () {
 
 
@@ -605,14 +617,6 @@ if (nuscode !== undefined) {
                 }
               }
           }
-
-function busorder() {
-  sortedServiceNo = services.sort((a, b) => (a.NextBus.EstimatedArrival > b.NextBus.EstimatedArrival ? 1 : -1));
-
-  for (i=0; i<sortedServiceNo.length; i++) {
-          console.log(sortedServiceNo[i]["ServiceNo"])
-  }
-}
           
       
           if (stopno == "66271" && services.length !== 0) {
@@ -676,6 +680,7 @@ function busorder() {
       }
     </script>
     <script>
+
       setInterval(function(){
             $.getJSON(url, function (json) {
               services = json["Services"];
