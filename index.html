@@ -448,13 +448,13 @@ nusurl = "https://bus.api.seetow.sg/NUS?id=" + nuscode;
   
 $("#hm").text(bus_dict[parseInt(stopno)][2] + " (" + stopid + ")");
 $.getJSON(url, function (json) {
-    const services = json["Services"];
+    services = json["Services"];
     let timenow = Date.now();
 });
 
 if (nuscode !== undefined) {
     $.getJSON(nusurl, function (json) {
-        const nusservices = json["ShuttleServiceResult"]["shuttles"];
+        nusservices = json["ShuttleServiceResult"]["shuttles"];
         let timenow = Date.now();
     });
 }
