@@ -2,6 +2,7 @@ nusstopdict = {
     16009:"KRB",
     16141:"SDE3-OPP",
     16151:"JP-SCH-16151",
+    16189:"IT",
     16161:"MUSEUM",
     16169:"RAFFLES",
     16171:"YIH",
@@ -29,5 +30,6 @@ nusstopdict = {
     100009:"NUSS-OPP",
     100010:"TCOMS",
     100011:"PGP",
-    100012:"TCOMS-OPP"
+    100012:"TCOMS-OPP",
+    100013:"COM3"
 }
