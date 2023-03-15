@@ -1,235 +1,138 @@
 {
-
     "dir": "ltr",
-
     "lang": "English",
-
     "name": "See Tow Bus",
-
     "scope": "/",
-
     "display": "standalone",
-
     "start_url": "https://bus.seetow.sg/app",
-
     "short_name": "See Tow Bus",
-
     "theme_color": "#000000",
-
     "description": "The most accurate bus app",
-
     "orientation": "any",
-
     "background_color": "transparent",
-    
-    "iarc_rating_id":"daa4cb7d-6b8b-4824-97ac-1b417f4b66e4",
-
-    "related_applications": [],
-
-    "prefer_related_applications": false,
-
+    "iarc_rating_id": "daa4cb7d-6b8b-4824-97ac-1b417f4b66e4",
     "icons": [
-
-        {
-
-            "src": "/images/3b98d153-4804-bc78-b9aa-06e048b0bef7.webPlatform.png",
-
-            "sizes": "44x44",
-
-            "type": "image/png"
-
-        },
-
-        {
-
-            "src": "/images/d1433cf5-1165-8175-ac40-39e007628eab.webPlatform.png",
-
-            "sizes": "48x48",
-
-            "type": "image/png"
-
-        },
-
-        {
-
-            "src": "/images/8a4e7d27-5f83-82da-0761-086f54c60a82.webPlatform.png",
-
-            "sizes": "1240x600",
-
-            "type": "image/png"
-
-        },
-
-        {
-
-            "src": "/images/92b320ab-a62b-c344-2283-24c47ef350b0.webPlatform.png",
-
-            "sizes": "300x300",
-
-            "type": "image/png"
-
-        },
-
-        {
-
-            "src": "/images/2ab0605b-03a2-3d1e-3c93-3311f6011543.webPlatform.png",
-
-            "sizes": "150x150",
-
-            "type": "image/png"
-
-        },
-
-        {
-
-            "src": "/images/85303428-4ac9-e4af-6675-235e1230632d.webPlatform.png",
-
-            "sizes": "88x88",
-
-            "type": "image/png"
-
-        },
-
-        {
-
-            "src": "/images/3de29894-61a1-eada-cc23-2b1e2e93ba4c.webPlatform.png",
-
-            "sizes": "24x24",
-
-            "type": "image/png"
-
-        },
-
-        {
-
-            "src": "/images/b3450591-09be-a562-ea4d-c0e2e783f004.webPlatform.png",
-
-            "sizes": "50x50",
-
-            "type": "image/png"
-
-        },
-
-        {
-
-            "src": "/images/1e200dc4-9df2-a08f-6513-0028783377ed.webPlatform.png",
-
-            "sizes": "620x300",
-
-            "type": "image/png"
-
-        },
-
-        {
-
-            "src": "/images/d3ba7751-a385-1095-8c22-fca62b7f68fa.webPlatform.png",
-
-            "sizes": "192x192",
-
-            "type": "image/png"
-
-        },
-
-        {
-
-            "src": "/images/0fc2807a-d5af-3701-73a6-49a6a1eabc4c.webPlatform.png",
-
-            "sizes": "144x144",
-
-            "type": "image/png"
-
-        },
-
-        {
-
-            "src": "/images/3710ce23-a51c-d2d1-6471-0384975fb527.webPlatform.png",
-
-            "sizes": "96x96",
-
-            "type": "image/png"
-
-        },
-
-        {
-
-            "src": "/images/8759ca86-78a7-604a-1ede-0dc6b688879d.webPlatform.png",
-
-            "sizes": "72x72",
-
-            "type": "image/png"
-
-        },
-
-        {
-
-            "src": "/images/250733c8-1b02-1c05-9aa2-b958358dcebd.webPlatform.png",
-
-            "sizes": "36x36",
-
-            "type": "image/png"
-
-        },
-
-        {
-
-            "src": "/images/eb9b3f67-a05e-a3c8-c7da-f54d4cc3684a.webPlatform.png",
-
-            "sizes": "1024x1024",
-
-            "type": "image/png"
-
-        },
-
-        {
-
-            "src": "/images/7211953a-e3bb-de62-fb8d-bcb76b8c64b3.webPlatform.png",
-
-            "sizes": "180x180",
-
-            "type": "image/png"
-
-        },
-
-        {
-
-            "src": "/images/75fe47de-6b4a-0a79-f5a2-3c373b901673.webPlatform.png",
-
-            "sizes": "152x152",
-
-            "type": "image/png"
-
-        },
-
-        {
-
-            "src": "/images/5926158b-c1d3-8052-7e9c-76da33a7ee97.webPlatform.png",
-
-            "sizes": "120x120",
-
-            "type": "image/png"
-
-        },
-
-        {
-
-            "src": "/images/6ef6e8d6-e6a4-1a20-a5e0-b73264631b46.webPlatform.png",
-
-            "sizes": "76x76",
-
-            "type": "image/png"
-
-        }
-
+      {
+        "src": "/images/3b98d153-4804-bc78-b9aa-06e048b0bef7.webPlatform.png",
+        "sizes": "44x44",
+        "type": "image/png",
+        "purpose": "any maskable"
+      },
+      {
+        "src": "/images/d1433cf5-1165-8175-ac40-39e007628eab.webPlatform.png",
+        "sizes": "48x48",
+        "type": "image/png",
+        "purpose": "any maskable"
+      },
+      {
+        "src": "/images/8a4e7d27-5f83-82da-0761-086f54c60a82.webPlatform.png",
+        "sizes": "1240x600",
+        "type": "image/png",
+        "purpose": "any maskable"
+      },
+      {
+        "src": "/images/92b320ab-a62b-c344-2283-24c47ef350b0.webPlatform.png",
+        "sizes": "300x300",
+        "type": "image/png",
+        "purpose": "any maskable"
+      },
+      {
+        "src": "/images/2ab0605b-03a2-3d1e-3c93-3311f6011543.webPlatform.png",
+        "sizes": "150x150",
+        "type": "image/png",
+        "purpose": "any maskable"
+      },
+      {
+        "src": "/images/85303428-4ac9-e4af-6675-235e1230632d.webPlatform.png",
+        "sizes": "88x88",
+        "type": "image/png",
+        "purpose": "any maskable"
+      },
+      {
+        "src": "/images/3de29894-61a1-eada-cc23-2b1e2e93ba4c.webPlatform.png",
+        "sizes": "24x24",
+        "type": "image/png",
+        "purpose": "any maskable"
+      },
+      {
+        "src": "/images/b3450591-09be-a562-ea4d-c0e2e783f004.webPlatform.png",
+        "sizes": "50x50",
+        "type": "image/png",
+        "purpose": "any maskable"
+      },
+      {
+        "src": "/images/1e200dc4-9df2-a08f-6513-0028783377ed.webPlatform.png",
+        "sizes": "620x300",
+        "type": "image/png",
+        "purpose": "any maskable"
+      },
+      {
+        "src": "/images/d3ba7751-a385-1095-8c22-fca62b7f68fa.webPlatform.png",
+        "sizes": "192x192",
+        "type": "image/png",
+        "purpose": "any maskable"
+      },
+      {
+        "src": "/images/0fc2807a-d5af-3701-73a6-49a6a1eabc4c.webPlatform.png",
+        "sizes": "144x144",
+        "type": "image/png",
+        "purpose": "any maskable"
+      },
+      {
+        "src": "/images/3710ce23-a51c-d2d1-6471-0384975fb527.webPlatform.png",
+        "sizes": "96x96",
+        "type": "image/png",
+        "purpose": "any maskable"
+      },
+      {
+        "src": "/images/8759ca86-78a7-604a-1ede-0dc6b688879d.webPlatform.png",
+        "sizes": "72x72",
+        "type": "image/png",
+        "purpose": "any maskable"
+      },
+      {
+        "src": "/images/250733c8-1b02-1c05-9aa2-b958358dcebd.webPlatform.png",
+        "sizes": "36x36",
+        "type": "image/png",
+        "purpose": "any maskable"
+      },
+      {
+        "src": "/images/eb9b3f67-a05e-a3c8-c7da-f54d4cc3684a.webPlatform.png",
+        "sizes": "1024x1024",
+        "type": "image/png",
+        "purpose": "any maskable"
+      },
+      {
+        "src": "/images/7211953a-e3bb-de62-fb8d-bcb76b8c64b3.webPlatform.png",
+        "sizes": "180x180",
+        "type": "image/png",
+        "purpose": "any maskable"
+      },
+      {
+        "src": "/images/75fe47de-6b4a-0a79-f5a2-3c373b901673.webPlatform.png",
+        "sizes": "152x152",
+        "type": "image/png",
+        "purpose": "any maskable"
+      },
+      {
+        "src": "/images/5926158b-c1d3-8052-7e9c-76da33a7ee97.webPlatform.png",
+        "sizes": "120x120",
+        "type": "image/png",
+        "purpose": "any maskable"
+      },
+      {
+        "src": "/images/6ef6e8d6-e6a4-1a20-a5e0-b73264631b46.webPlatform.png",
+        "sizes": "76x76",
+        "type": "image/png",
+        "purpose": "any maskable"
+      }
     ],
-
-  "related_applications": [{
-
-    "platform": "play",
-
-    "url": "https://play.google.com/store/apps/details?id=com.seetow.bus"
-
-  }],
-
-  "prefer_related_applications": false
-
-}
+    "related_applications": [
+      {
+        "platform": "play",
+        "url": "https://play.google.com/store/apps/details?id=com.seetow.bus"
+      }
+    ],
+    "prefer_related_applications": false
+  }
+  
