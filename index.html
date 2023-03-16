@@ -349,10 +349,7 @@
       });
       }
       }).addTo(map);
-
-      </script>
-      <script>
-
+      
       function getCookie(name)
       {
       var re = new RegExp(name + "=([^;]+)");
@@ -382,92 +379,77 @@
       }
       
       
-      function updateCookie() {
-  // Use the setCookie function to set the expiration time
-  var now = new Date();
-  var expireTime = now.setTime(now.getTime() + 5000000 * 36000);
-
-  // Use a local variable to store the value of document.cookie
-  var cookie = document.cookie;
-
-  // Update the local variable instead of accessing document.cookie
-  cookie = "fav=" + fav1 + "," + stopno + ";expires=" + expireTime.toUTCString() + ";path=/";
-  document.cookie = cookie;
-
-  alert("The bus stop " + bus_dict[parseInt(stopno)][2] + " has been added!");
-}
-
-function fancyTimeFormat(duration) {
-  // Hours, minutes and seconds
-  var hrs = ~~(duration / 3600);
-  var mins = ~~((duration % 3600) / 60);
-  var secs = ~~duration % 60;
-
-  // Output like "1:01" or "4:03:59" or "123:03:59"
-  var ret = "";
-
-  if (hrs > 0) {
-    // Use the String.padStart() method to add leading zeros
-    ret += `${hrs}:${mins.toString().padStart(2, "0")}`;
-  }
-
-  // Use the String.padStart() method to add leading zeros and template literals
-  ret += `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
-  return ret;
-}
-
+      function updatecookie() {
+      var now = new Date();
+      var time = now.getTime();
+      var expireTime = time + 5000000*36000;
+      now.setTime(expireTime);
+      document.cookie = "fav="+fav1+","+stopno+";expires="+now.toUTCString()+";path=/";
+      alert("The bus stop "+bus_dict[parseInt(stopno)][2]+" has been added!")
+      }
+      function fancyTimeFormat(duration) {   
+      // Hours, minutes and seconds
+      var hrs = ~~(duration / 3600);
+      var mins = ~~((duration % 3600) / 60);
+      var secs = ~~duration % 60;
+      
+      // Output like "1:01" or "4:03:59" or "123:03:59"
+      var ret = "";
+      
+      if (hrs > 0) {
+        ret += "" + hrs + ":" + (mins < 10 ? "0" : "");
+      }
+      
+      ret += "" + mins + ":" + (secs < 10 ? "0" : "");
+      ret += "" + secs;
+      return ret;
+      }
       
       
       function populatetable(){
       
       nuscode = nusstopdict[stopno]
       
-      function minTommss(minutes) {
-  var sign = minutes < 0 ? "-" : "";
-  var min = Math.floor(Math.abs(minutes));
-  var sec = Math.floor((Math.abs(minutes) * 60) % 60);
-
-  // Use the String.padStart() method to add leading zeros and template literals
-  return `${sign}${min.toString().padStart(2, "0")}:${sec.toString().padStart(2, "0")}`;
-}
-
+      function minTommss(minutes){
+        var sign = minutes < 0 ? "-" : "";
+        var min = Math.floor(Math.abs(minutes));
+        var sec = Math.floor((Math.abs(minutes) * 60) % 60);
+        return sign + (min < 10 ? "0" : "") + min + ":" + (sec < 10 ? "0" : "") + sec;
+      };
       updateresults();
       
       $("#locbutton").html('<a class="btn waves-effect waves-light modal-trigger" href="https://www.google.com/maps/@?api=1&map_action=pano&viewpoint='+bus_dict[parseInt(stopno)][0]+','+bus_dict[parseInt(stopno)][1]+'" target="_blank">location</a>');
       
-   
-if (stopno > 100000) {
-    stopid = "NUS"
-} else {
-    stopid = stopno  
-}      
-
-url = "https://bus.api.seetow.sg/LTA?id=" + stopid;
-nuscode = bus_dict[parseInt(stopno)][3];
-nusurl = "https://bus.api.seetow.sg/NUS?id=" + nuscode;
-
-
-  
-$("#hm").text(bus_dict[parseInt(stopno)][2] + " (" + stopid + ")");
-$.getJSON(url, function (json) {
-    services = json["Services"];
-    let timenow = Date.now();
-});
-
-if (nuscode !== undefined) {
-    $.getJSON(nusurl, function (json) {
-        nusservices = json["ShuttleServiceResult"]["shuttles"];
+      
+      url = "https://bus.api.seetow.sg/LTA?id="+stopno;
+        
+        if (stopno > 100000) {
+        stopid = "NUS"
+        } else {
+        stopid = stopno  
+        }
+          
+      $("#hm").text(bus_dict[parseInt(stopno)][2]+' ('+stopid+')');
+      $.getJSON(url, function (json) {
+        services = json["Services"];
+      
         let timenow = Date.now();
-    });
-}
-  
-
-
-
+      
+      });
+      
+      nusurl = "https://bus.api.seetow.sg/NUS?id="+nuscode;
+      console.log(nusurl);  
+      
+        if (nuscode !== undefined) {
+      $.getJSON(nusurl, function (json) {
+        nusservices = json["ShuttleServiceResult"]["shuttles"];
+      
+        let timenow = Date.now();
+      
+      })};
+      
+      
       setInterval(function () {
-
-
-
           $("#fetching").remove();
           $("#time").empty();
           let timenow = Date.now();
@@ -622,26 +604,12 @@ if (nuscode !== undefined) {
               jQuery("#bus1").append("<br>To Malaysia");
           }
       }, 1000);
-
-function busorder() {
-  sortedServiceNo = services.sort((a, b) => (a.NextBus.EstimatedArrival > b.NextBus.EstimatedArrival ? 1 : -1));
-
-for (i=0; i<sortedServiceNo.length; i++) {
-        console.log(sortedServiceNo[i]["ServiceNo"])
-}
-}
-
-setInterval(function () {
-busorder();
-}, 10000);
-
-
       }
       
       
+    
     </script>
     <script>
-
       setInterval(function(){
             $.getJSON(url, function (json) {
               services = json["Services"];
@@ -653,25 +621,11 @@ busorder();
               });
         }, 30000)
       
-// Create a Date object outside the updateresults() function
-let todayresult = new Date();
-
-function updateresults() {
-  // Update the time of the existing Date object
-  todayresult.setTime(Date.now());
-
-  // Get the individual components of the time
-  let hours = todayresult.getHours();
-  let minutes = todayresult.getMinutes();
-  let seconds = todayresult.getSeconds();
-
-  // Use string concatenation to build a custom time string
-  let timeresult = hours + ":" + minutes + ":" + seconds;
-
-  // Use the innerText property to update the text content of the element
-  document.getElementById("resultupdate").innerText = timeresult;
-}
-
+      function updateresults() {
+      todayresult = new Date();
+      timeresult = todayresult.toLocaleTimeString();
+      $("#resultupdate").text(timeresult)
+      }
        
       
       
@@ -702,65 +656,49 @@ function updateresults() {
       });
     </script>
     <script>
-function activatenearby() {
-  jQuery('#nearbycheck').text('Checking, please wait...');
-
-  navigator.geolocation.getCurrentPosition(function(position) {
-    $.get(
-      'https://bus.api.seetow.sg/TS?lat=' +
-        position.coords.latitude +
-        '&long=' +
-        position.coords.longitude,
-      function(html) {
-        const elements = $.parseHTML(html);
-
-        elements.forEach(function(element) {
-          $('#mehmeh').append('<div class="listofstops">' + element + '</div>');
-        });
-
-        const listOfStops = document.getElementsByClassName('listofstops');
-
-        listOfStops.each(function(i, stop) {
-          const stopno = stop
-            .innerHTML()
-            .substring(34)
-            .trim();
-
-          if (!Number.isNaN(stopno)) {
-            const stopname = bus_dict[parseInt(stopno)][2];
-            jQuery('#locationlive')
-              .append(
-                '<a class="waves-effect waves-light btn modal-trigger brown" href="#tableofresults" onclick="javascript:stopno=' +
-                  stopno +
-                  ';redir()">' +
-                  stopname +
-                  '</a>'
-              )
-              .remove();
-          }
-        });
-
-        jQuery('#nearbycheck2').remove();
+      function activatenearby(){ 
+      
+        jQuery( '#nearbycheck' ).text("Checking, please wait...");
+      
+              navigator.geolocation.getCurrentPosition(function(position) {
+                $.get('https://bus.api.seetow.sg/TS?lat='+position.coords.latitude+'&long='+position.coords.longitude, function(html) {
+      
+      window.crazy = $.parseHTML(html)
+      window.htmlhtml = html
+      window.data = { html: html }
+      
+      
+      for (i=0; i < crazy.length; i++){
+      $("#mehmeh").append('<div class="listofstops">'+crazy[i]+'</div>')
       }
-    );
-  });
-}
-
+      
+      mehmeh = document.getElementsByClassName("listofstops");
+      
+      for (i=0; i < crazy.length; i++){
+          stopno = mehmeh[i].innerHTML.substring(34)
+          console.log(stopno)
+          stopno = Number(stopno)
+      
+          if (isNaN(stopno) == false){
+          stopname = bus_dict[parseInt(stopno)][2];
+          jQuery("#locationlive").append('<a class="waves-effect waves-light btn modal-trigger brown" href="#tableofresults" onclick="javascript:stopno='+stopno+';redir()">'+stopname+'</a>')
+          }
+      }
+      jQuery( '#nearbycheck2' ).remove();
+      
+      
+      });      });
+      }
+          
     </script>
     <script>
-// Save a reference to the field1 and field1btn elements outside the event listener function
-var field1 = document.getElementById("field1");
-var field1btn = document.getElementById("field1btn");
-
-field1.addEventListener("keypress", function(event) {
-  // Use the keyCode property to check for the "Enter" key
-  if (event.keyCode === 13) {
-    event.preventDefault();
-    // Use the saved reference to the field1btn element
-    field1btn.click();
-  }
-});
-
+      var field1 = document.getElementById("field1");
+      field1.addEventListener("keypress", function(event) {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        document.getElementById("field1btn").click();
+      }
+      });
     </script>
   </body>
 </html>
