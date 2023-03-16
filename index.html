@@ -380,13 +380,16 @@
       
       
 function updatecookie() {
+  const EXPIRY_TIME_MS = 5000000 * 36000; // 5,000,000 seconds
+
   let now = Date.now();
-  let expireTime = now + 5000000 * 36000;
-  let cookieValue = fav1 + "," + stopno;
+  let expireTime = now + EXPIRY_TIME_MS;
+  let cookieValue = fav1.toString() + "," + stopno.toString();
   let cookieString = "fav=" + cookieValue + ";expires=" + new Date(expireTime).toUTCString() + ";path=/";
   document.cookie = cookieString;
-  alert("The bus stop " + bus_dict[parseInt(stopno)][2] + " has been added!")
+  alert("The bus stop " + bus_dict[parseInt(stopno)][2] + " has been added!");
 }
+
 
 
 
