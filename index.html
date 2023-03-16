@@ -136,7 +136,7 @@
       <div class="section">
         <div class="row">
 
-          <app-singpass><div class="singpass-container show-element" style="display:block;margin:auto"><div><a><img class="singpass-login-icon" src="/static/sp-login-button.svg"></a></div></div></app-singpass>
+          <app-singpass><div class="singpass-container show-element"><div><a><img class="singpass-login-icon" src="/static/sp-login-button.svg" style="display:block;margin:auto"></a></div></div></app-singpass>
 
           <meta name="viewport" content="width=device-width, initial-scale=1">
           <div id="stopsearch">
@@ -379,31 +379,25 @@
       }
       
       
-      function updatecookie() {
-      var now = new Date();
-      var time = now.getTime();
-      var expireTime = time + 5000000*36000;
-      now.setTime(expireTime);
-      document.cookie = "fav="+fav1+","+stopno+";expires="+now.toUTCString()+";path=/";
-      alert("The bus stop "+bus_dict[parseInt(stopno)][2]+" has been added!")
-      }
-      function fancyTimeFormat(duration) {   
-      // Hours, minutes and seconds
-      var hrs = ~~(duration / 3600);
-      var mins = ~~((duration % 3600) / 60);
-      var secs = ~~duration % 60;
-      
-      // Output like "1:01" or "4:03:59" or "123:03:59"
-      var ret = "";
-      
-      if (hrs > 0) {
-        ret += "" + hrs + ":" + (mins < 10 ? "0" : "");
-      }
-      
-      ret += "" + mins + ":" + (secs < 10 ? "0" : "");
-      ret += "" + secs;
-      return ret;
-      }
+function updatecookie() {
+  let now = Date.now();
+  let expireTime = now + 5000000 * 36000;
+  let cookieValue = fav1 + "," + stopno;
+  let cookieString = "fav=" + cookieValue + ";expires=" + new Date(expireTime).toUTCString() + ";path=/";
+  document.cookie = cookieString;
+  alert("The bus stop " + bus_dict[parseInt(stopno)][2] + " has been added!")
+}
+
+
+
+function fancyTimeFormat(duration) {
+  const hours = Math.floor(duration / 3600);
+  const minutes = Math.floor((duration % 3600) / 60);
+  const seconds = Math.floor(duration % 60);
+  
+  return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+}
+
       
       
       function populatetable(){
