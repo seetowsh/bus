@@ -48,7 +48,10 @@
       background-color: #7CFC00;
       }
       body {
-      font-family: "San Francisco", "Helvetica Neue", Helvetica
+      font-family: system-ui, "San Francisco", "Helvetica Neue", Helvetica
+      }
+      h2.stoptitle {
+      font-size: 5vmin
       }
       footer {
       bottom: 0;
@@ -263,7 +266,7 @@
     <div id="tableofresults" class="modal">
       <div class="modal-content">
         <div id="resultstable">
-          <h2 class="center"><span id="hm"></span></h2>
+          <h2 class="center stoptitle"><span id="hm"></span></h2>
           <p class="center"><a class="btn waves-effect waves-light modal-close"><i class="material-icons">arrow_back</i></a><span id="locbutton"></span><a class="btn waves-effect waves-light modal-trigger" href="#legend">legend</a><a class="btn waves-effect waves-light" onClick="updatecookie();"><i class="material-icons">star</i></a></p>
           <p class="center">Results were last fetched from the server at <span id="resultupdate"></span></p>
           <table>
