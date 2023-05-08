@@ -599,7 +599,7 @@ function fancyTimeFormat(duration) {
                   } else {
                     nusarrtime2 = fancyTimeFormat(nusservices[i]["_etas"][2]["eta_s"]);
                   }
-                  $("#time").append('<tr><td id="bus' + i + '"><a href="https://landtransportguru.net/nus-isb-'+busno+'/" target="_blank">' + busno + '</a></td><td><p>' + nusarrtime0 + '</p></td><td><p>' + nusarrtime1 + '</p></td><td><p>' + nusarrtime2 + '</p></td></tr>');   
+                  $("#time").append('<tr><td id="nus' + i + '"><a href="https://landtransportguru.net/nus-isb-'+busno+'/" target="_blank">' + busno + '</a></td><td><p id="nus' + i + '0" class="nusbustime">' + nusarrtime0 + '</p></td><td><p id="nus' + i + '1" class="nusbustime">' + nusarrtime1 + '</p></td><td><p id="nus' + i + '2" class="nusbustime">' + nusarrtime2 + '</p></td></tr>');   
                 }
               }
           }
