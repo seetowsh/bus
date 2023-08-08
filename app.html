@@ -275,7 +275,7 @@ h2.stoptitle {
     <div id="tableofresults" class="modal">
       <div class="modal-content">
         <div id="resultstable">
-          <h2 class="center stoptitle"><span id="hm"></span></h2>
+          <h2 class="center"><span id="hm"></span></h2>
           <p class="center"><a class="btn waves-effect waves-light modal-close"><i class="material-icons">arrow_back</i></a><span id="locbutton"></span><a class="btn waves-effect waves-light modal-trigger" href="#legend">legend</a><a class="btn waves-effect waves-light" onClick="updatecookie();"><i class="material-icons">star</i></a></p>
           <p class="center">Results were last fetched from the server at <span id="resultupdate"></span></p>
           <table>
@@ -361,26 +361,33 @@ h2.stoptitle {
       });
       }
       }).addTo(map);
-      
-      function getCookie(name)
-      {
-      var re = new RegExp(name + "=([^;]+)");
-      var value = re.exec(document.cookie);
-      return (value != null) ? unescape(value[1]) : null;
-      }
-      fav1 = getCookie("fav");
-      if (fav1 !== null){
-      fav = fav1.split(",")
-      for(i=1; i<fav.length; i++){
-      stopno = fav[i];
-      stopname = bus_dict[parseInt(stopno)][2];
-      jQuery("#topbar").prepend('<a class="waves-effect waves-light btn modal-trigger brown" href="#tableofresults" onclick="javascript:stopno='+stopno+';redir()">'+stopname+'</a>')
-      }
-    } else {
-      jQuery("#topbar").prepend('None right now :(. Add some bus stops to your favourites by pressing the star icon on any bus stop!')
 
-    }
-      jQuery("#topbar").prepend('<h6>Your favourite bus stops:</h6>')
+      
+function getCookie(name) {
+  const re = new RegExp(name + "=([^;]+)");
+  const value = re.exec(document.cookie);
+  return (value != null) ? unescape(value[1]) : null;
+}
+
+let fav1 = getCookie("fav");
+
+let topBarElements = [];
+let topBarHTML = "";
+
+if (fav1 !== null){
+  const fav = fav1.split(",");
+  for(let i=1; i<fav.length; i++){
+    const stopno = fav[i];
+    const stopname = bus_dict[parseInt(stopno)][2];
+    topBarElements.push('<a class="waves-effect waves-light btn modal-trigger brown" href="#tableofresults" onclick="javascript:stopno='+stopno+';redir()">'+stopname+'</a>');
+  }
+  topBarHTML = topBarElements.join("");
+} else {
+  topBarHTML = 'None right now :(. Add some bus stops to your favourites by pressing the star icon on any bus stop!';
+}
+
+jQuery("#topbar").prepend('<h6>Your favourite bus stops:</h6>' + topBarHTML);
+
       
       
       function redirlegacy(code){
@@ -458,136 +465,107 @@ function fancyTimeFormat(duration) {
       })};
       
       
-      setInterval(function () {
-          $("#fetching").remove();
-          $("#time").empty();
-          let timenow = Date.now();
-      
-          if (stopid !== stopno) {
-      
-          } else if (services.length == 0) {
-            $("#time").append('<tr><td colspan="5"><p style="text-align:center" id="nightalert ">Looks like we didn\'t get any buses. This could be because of 1 of several reasons:</p> <ul><li><p>The central server is down. <a href="https://www.lta.gov.sg/content/ltagov/en/contact_us.html" target="_blank">Report issues here</a>.</p></li><p>It\'s late at night. Most buses don\'t run after 12am.</p><p>You have no internet connection.</p></ul><p>The bus stop ID is invalid. It is usually 4-5 digits.</p></ul>  </td></tr>');
-          } else {
-              for (i = 0; i < services.length; i++) {
-                  let busno = services[i]["ServiceNo"];
-                  let arrtimemsfake = services[i]["NextBus"]["EstimatedArrival"];
-                  let arrtimefake = +new Date(arrtimemsfake);
-                  let arrtimems = arrtimefake - timenow;
-                  let arrtimemin = arrtimems / 60000;
-                  let arrtime = minTommss(arrtimemin);
-                  let arrtime2msfake = services[i]["NextBus2"]["EstimatedArrival"];
-                  let arrtime2fake = +new Date(arrtime2msfake);
-                  let arrtime2ms = arrtime2fake - timenow;
-                  let arrtime2min = arrtime2ms / 60000;
-                  let arrtime2 = minTommss(arrtime2min)
-                  let arrtime3msfake = services[i]["NextBus3"]["EstimatedArrival"];
-                  let arrtime3fake = +new Date(arrtime3msfake);
-                  let arrtime3ms = arrtime3fake - timenow;
-                  let arrtime3min = arrtime3ms / 60000;
-                  let arrtime3 = minTommss(arrtime3min)
-                  if (arrtime.charAt(0) == "-") {
-                      arrtime = "Very soon!";
-                  } else {
-                      arrtime = arrtime + "&nbsp;mins";
-                  }
-                  if (services[i]["NextBus"]["Feature"] == "WAB" || services[i]["NextBus"]["Load"] == "") {
-                      wab = ''
-                  } else {
-                      wab = '<i style="color:red" class="material-icons">accessible</i>'
-                  }
-                  if (services[i]["NextBus"]["Load"] == "SDA") {
-                      load = '<i class="material-icons">directions_walk</i>';
-                  } else if (services[i]["NextBus"]["Load"] == "SEA") {
-                      load = '<i class="material-icons">airline_seat_recline_normal</i>';
-                  } else if (services[i]["NextBus"]["Load"] == "LSD") {
-                      load = '<i class="material-icons">wc</i>';
-                  }
-                  if (services[i]["NextBus"]["Type"] == "SD") {
-                      deck = '<i class="material-icons">filter_1</i> ';
-                  } else if (services[i]["NextBus"]["Type"] == "DD") {
-                      deck = '<i class="material-icons">filter_2</i> ';
-                  } else {
-                      deck = '&#127345;&#65039;';
-                  }
-                  if (arrtime2 == "NaN:NaN") {
-                      arrtime2 = "";
-                  } else if (arrtime.charAt(0) == "-") {
-                      arrtime2 = "Very&nbsp;soon!";
-                  } else {
-                      arrtime2 = arrtime2 + "&nbsp;mins";
-                  }
-                  if (services[i]["NextBus2"]["Feature"] == "WAB" || services[i]["NextBus2"]["Load"] == "") {
-                      wab2 = ''
-                  } else {
-                      wab2 = '<i style="color:red" class="material-icons">accessible</i>'
-                  }
-                  if (services[i]["NextBus2"]["Load"] == "SDA") {
-                      load2 = '<i class="material-icons">directions_walk</i>';
-                  } else if (services[i]["NextBus2"]["Load"] == "SEA") {
-                      load2 = '<i class="material-icons">airline_seat_recline_normal</i>';
-                  } else if (services[i]["NextBus2"]["Load"] == "LSD") {
-                      load2 = '<i class="material-icons">wc</i>';
-                  } else {
-                      load2 = ""
-                  }
-                  if (services[i]["NextBus2"]["Type"] == "SD") {
-                      deck2 = '<i class="material-icons">filter_1</i> ';
-                  } else if (services[i]["NextBus2"]["Type"] == "DD") {
-                      deck2 = '<i class="material-icons">filter_2</i> ';
-                  } else if (services[i]["NextBus2"]["Type"] == "BD") {
-                      deck2 = '&#127345;&#65039;';
-                  } else {
-                      deck2 = ""
-                  }
-                  if (arrtime3 == "NaN:NaN") {
-                      arrtime3 = "";
-                  } else if (arrtime.charAt(0) == "-") {
-                      arrtime3 = "Very&nbsp;soon!";
-                  } else {
-                      arrtime3 = arrtime3 + "&nbsp;mins";
-                  }
-                  if (services[i]["NextBus3"]["Feature"] == "WAB" || services[i]["NextBus3"]["Load"] == "") {
-                      wab3 = ''
-                  } else {
-                      wab3 = '<i style="color:red" class="material-icons">accessible</i>'
-                  }
-                  if (services[i]["NextBus3"]["Load"] == "SDA") {
-                      load3 = '<i class="material-icons">directions_walk</i>';
-                  } else if (services[i]["NextBus3"]["Load"] == "SEA") {
-                      load3 = '<i class="material-icons">airline_seat_recline_normal</i>';
-                  } else if (services[i]["NextBus3"]["Load"] == "LSD") {
-                      load3 = '<i class="material-icons">wc</i>';
-                  } else {
-                      load3 = ""
-                  }
-                  if (services[i]["NextBus3"]["Type"] == "SD") {
-                      deck3 = '<i class="material-icons">filter_1</i> ';
-                  } else if (services[i]["NextBus3"]["Type"] == "DD") {
-                      deck3 = '<i class="material-icons">filter_2</i> ';
-                  } else if (services[i]["NextBus3"]["Type"] == "BD") {
-                      deck3 = '&#127345;&#65039;';
-                  } else {
-                      deck3 = ""
-                  }
-                  if (services[i]["NextBus"]["Latitude"] == 0) {
-                    map1 = ""
-                  } else {
-                    map1 = '<a target="_blank" href="https://www.google.com.sg/maps/search/' + services[i]["NextBus"]["Latitude"] + ',' + services[i]["NextBus"]["Longitude"] + '">'
-                  }
-                  if (services[i]["NextBus2"]["Latitude"] == 0) {
-                    map2 = ""
-                  } else {
-                    map2 = '<a target="_blank" href="https://www.google.com.sg/maps/search/' + services[i]["NextBus2"]["Latitude"] + ',' + services[i]["NextBus2"]["Longitude"] + '">'
-                  }
-                  if (services[i]["NextBus3"]["Latitude"] == 0) {
-                    map3 = ""
-                  } else {
-                    map3 = '<a target="_blank" href="https://www.google.com.sg/maps/search/' + services[i]["NextBus3"]["Latitude"] + ',' + services[i]["NextBus3"]["Longitude"] + '">'
-                  }
-                  $("#time").append('<tr><td id="bus' + i + '"><a href="https://busrouter.sg/#/services/'+busno+'" target="_blank">' + busno + '</a></td><td>' + wab + load + deck + map1 + arrtime + '</a></td><td>' + wab2 + load2 + deck2 + map2 + arrtime2 + '</a></td><td>' + wab3 + load3 + deck3 + map3 + arrtime3 + '</a></td></tr>');
-      
-                }
-          };
+function calculateArrivalTime(time, timenow) {
+    const fakeTime = +new Date(time);
+
+    // Handle if the time is not valid
+    if (isNaN(fakeTime)) {
+        return '';
+    }
+
+    const timeMs = fakeTime - timenow;
+    const timeMin = timeMs / 60000;
+    let timeStr = minTommss(timeMin);
+
+    if (timeStr.charAt(0) == "-") {
+        timeStr = "Very soon!";
+    } else {
+        timeStr = timeStr + "&nbsp;mins";
+    }
+
+    return timeStr;
+}
+
+function getWAB(bus) {
+    if (bus["Feature"] == "WAB" || bus["Load"] == "") {
+        return '';
+    } else {
+        return '<i style="color:red" class="material-icons">accessible</i>';
+    }
+}
+
+function getLoad(bus) {
+    if (bus["Load"] == "SDA") {
+        return '<i class="material-icons">directions_walk</i>';
+    } else if (bus["Load"] == "SEA") {
+        return '<i class="material-icons">airline_seat_recline_normal</i>';
+    } else if (bus["Load"] == "LSD") {
+        return '<i class="material-icons">wc</i>';
+    } else {
+        return "";
+    }
+}
+
+function getDeck(bus) {
+    if (bus["Type"] == "SD") {
+        return '<i class="material-icons">filter_1</i> ';
+    } else if (bus["Type"] == "DD") {
+        return '<i class="material-icons">filter_2</i> ';
+    } else if (bus["Type"] == "BD") {
+        return '&#127345;&#65039;';
+    } else {
+        return "";
+    }
+}
+
+function getMapLink(bus) {
+    if (bus["Latitude"] == 0) {
+        return "";
+    } else {
+        return '<a target="_blank" href="https://www.google.com.sg/maps/search/' + bus["Latitude"] + ',' + bus["Longitude"] + '">';
+    }
+}
+
+setInterval(function () {
+    $("#fetching").remove();
+    $("#time").empty();
+    let timenow = Date.now();
+
+    let htmlRows = [];
+
+    if (services.length == 0) {
+        // your error message
+    } else {
+        for (let i = 0; i < services.length; i++) {
+            let service = services[i];
+            let busno = service["ServiceNo"];
+
+            let arrtime = calculateArrivalTime(service["NextBus"]["EstimatedArrival"], timenow);
+            let arrtime2 = calculateArrivalTime(service["NextBus2"]["EstimatedArrival"], timenow);
+            let arrtime3 = calculateArrivalTime(service["NextBus3"]["EstimatedArrival"], timenow);
+
+            let wab = getWAB(service["NextBus"]);
+            let wab2 = getWAB(service["NextBus2"]);
+            let wab3 = getWAB(service["NextBus3"]);
+
+            let load = getLoad(service["NextBus"]);
+            let load2 = getLoad(service["NextBus2"]);
+            let load3 = getLoad(service["NextBus3"]);
+
+            let deck = getDeck(service["NextBus"]);
+            let deck2 = getDeck(service["NextBus2"]);
+            let deck3 = getDeck(service["NextBus3"]);
+
+            let map1 = getMapLink(service["NextBus"]);
+            let map2 = getMapLink(service["NextBus2"]);
+            let map3 = getMapLink(service["NextBus3"]);
+
+            let rowHtml = `<tr><td id="bus${i}"><a href="https://busrouter.sg/#/services/${busno}" target="_blank">${busno}</a></td><td>${wab}${load}${deck}${map1}${arrtime}</a></td><td>${wab2}${load2}${deck2}${map2}${arrtime2}</a></td><td>${wab3}${load3}${deck3}${map3}${arrtime3}</a></td></tr>`;
+            htmlRows.push(rowHtml); 
+        }
+    }
+
+    $("#time").append(htmlRows.join(""));
       
           if (typeof nuscode == 'undefined') { 
           
@@ -611,7 +589,7 @@ function fancyTimeFormat(duration) {
                   } else {
                     nusarrtime2 = fancyTimeFormat(nusservices[i]["_etas"][2]["eta_s"]);
                   }
-                  $("#time").append('<tr><td id="bus' + i + '"><a href="https://landtransportguru.net/nus-isb-'+busno+'/" target="_blank">' + busno + '</a></td><td><p>' + nusarrtime0 + '</p></td><td><p>' + nusarrtime1 + '</p></td><td><p>' + nusarrtime2 + '</p></td></tr>');   
+                  $("#time").append('<tr><td id="nus' + i + '"><a href="https://landtransportguru.net/nus-isb-'+busno+'/" target="_blank">' + busno + '</a></td><td><p id="nus' + i + '0" class="nusbustime">' + nusarrtime0 + '</p></td><td><p id="nus' + i + '1" class="nusbustime">' + nusarrtime1 + '</p></td><td><p id="nus' + i + '2" class="nusbustime">' + nusarrtime2 + '</p></td></tr>');   
                 }
               }
           }
@@ -680,40 +658,36 @@ function fancyTimeFormat(duration) {
       });
     </script>
     <script>
-      function activatenearby(){ 
-      
-        jQuery( '#nearbycheck' ).text("Checking, please wait...");
-      
-              navigator.geolocation.getCurrentPosition(function(position) {
-                $.get('https://bus.api.seetow.sg/TS?lat='+position.coords.latitude+'&long='+position.coords.longitude, function(html) {
-      
-      window.crazy = $.parseHTML(html)
-      window.htmlhtml = html
-      window.data = { html: html }
-      
-      
-      for (i=0; i < crazy.length; i++){
-      $("#mehmeh").append('<div class="listofstops">'+crazy[i]+'</div>')
-      }
-      
-      mehmeh = document.getElementsByClassName("listofstops");
-      
-      for (i=0; i < crazy.length; i++){
-          stopno = mehmeh[i].innerHTML.substring(34)
-          console.log(stopno)
-          stopno = Number(stopno)
-      
-          if (isNaN(stopno) == false){
-          stopname = bus_dict[parseInt(stopno)][2];
-          jQuery("#locationlive").append('<a class="waves-effect waves-light btn modal-trigger brown" href="#tableofresults" onclick="javascript:stopno='+stopno+';redir()">'+stopname+'</a>')
-          }
-      }
-      jQuery( '#nearbycheck2' ).remove();
-      
-      
-      });      });
-      }
-          
+async function activatenearby(){ 
+    jQuery('#nearbycheck').text("Checking, please wait...");
+    
+    const position = await new Promise((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(resolve, reject);
+    });
+
+    window.htmlhtml = await $.get(`https://bus.api.seetow.sg/TS?lat=${position.coords.latitude}&long=${position.coords.longitude}`);
+    window.crazy = $.parseHTML(window.htmlhtml);
+    window.data = { html: window.htmlhtml };
+
+    let listOfStops = '';
+    for(let i=0; i < window.crazy.length; i++){
+        listOfStops += `<div class="listofstops">${window.crazy[i]}</div>`;
+    }
+    $("#mehmeh").html(listOfStops);
+    
+    let locations = '';
+    let mehmeh = document.getElementsByClassName("listofstops");
+    for(let i=0; i < window.crazy.length; i++){
+        let stopno = Number(mehmeh[i].textContent.substring(34));
+
+        if (!isNaN(stopno)){
+            let stopname = bus_dict[parseInt(stopno)][2];
+            locations += `<a class="waves-effect waves-light btn modal-trigger brown" href="#tableofresults" onclick="javascript:stopno=${stopno};redir()">${stopname}</a>`;
+        }
+    }
+    jQuery("#locationlive").html(locations);
+    jQuery('#nearbycheck2').remove();
+}
     </script>
     <script>
       var field1 = document.getElementById("field1");
