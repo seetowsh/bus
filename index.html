@@ -448,6 +448,12 @@ function fancyTimeFormat(duration) {
       
 function calculateArrivalTime(time, timenow) {
     const fakeTime = +new Date(time);
+
+    // Handle if the time is not valid
+    if (isNaN(fakeTime)) {
+        return '';
+    }
+
     const timeMs = fakeTime - timenow;
     const timeMin = timeMs / 60000;
     let timeStr = minTommss(timeMin);
