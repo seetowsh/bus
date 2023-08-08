@@ -493,6 +493,14 @@ function getDeck(bus) {
     }
 }
 
+function getMapLink(bus) {
+    if (bus["Latitude"] == 0) {
+        return "";
+    } else {
+        return '<a target="_blank" href="https://www.google.com.sg/maps/search/' + bus["Latitude"] + ',' + bus["Longitude"] + '">';
+    }
+}
+
 setInterval(function () {
     $("#fetching").remove();
     $("#time").empty();
@@ -523,8 +531,12 @@ setInterval(function () {
             let deck2 = getDeck(service["NextBus2"]);
             let deck3 = getDeck(service["NextBus3"]);
 
+            let map1 = getMapLink(service["NextBus"]);
+            let map2 = getMapLink(service["NextBus2"]);
+            let map3 = getMapLink(service["NextBus3"]);
+
             let rowHtml = `<tr><td id="bus${i}"><a href="https://busrouter.sg/#/services/${busno}" target="_blank">${busno}</a></td><td>${wab}${load}${deck}${map1}${arrtime}</a></td><td>${wab2}${load2}${deck2}${map2}${arrtime2}</a></td><td>${wab3}${load3}${deck3}${map3}${arrtime3}</a></td></tr>`;
-            htmlRows.push(rowHtml);
+            htmlRows.push(rowHtml); 
         }
     }
 
