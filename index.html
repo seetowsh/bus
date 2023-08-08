@@ -505,6 +505,7 @@ setInterval(function () {
     } else {
         for (let i = 0; i < services.length; i++) {
             let service = services[i];
+            let busno = service["ServiceNo"];
 
             let arrtime = calculateArrivalTime(service["NextBus"]["EstimatedArrival"], timenow);
             let arrtime2 = calculateArrivalTime(service["NextBus2"]["EstimatedArrival"], timenow);
