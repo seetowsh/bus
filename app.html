@@ -338,6 +338,11 @@ h2.stoptitle {
       
       
         });
+      map.on('locationerror', (err) => {
+    console.error("Location access denied:", err.message);
+    // Optionally provide some feedback to the user.
+      });
+
         map.locate({setView: true, minZoom: 15});
       
       function onEachFeature(feature, layer) {
