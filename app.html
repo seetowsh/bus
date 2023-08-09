@@ -670,7 +670,7 @@ async function activatenearby() {
         navigator.geolocation.getCurrentPosition(resolve, (error) => {
             switch(error.code) {
                 case error.PERMISSION_DENIED:
-                    reject("User denied the request for Geolocation.");
+                    reject(new Error("User denied the request for Geolocation."));
                     break;
                 case error.POSITION_UNAVAILABLE:
                     reject("Location information is unavailable.");
