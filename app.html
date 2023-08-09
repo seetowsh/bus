@@ -557,28 +557,23 @@ function formatNusEta(etaObj) {
 }
 
 function generateNusServiceRow(service, index) {
-    if (!service || service["name"].charAt(0) === "P") return "";
+    if (!service || service.name.charAt(0) === "P") return "";
 
-    let busno = service["name"];
-    let nusarrtime0 = formatNusEta(service["_etas"][0]);
-    let nusarrtime1 = formatNusEta(service["_etas"][1]);
-    let nusarrtime2 = formatNusEta(service["_etas"][2]);
+    let busno = service.name;
+    let nusarrtime0 = service["_etas"] && service["_etas"][0] ? formatNusEta(service["_etas"][0]) : "No data";
+    let nusarrtime1 = service["_etas"] && service["_etas"][1] ? formatNusEta(service["_etas"][1]) : "No data";
+    let nusarrtime2 = service["_etas"] && service["_etas"][2] ? formatNusEta(service["_etas"][2]) : "No data";
 
     return `<tr>
                 <td id="nus${index}">
                     <a href="https://landtransportguru.net/nus-isb-${busno}/" target="_blank">${busno}</a>
                 </td>
-                <td>
-                    <p id="nus${index}0" class="nusbustime">${nusarrtime0}</p>
-                </td>
-                <td>
-                    <p id="nus${index}1" class="nusbustime">${nusarrtime1}</p>
-                </td>
-                <td>
-                    <p id="nus${index}2" class="nusbustime">${nusarrtime2}</p>
-                </td>
+                <td><p id="nus${index}0" class="nusbustime">${nusarrtime0}</p></td>
+                <td><p id="nus${index}1" class="nusbustime">${nusarrtime1}</p></td>
+                <td><p id="nus${index}2" class="nusbustime">${nusarrtime2}</p></td>
             </tr>`;
 }
+
 
 setInterval(function () {
     $("#fetching").remove();
@@ -619,28 +614,23 @@ setInterval(function () {
 
     let nusRows = [];
     
-    if (typeof nusservices !== 'undefined') {
-        for (let i = 0; i < nusservices.length; i++) {
-            let service = nusservices[i];
-            if (service["_etas"] && service["_etas"].length > 0) {
-                let busno = service["name"];
-                if (busno.charAt(0) !== "P") {
-                    let eta0 = formatNusEta(service["_etas"][0]);
-                    let eta1 = service["_etas"][1] ? formatNusEta(service["_etas"][1]) : "";
-                    let eta2 = service["_etas"][2] ? formatNusEta(service["_etas"][2]) : "";
+if (typeof nusservices !== 'undefined') {
+    for (let i = 0; i < nusservices.length; i++) {
+        let service = nusservices[i];
 
-                    let rowHtml = generateNusServiceRow(i, busno, eta0, eta1, eta2);
-                    nusRows.push(rowHtml);
-                }
-            } else {
-                let busno = service["name"];
-                if (busno.charAt(0) !== "P") {
-                    let rowHtml = `<tr><td id="nus${i}"><a href="https://landtransportguru.net/nus-isb-${busno}/" target="_blank">${busno}</a></td><td colspan="3">No upcoming arrivals</td></tr>`;
-                    nusRows.push(rowHtml);
-                }
+        if (service["_etas"] && service["_etas"].length > 0) {
+            let rowHtml = generateNusServiceRow(service, i);
+            nusRows.push(rowHtml);
+        } else {
+            let busno = service["name"];
+            if (busno.charAt(0) !== "P") {
+                let rowHtml = `<tr><td id="nus${i}"><a href="https://landtransportguru.net/nus-isb-${busno}/" target="_blank">${busno}</a></td><td colspan="3">No upcoming arrivals</td></tr>`;
+                nusRows.push(rowHtml);
             }
         }
     }
+}
+
 
     $("#time").append(nusRows.join(""));
 
