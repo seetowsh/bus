@@ -667,46 +667,56 @@ setInterval(function () {
       });
     </script>
     <script>
-window.activatenearby = async function() {
+function activatenearby() { 
     // Inform the user
     $('#nearbycheck').text("Checking, please wait...");
-    
-const position = await new Promise((resolve, reject) => {
-    navigator.geolocation.getCurrentPosition(resolve, (error) => {
-        reject(new Error(error.message));
+
+    // Fetch the geolocation data
+    navigator.geolocation.getCurrentPosition(function(position) {
+        $.get(`https://bus.api.seetow.sg/TS?lat=${position.coords.latitude}&long=${position.coords.longitude}`)
+            .done(function(htmlResponse) {
+                // Parse the response to extract relevant information
+                const $parsedResponse = $(htmlResponse);
+                let locations = '';
+
+                $parsedResponse.each(function() {
+                    const stopDetails = $(this).find('.name').text().split(':');
+
+                    if (stopDetails && stopDetails.length === 2) {
+                        const stopno = Number(stopDetails[0].trim());
+                        const stopname = stopDetails[1].trim();
+
+                        if (!isNaN(stopno) && stopname) {
+                            locations += `<a class="waves-effect waves-light btn modal-trigger brown" href="#tableofresults" onclick="javascript:stopno=${stopno};redir()">${stopname}</a>`;
+                        }
+                    }
+                });
+
+                // Update the DOM once to reduce reflows
+                $('#mehmeh').html($parsedResponse);
+                $('#locationlive').html(locations);
+                $('#nearbycheck2').remove();
+            })
+            .fail(function(jqXHR, textStatus, errorThrown) {
+                $('#nearbycheck').text(textStatus).addClass('error-class'); 
+            });
+    }, function(error) {
+        switch(error.code) {
+            case error.PERMISSION_DENIED:
+                $('#nearbycheck').text("User denied the request for Geolocation.").addClass('error-class');
+                break;
+            case error.POSITION_UNAVAILABLE:
+                $('#nearbycheck').text("Location information is unavailable.").addClass('error-class');
+                break;
+            case error.TIMEOUT:
+                $('#nearbycheck').text("The request to get user location timed out.").addClass('error-class');
+                break;
+            default:
+                $('#nearbycheck').text("An unknown error occurred.").addClass('error-class');
+        }
     });
-});
-
-        // Fetch the API data
-        const htmlResponse = await $.get(`https://bus.api.seetow.sg/TS?lat=${position.coords.latitude}&long=${position.coords.longitude}`);
-
-        // Parse the response to extract relevant information
-        const $parsedResponse = $(htmlResponse);
-
-        let locations = '';
-        
-        $parsedResponse.each(function() {
-            const stopDetails = $(this).find('.name').text().split(':');
-            
-            if (stopDetails && stopDetails.length === 2) {
-                const stopno = Number(stopDetails[0].trim());
-                const stopname = stopDetails[1].trim();
-
-                if (!isNaN(stopno) && stopname) {
-                    locations += `<a class="waves-effect waves-light btn modal-trigger brown" href="#tableofresults" onclick="javascript:stopno=${stopno};redir()">${stopname}</a>`;
-                }
-            }
-        });
-        
-        // Update the DOM once to reduce reflows
-        $('#mehmeh').html($parsedResponse);
-        $('#locationlive').html(locations);
-catch (error) {
-    $('#nearbycheck').text(error.message);
-} finally {
-    $('#nearbycheck2').remove();
 }
-}
+
 
 
     </script>
