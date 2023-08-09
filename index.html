@@ -636,7 +636,7 @@ if (typeof nusservices !== 'undefined') {
 
     $("#time").append(nusRows.join(""));
 
-if (services.length === 0 && nusservices.length === 0) {
+if (services.length === 0 && nusservices === undefined) {
     // Show a message informing the user that no buses are arriving
     $("#time").append('<tr><td colspan="4">We received a response but there was no information. Are buses running at this time? Is this a valid stop ID? The API may be temporarily down. <br>HTTP 200 ==> Empty response body.</td></tr>');
 };
