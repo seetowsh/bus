@@ -20,14 +20,6 @@
     <meta name="google-signin-client_id" content="35800995045-u54nb2hltd3kl9vuhrhjq3eca2k5110u.apps.googleusercontent.com">
     <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" />
-    <script>
-      var OneSignal = window.OneSignal || [];
-      OneSignal.push(function() {
-        OneSignal.init({
-          appId: "b019c6f8-fd71-4f16-835b-0a755e2c29ea",
-        });
-      });
-    </script>
     <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
     <script>
       (adsbygoogle = window.adsbygoogle || []).push({
@@ -594,30 +586,26 @@ setInterval(function () {
         $("#time").append(htmlRows.join(""));
     }
 
-      if (typeof nuscode !== 'undefined' && typeof nusservices !== 'undefined' && nusservices.length > 0) {
-        nusservices.forEach((service, i) => {
-            if (service["name"].charAt(0) !== "P") {
-                  let busno = nusservices[i]["name"];
-                  let nusarrtime0 = fancyTimeFormat(nusservices[i]["_etas"][0]["eta_s"])
-                  if (nusarrtime0.charAt(0) == "-") {
-                      nusarrtime0 = "Very soon!";
-                  } else {
-                      nusarrtime0 = nusarrtime0;
-                  };
-                  if (typeof nusservices[i]["_etas"][1] == 'undefined') {
-                    nusarrtime1 = "";
-                  } else {
-                    nusarrtime1 = fancyTimeFormat(nusservices[i]["_etas"][1]["eta_s"]);
-                  }
-                  if (typeof nusservices[i]["_etas"][2] == 'undefined') {
-                    nusarrtime2 = "";
-                  } else {
-                    nusarrtime2 = fancyTimeFormat(nusservices[i]["_etas"][2]["eta_s"]);
-                  }
-                  $("#time").append('<tr><td id="nus' + i + '"><a href="https://landtransportguru.net/nus-isb-'+busno+'/" target="_blank">' + busno + '</a></td><td><p id="nus' + i + '0" class="nusbustime">' + nusarrtime0 + '</p></td><td><p id="nus' + i + '1" class="nusbustime">' + nusarrtime1 + '</p></td><td><p id="nus' + i + '2" class="nusbustime">' + nusarrtime2 + '</p></td></tr>');   
+if (typeof nuscode !== 'undefined') { 
+    for (let i = 0; i < nusservices.length; i++) {
+        if (nusservices[i]["name"].charAt(0) !== "P") {
+            let busno = nusservices[i]["name"];
+
+            if (nusservices[i]._etas && nusservices[i]._etas[0]) {
+                let nusarrtime0 = fancyTimeFormat(nusservices[i]["_etas"][0]["eta_s"]);
+                if (nusarrtime0.charAt(0) == "-") {
+                    nusarrtime0 = "Very soon!";
+                } // else condition is not needed as you're reassigning nusarrtime0 to itself.
+
+                let nusarrtime1 = (nusservices[i]._etas[1]) ? fancyTimeFormat(nusservices[i]._etas[1]["eta_s"]) : "";
+                let nusarrtime2 = (nusservices[i]._etas[2]) ? fancyTimeFormat(nusservices[i]._etas[2]["eta_s"]) : "";
+
+                $("#time").append('<tr><td id="nus' + i + '"><a href="https://landtransportguru.net/nus-isb-' + busno + '/" target="_blank">' + busno + '</a></td><td><p id="nus' + i + '0" class="nusbustime">' + nusarrtime0 + '</p></td><td><p id="nus' + i + '1" class="nusbustime">' + nusarrtime1 + '</p></td><td><p id="nus' + i + '2" class="nusbustime">' + nusarrtime2 + '</p></td></tr>');   
             }
-        });
+        }
     }
+}
+
           
       
     if (typeof stopno !== 'undefined' && services && services.length !== 0) {
