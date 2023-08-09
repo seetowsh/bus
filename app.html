@@ -589,8 +589,7 @@ setInterval(function () {
             let map2 = getMapLink(service["NextBus2"]);
             let map3 = getMapLink(service["NextBus3"]);
 
-            let rowHtml = `<tr><td id="bus${i}">... (rest of the HTML string)`;
-            htmlRows.push(rowHtml);
+            let rowHtml = `<tr><td id="bus${i}"><a href="https://busrouter.sg/#/services/${busno}" target="_blank">${busno}</a></td><td>${wab}${load}${deck}${map1}${arrtime}</a></td><td>${wab2}${load2}${deck2}${map2}${arrtime2}</a></td><td>${wab3}${load3}${deck3}${map3}${arrtime3}</a></td></tr>`;            htmlRows.push(rowHtml);
         });
         $("#time").append(htmlRows.join(""));
     }
