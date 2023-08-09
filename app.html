@@ -611,15 +611,38 @@ setInterval(function () {
             let map2 = getMapLink(service["NextBus2"]);
             let map3 = getMapLink(service["NextBus3"]);
 
-            let rowHtml = `<tr><td id="bus${i}"><a href="https://busrouter.sg/#/services/${busno}" target="_blank">${busno}</a></td><td>${wab}${load}${deck}${map1}${arrtime}</a></td><td>${wab2}${load2}${deck2}${map2}${arrtime2}</a></td><td>${wab3}${load3}${deck3}${map3}${arrtime3}</a></td></tr>`;            htmlRows.push(rowHtml);
+            let rowHtml = `<tr><td id="bus${i}"><a href="https://busrouter.sg/#/services/${busno}" target="_blank">${busno}</a></td><td>${wab}${load}${deck}${map1}${arrtime}</a></td><td>${wab2}${load2}${deck2}${map2}${arrtime2}</a></td><td>${wab3}${load3}${deck3}${map3}${arrtime3}</a></td></tr>`;
+        htmlRows.push(rowHtml);
         });
         $("#time").append(htmlRows.join(""));
     }
 
-    if (typeof nuscode !== 'undefined' && Array.isArray(nusservices)) {
-        let nusRows = nusservices.map(generateNusServiceRow).filter(Boolean);  // filter(Boolean) removes any undefined/empty strings
-        $("#time").append(nusRows.join(""));
+    let nusRows = [];
+    
+    if (typeof nusservices !== 'undefined') {
+        for (let i = 0; i < nusservices.length; i++) {
+            let service = nusservices[i];
+            if (service["_etas"] && service["_etas"].length > 0) {
+                let busno = service["name"];
+                if (busno.charAt(0) !== "P") {
+                    let eta0 = formatNusEta(service["_etas"][0]);
+                    let eta1 = service["_etas"][1] ? formatNusEta(service["_etas"][1]) : "";
+                    let eta2 = service["_etas"][2] ? formatNusEta(service["_etas"][2]) : "";
+
+                    let rowHtml = generateNusServiceRow(i, busno, eta0, eta1, eta2);
+                    nusRows.push(rowHtml);
+                }
+            } else {
+                let busno = service["name"];
+                if (busno.charAt(0) !== "P") {
+                    let rowHtml = `<tr><td id="nus${i}"><a href="https://landtransportguru.net/nus-isb-${busno}/" target="_blank">${busno}</a></td><td colspan="3">No upcoming arrivals</td></tr>`;
+                    nusRows.push(rowHtml);
+                }
+            }
+        }
     }
+
+    $("#time").append(nusRows.join(""));
 
           
       
