@@ -550,6 +550,36 @@ function getMapLink(bus) {
     }
 }
 
+function formatNusEta(etaObj) {
+    if (!etaObj || !etaObj["eta_s"]) return "";
+    let formattedTime = fancyTimeFormat(etaObj["eta_s"]);
+    return (formattedTime.charAt(0) == "-") ? "Very soon!" : formattedTime;
+}
+
+function generateNusServiceRow(service, index) {
+    if (!service || service["name"].charAt(0) === "P") return "";
+
+    let busno = service["name"];
+    let nusarrtime0 = formatNusEta(service["_etas"][0]);
+    let nusarrtime1 = formatNusEta(service["_etas"][1]);
+    let nusarrtime2 = formatNusEta(service["_etas"][2]);
+
+    return `<tr>
+                <td id="nus${index}">
+                    <a href="https://landtransportguru.net/nus-isb-${busno}/" target="_blank">${busno}</a>
+                </td>
+                <td>
+                    <p id="nus${index}0" class="nusbustime">${nusarrtime0}</p>
+                </td>
+                <td>
+                    <p id="nus${index}1" class="nusbustime">${nusarrtime1}</p>
+                </td>
+                <td>
+                    <p id="nus${index}2" class="nusbustime">${nusarrtime2}</p>
+                </td>
+            </tr>`;
+}
+
 setInterval(function () {
     $("#fetching").remove();
     $("#time").empty();
@@ -586,25 +616,10 @@ setInterval(function () {
         $("#time").append(htmlRows.join(""));
     }
 
-if (typeof nuscode !== 'undefined') { 
-    for (let i = 0; i < nusservices.length; i++) {
-        if (nusservices[i]["name"].charAt(0) !== "P") {
-            let busno = nusservices[i]["name"];
-
-            if (nusservices[i]._etas && nusservices[i]._etas[0]) {
-                let nusarrtime0 = fancyTimeFormat(nusservices[i]["_etas"][0]["eta_s"]);
-                if (nusarrtime0.charAt(0) == "-") {
-                    nusarrtime0 = "Very soon!";
-                } // else condition is not needed as you're reassigning nusarrtime0 to itself.
-
-                let nusarrtime1 = (nusservices[i]._etas[1]) ? fancyTimeFormat(nusservices[i]._etas[1]["eta_s"]) : "";
-                let nusarrtime2 = (nusservices[i]._etas[2]) ? fancyTimeFormat(nusservices[i]._etas[2]["eta_s"]) : "";
-
-                $("#time").append('<tr><td id="nus' + i + '"><a href="https://landtransportguru.net/nus-isb-' + busno + '/" target="_blank">' + busno + '</a></td><td><p id="nus' + i + '0" class="nusbustime">' + nusarrtime0 + '</p></td><td><p id="nus' + i + '1" class="nusbustime">' + nusarrtime1 + '</p></td><td><p id="nus' + i + '2" class="nusbustime">' + nusarrtime2 + '</p></td></tr>');   
-            }
-        }
+    if (typeof nuscode !== 'undefined' && Array.isArray(nusservices)) {
+        let nusRows = nusservices.map(generateNusServiceRow).filter(Boolean);  // filter(Boolean) removes any undefined/empty strings
+        $("#time").append(nusRows.join(""));
     }
-}
 
           
       
