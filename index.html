@@ -583,6 +583,11 @@ setInterval(function () {
     let htmlRows = [];
 
     if (typeof services !== 'undefined' && services.length > 0) {
+
+      if (services.length === 0) {
+    // Show a message informing the user that no buses are arriving
+    $("#time").append('<tr><td colspan="4">No buses arriving at the moment.</td></tr>');
+} else {
         services.forEach((service, i) => {
             let busno = service["ServiceNo"];
 
@@ -610,6 +615,7 @@ setInterval(function () {
         htmlRows.push(rowHtml);
         });
         $("#time").append(htmlRows.join(""));
+      }
     }
 
     let nusRows = [];
