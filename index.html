@@ -20,14 +20,6 @@
     <meta name="google-signin-client_id" content="35800995045-u54nb2hltd3kl9vuhrhjq3eca2k5110u.apps.googleusercontent.com">
     <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" />
-    <script>
-      var OneSignal = window.OneSignal || [];
-      OneSignal.push(function() {
-        OneSignal.init({
-          appId: "b019c6f8-fd71-4f16-835b-0a755e2c29ea",
-        });
-      });
-    </script>
     <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
     <script>
       (adsbygoogle = window.adsbygoogle || []).push({
@@ -48,8 +40,24 @@
       background-color: #7CFC00;
       }
       body {
-      font-family: "San Francisco", "Helvetica Neue", Helvetica
+      font-family: Aptos, Bierstadt, "San Francisco", "Helvetica Neue", Helvetica
       }
+  nav .brand-logo {
+    overflow: hidden;
+    white-space: nowrap;
+}
+h2.stoptitle {
+  font-size: 10vmin;
+}
+@media screen and (min-width: 600px) {
+  h2.stoptitle {
+     font-size: 3.56rem;
+  }
+}
+@media only screen and (max-width: 992.99px) {
+.modal {
+  width: 100% !important;
+}}
       footer {
       bottom: 0;
       }
@@ -263,7 +271,7 @@
     <div id="tableofresults" class="modal">
       <div class="modal-content">
         <div id="resultstable">
-          <h2 class="center"><span id="hm"></span></h2>
+          <h2 class="center stoptitle"><span id="hm"></span></h2>
           <p class="center"><a class="btn waves-effect waves-light modal-close"><i class="material-icons">arrow_back</i></a><span id="locbutton"></span><a class="btn waves-effect waves-light modal-trigger" href="#legend">legend</a><a class="btn waves-effect waves-light" onClick="updatecookie();"><i class="material-icons">star</i></a></p>
           <p class="center">Results were last fetched from the server at <span id="resultupdate"></span></p>
           <table>
@@ -322,6 +330,11 @@
       
       
         });
+      map.on('locationerror', (err) => {
+    console.error("Location access denied:", err.message);
+    // Optionally provide some feedback to the user.
+      });
+
         map.locate({setView: true, minZoom: 15});
       
       function onEachFeature(feature, layer) {
@@ -351,6 +364,11 @@
       }).addTo(map);
 
       
+function clearFavorites() {
+    document.cookie = "fav=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    window.alert("Your favourites have been cleared. The changes will take effect the next time you reopen the app.");
+}
+
 function getCookie(name) {
   const re = new RegExp(name + "=([^;]+)");
   const value = re.exec(document.cookie);
@@ -358,20 +376,24 @@ function getCookie(name) {
 }
 
 let fav1 = getCookie("fav");
-
 let topBarElements = [];
-let topBarHTML = "";
 
-if (fav1 !== null){
-  const fav = fav1.split(",");
-  for(let i=1; i<fav.length; i++){
-    const stopno = fav[i];
-    const stopname = bus_dict[parseInt(stopno)][2];
-    topBarElements.push('<a class="waves-effect waves-light btn modal-trigger brown" href="#tableofresults" onclick="javascript:stopno='+stopno+';redir()">'+stopname+'</a>');
-  }
-  topBarHTML = topBarElements.join("");
+if (fav1) {
+    const fav = fav1.split(",");
+
+    for(let i=0; i<fav.length; i++) {
+        const stopno = fav[i];
+        const stopname = bus_dict[parseInt(stopno)] && bus_dict[parseInt(stopno)][2];
+        
+        if (stopname) {
+            topBarElements.push(`<a class="waves-effect waves-light btn modal-trigger brown" href="#tableofresults" onclick="javascript:stopno=${stopno};redir()">${stopname}</a>`);
+        }
+    }
+
+    topBarElements.push('<a class="waves-effect waves-light btn modal-trigger brown" onclick="clearFavorites()">Clear Favourites</a>');
+    topBarHTML = topBarElements.join("");
 } else {
-  topBarHTML = 'None right now :(. Add some bus stops to your favourites by pressing the star icon on any bus stop!';
+    topBarHTML = 'None right now :(. Add some bus stops to your favourites by pressing the star icon on any bus stop!';
 }
 
 jQuery("#topbar").prepend('<h6>Your favourite bus stops:</h6>' + topBarHTML);
@@ -387,15 +409,29 @@ jQuery("#topbar").prepend('<h6>Your favourite bus stops:</h6>' + topBarHTML);
       
       
 function updatecookie() {
-  const EXPIRY_TIME_MS = 5000000 * 36000; // 5,000,000 seconds
+    const EXPIRY_TIME_MS = 5000000 * 36000; // 5,000,000 seconds
+    let now = Date.now();
+    let expireTime = now + EXPIRY_TIME_MS;
+    let cookieValue;
 
-  let now = Date.now();
-  let expireTime = now + EXPIRY_TIME_MS;
-  let cookieValue = fav1.toString() + "," + stopno.toString();
-  let cookieString = "fav=" + cookieValue + ";expires=" + new Date(expireTime).toUTCString() + ";path=/";
-  document.cookie = cookieString;
-  alert("The bus stop " + bus_dict[parseInt(stopno)][2] + " has been added!");
+    // If fav1 exists and is not empty, append stopno to it. Otherwise, set fav1 to stopno.
+    if (fav1) {
+        cookieValue = fav1 + "," + stopno.toString();
+    } else {
+        cookieValue = stopno.toString();
+    }
+
+    let cookieString = "fav=" + cookieValue + ";expires=" + new Date(expireTime).toUTCString() + ";path=/";
+    document.cookie = cookieString;
+
+    if (bus_dict && bus_dict[parseInt(stopno)]) {
+        alert("The bus stop " + bus_dict[parseInt(stopno)][2] + " has been added!");
+    } else {
+        alert("Bus stop added!");
+    }
 }
+
+      fav1 = getCookie("fav");
 
 
 
@@ -514,6 +550,31 @@ function getMapLink(bus) {
     }
 }
 
+function formatNusEta(etaObj) {
+    if (!etaObj || !etaObj["eta_s"]) return "";
+    let formattedTime = fancyTimeFormat(etaObj["eta_s"]);
+    return (formattedTime.charAt(0) == "-") ? "Very soon!" : formattedTime;
+}
+
+function generateNusServiceRow(service, index) {
+    if (!service || service.name.charAt(0) === "P") return "";
+
+    let busno = service.name;
+    let nusarrtime0 = service["_etas"] && service["_etas"][0] ? formatNusEta(service["_etas"][0]) : "No data";
+    let nusarrtime1 = service["_etas"] && service["_etas"][1] ? formatNusEta(service["_etas"][1]) : "No data";
+    let nusarrtime2 = service["_etas"] && service["_etas"][2] ? formatNusEta(service["_etas"][2]) : "No data";
+
+    return `<tr>
+                <td id="nus${index}">
+                    <a href="https://landtransportguru.net/nus-isb-${busno}/" target="_blank">${busno}</a>
+                </td>
+                <td><p id="nus${index}0" class="nusbustime">${nusarrtime0}</p></td>
+                <td><p id="nus${index}1" class="nusbustime">${nusarrtime1}</p></td>
+                <td><p id="nus${index}2" class="nusbustime">${nusarrtime2}</p></td>
+            </tr>`;
+}
+
+
 setInterval(function () {
     $("#fetching").remove();
     $("#time").empty();
@@ -521,11 +582,8 @@ setInterval(function () {
 
     let htmlRows = [];
 
-    if (services.length == 0) {
-        // your error message
-    } else {
-        for (let i = 0; i < services.length; i++) {
-            let service = services[i];
+    if (typeof services !== 'undefined' && services.length > 0) {
+        services.forEach((service, i) => {
             let busno = service["ServiceNo"];
 
             let arrtime = calculateArrivalTime(service["NextBus"]["EstimatedArrival"], timenow);
@@ -549,51 +607,48 @@ setInterval(function () {
             let map3 = getMapLink(service["NextBus3"]);
 
             let rowHtml = `<tr><td id="bus${i}"><a href="https://busrouter.sg/#/services/${busno}" target="_blank">${busno}</a></td><td>${wab}${load}${deck}${map1}${arrtime}</a></td><td>${wab2}${load2}${deck2}${map2}${arrtime2}</a></td><td>${wab3}${load3}${deck3}${map3}${arrtime3}</a></td></tr>`;
-            htmlRows.push(rowHtml); 
-        }
+        htmlRows.push(rowHtml);
+        });
+        $("#time").append(htmlRows.join(""));
     }
 
-    $("#time").append(htmlRows.join(""));
-      
-          if (typeof nuscode == 'undefined') { 
-          
-          } else {
-              for (i = 0; i < nusservices.length; i++) {
-                if (nusservices[i]["name"].charAt(0) !== "P"){
-                  let busno = nusservices[i]["name"];
-                  let nusarrtime0 = fancyTimeFormat(nusservices[i]["_etas"][0]["eta_s"])
-                  if (nusarrtime0.charAt(0) == "-") {
-                      nusarrtime0 = "Very soon!";
-                  } else {
-                      nusarrtime0 = nusarrtime0;
-                  };
-                  if (typeof nusservices[i]["_etas"][1] == 'undefined') {
-                    nusarrtime1 = "";
-                  } else {
-                    nusarrtime1 = fancyTimeFormat(nusservices[i]["_etas"][1]["eta_s"]);
-                  }
-                  if (typeof nusservices[i]["_etas"][2] == 'undefined') {
-                    nusarrtime2 = "";
-                  } else {
-                    nusarrtime2 = fancyTimeFormat(nusservices[i]["_etas"][2]["eta_s"]);
-                  }
-                  $("#time").append('<tr><td id="nus' + i + '"><a href="https://landtransportguru.net/nus-isb-'+busno+'/" target="_blank">' + busno + '</a></td><td><p id="nus' + i + '0" class="nusbustime">' + nusarrtime0 + '</p></td><td><p id="nus' + i + '1" class="nusbustime">' + nusarrtime1 + '</p></td><td><p id="nus' + i + '2" class="nusbustime">' + nusarrtime2 + '</p></td></tr>');   
-                }
-              }
-          }
+    let nusRows = [];
+    
+if (typeof nusservices !== 'undefined') {
+    for (let i = 0; i < nusservices.length; i++) {
+        let service = nusservices[i];
+
+        if (service["_etas"] && service["_etas"].length > 0) {
+            let rowHtml = generateNusServiceRow(service, i);
+            nusRows.push(rowHtml);
+        } else {
+            let busno = service["name"];
+            if (busno.charAt(0) !== "P") {
+                let rowHtml = `<tr><td id="nus${i}"><a href="https://landtransportguru.net/nus-isb-${busno}/" target="_blank">${busno}</a></td><td colspan="3">No upcoming arrivals</td></tr>`;
+                nusRows.push(rowHtml);
+            }
+        }
+    }
+}
+
+
+    $("#time").append(nusRows.join(""));
+
           
       
-          if (stopno == "66271" && services.length !== 0) {
-              jQuery("#bus0").append("<br>To Ang Mo Kio");
-              jQuery("#bus1").append("<br>To Punggol");
-          } else if (stopno == "46088" && services.length !== 0) {
-              jQuery("#bus0").append("<br>To Kranji");
-              jQuery("#bus1").append("<br>To Malaysia");
-          } else if (stopno == "46069" && services.length !== 0) {
-              jQuery("#bus0").append("<br>To Kranji");
-              jQuery("#bus1").append("<br>To Malaysia");
-          }
-      }, 1000);
+    if (typeof stopno !== 'undefined' && services && services.length !== 0) {
+        if (stopno == "66271") {
+            jQuery("#bus0").append("<br>To Ang Mo Kio");
+            jQuery("#bus1").append("<br>To Punggol");
+        } else if (stopno == "46088") {
+            jQuery("#bus0").append("<br>To Kranji");
+            jQuery("#bus1").append("<br>To Malaysia");
+        } else if (stopno == "46069") {
+            jQuery("#bus0").append("<br>To Kranji");
+            jQuery("#bus1").append("<br>To Malaysia");
+        }
+    }
+}, 1000);
       }
       
       
@@ -646,36 +701,58 @@ setInterval(function () {
       });
     </script>
     <script>
-async function activatenearby(){ 
-    jQuery('#nearbycheck').text("Checking, please wait...");
-    
-    const position = await new Promise((resolve, reject) => {
-        navigator.geolocation.getCurrentPosition(resolve, reject);
-    });
+function activatenearby() { 
+    // Inform the user
+    $('#nearbycheck').text("Checking, please wait...");
 
-    window.htmlhtml = await $.get(`https://bus.api.seetow.sg/TS?lat=${position.coords.latitude}&long=${position.coords.longitude}`);
-    window.crazy = $.parseHTML(window.htmlhtml);
-    window.data = { html: window.htmlhtml };
+    // Fetch the geolocation data
+    navigator.geolocation.getCurrentPosition(function(position) {
+        $.get(`https://bus.api.seetow.sg/TS?lat=${position.coords.latitude}&long=${position.coords.longitude}`)
+            .done(function(htmlResponse) {
+                // Parse the response to extract relevant information
+                const $parsedResponse = $(htmlResponse);
+                let locations = '';
 
-    let listOfStops = '';
-    for(let i=0; i < window.crazy.length; i++){
-        listOfStops += `<div class="listofstops">${window.crazy[i]}</div>`;
-    }
-    $("#mehmeh").html(listOfStops);
-    
-    let locations = '';
-    let mehmeh = document.getElementsByClassName("listofstops");
-    for(let i=0; i < window.crazy.length; i++){
-        let stopno = Number(mehmeh[i].textContent.substring(34));
+                $parsedResponse.each(function() {
+                    const stopDetails = $(this).find('.name').text().split(':');
 
-        if (!isNaN(stopno)){
-            let stopname = bus_dict[parseInt(stopno)][2];
-            locations += `<a class="waves-effect waves-light btn modal-trigger brown" href="#tableofresults" onclick="javascript:stopno=${stopno};redir()">${stopname}</a>`;
+                    if (stopDetails && stopDetails.length === 2) {
+                        const stopno = Number(stopDetails[0].trim());
+                        const stopname = stopDetails[1].trim();
+
+                        if (!isNaN(stopno) && stopname) {
+                            locations += `<a class="waves-effect waves-light btn modal-trigger brown" href="#tableofresults" onclick="javascript:stopno=${stopno};redir()">${stopname}</a>`;
+                        }
+                    }
+                });
+
+                // Update the DOM once to reduce reflows
+                $('#mehmeh').html($parsedResponse);
+                $('#locationlive').html(locations);
+                $('#nearbycheck2').remove();
+            })
+            .fail(function(jqXHR, textStatus, errorThrown) {
+                $('#nearbycheck').text(textStatus).addClass('error-class'); 
+            });
+    }, function(error) {
+        switch(error.code) {
+            case error.PERMISSION_DENIED:
+                $('#nearbycheck').text("User denied the request for Geolocation.").addClass('error-class');
+                break;
+            case error.POSITION_UNAVAILABLE:
+                $('#nearbycheck').text("Location information is unavailable.").addClass('error-class');
+                break;
+            case error.TIMEOUT:
+                $('#nearbycheck').text("The request to get user location timed out.").addClass('error-class');
+                break;
+            default:
+                $('#nearbycheck').text("An unknown error occurred.").addClass('error-class');
         }
-    }
-    jQuery("#locationlive").html(locations);
-    jQuery('#nearbycheck2').remove();
+    });
 }
+
+
+
     </script>
     <script>
       var field1 = document.getElementById("field1");
