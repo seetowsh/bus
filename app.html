@@ -662,36 +662,61 @@ setInterval(function () {
       });
     </script>
     <script>
-async function activatenearby(){ 
-    jQuery('#nearbycheck').text("Checking, please wait...");
+async function activatenearby() { 
+    // Inform the user
+    $('#nearbycheck').text("Checking, please wait...");
     
     const position = await new Promise((resolve, reject) => {
-        navigator.geolocation.getCurrentPosition(resolve, reject);
+        navigator.geolocation.getCurrentPosition(resolve, (error) => {
+            switch(error.code) {
+                case error.PERMISSION_DENIED:
+                    reject("User denied the request for Geolocation.");
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    reject("Location information is unavailable.");
+                    break;
+                case error.TIMEOUT:
+                    reject("The request to get user location timed out.");
+                    break;
+                case error.UNKNOWN_ERROR:
+                    reject("An unknown error occurred.");
+                    break;
+            }
+        });
     });
 
-    window.htmlhtml = await $.get(`https://bus.api.seetow.sg/TS?lat=${position.coords.latitude}&long=${position.coords.longitude}`);
-    window.crazy = $.parseHTML(window.htmlhtml);
-    window.data = { html: window.htmlhtml };
+        // Fetch the API data
+        const htmlResponse = await $.get(`https://bus.api.seetow.sg/TS?lat=${position.coords.latitude}&long=${position.coords.longitude}`);
 
-    let listOfStops = '';
-    for(let i=0; i < window.crazy.length; i++){
-        listOfStops += `<div class="listofstops">${window.crazy[i]}</div>`;
-    }
-    $("#mehmeh").html(listOfStops);
-    
-    let locations = '';
-    let mehmeh = document.getElementsByClassName("listofstops");
-    for(let i=0; i < window.crazy.length; i++){
-        let stopno = Number(mehmeh[i].textContent.substring(34));
+        // Parse the response to extract relevant information
+        const $parsedResponse = $(htmlResponse);
 
-        if (!isNaN(stopno)){
-            let stopname = bus_dict[parseInt(stopno)][2];
-            locations += `<a class="waves-effect waves-light btn modal-trigger brown" href="#tableofresults" onclick="javascript:stopno=${stopno};redir()">${stopname}</a>`;
-        }
-    }
-    jQuery("#locationlive").html(locations);
-    jQuery('#nearbycheck2').remove();
+        let locations = '';
+        
+        $parsedResponse.each(function() {
+            const stopDetails = $(this).find('.name').text().split(':');
+            
+            if (stopDetails && stopDetails.length === 2) {
+                const stopno = Number(stopDetails[0].trim());
+                const stopname = stopDetails[1].trim();
+
+                if (!isNaN(stopno) && stopname) {
+                    locations += `<a class="waves-effect waves-light btn modal-trigger brown" href="#tableofresults" onclick="javascript:stopno=${stopno};redir()">${stopname}</a>`;
+                }
+            }
+        });
+        
+        // Update the DOM once to reduce reflows
+        $('#mehmeh').html($parsedResponse);
+        $('#locationlive').html(locations);
+} catch (error) {
+    $('#nearbycheck').text(error);  // Directly set the error message to replace "Checking, please wait..."
+} finally {
+    $('#nearbycheck2').remove();
 }
+}
+
+
     </script>
     <script>
       var field1 = document.getElementById("field1");
