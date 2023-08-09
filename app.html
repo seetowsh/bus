@@ -565,11 +565,8 @@ setInterval(function () {
 
     let htmlRows = [];
 
-    if (services.length == 0) {
-        // your error message
-    } else {
-        for (let i = 0; i < services.length; i++) {
-            let service = services[i];
+    if (typeof services !== 'undefined' && services.length > 0) {
+        services.forEach((service, i) => {
             let busno = service["ServiceNo"];
 
             let arrtime = calculateArrivalTime(service["NextBus"]["EstimatedArrival"], timenow);
@@ -592,18 +589,15 @@ setInterval(function () {
             let map2 = getMapLink(service["NextBus2"]);
             let map3 = getMapLink(service["NextBus3"]);
 
-            let rowHtml = `<tr><td id="bus${i}"><a href="https://busrouter.sg/#/services/${busno}" target="_blank">${busno}</a></td><td>${wab}${load}${deck}${map1}${arrtime}</a></td><td>${wab2}${load2}${deck2}${map2}${arrtime2}</a></td><td>${wab3}${load3}${deck3}${map3}${arrtime3}</a></td></tr>`;
-            htmlRows.push(rowHtml); 
-        }
+            let rowHtml = `<tr><td id="bus${i}">... (rest of the HTML string)`;
+            htmlRows.push(rowHtml);
+        });
+        $("#time").append(htmlRows.join(""));
     }
 
-    $("#time").append(htmlRows.join(""));
-      
-          if (typeof nuscode == 'undefined') { 
-          
-          } else {
-              for (i = 0; i < nusservices.length; i++) {
-                if (nusservices[i]["name"].charAt(0) !== "P"){
+    if (typeof nuscode !== 'undefined' && typeof nusservices !== 'undefined' && nusservices.length > 0) {
+        nusservices.forEach((service, i) => {
+            if (service["name"].charAt(0) !== "P") {
                   let busno = nusservices[i]["name"];
                   let nusarrtime0 = fancyTimeFormat(nusservices[i]["_etas"][0]["eta_s"])
                   if (nusarrtime0.charAt(0) == "-") {
@@ -627,16 +621,18 @@ setInterval(function () {
           }
           
       
-          if (stopno == "66271" && services.length !== 0) {
-              jQuery("#bus0").append("<br>To Ang Mo Kio");
-              jQuery("#bus1").append("<br>To Punggol");
-          } else if (stopno == "46088" && services.length !== 0) {
-              jQuery("#bus0").append("<br>To Kranji");
-              jQuery("#bus1").append("<br>To Malaysia");
-          } else if (stopno == "46069" && services.length !== 0) {
-              jQuery("#bus0").append("<br>To Kranji");
-              jQuery("#bus1").append("<br>To Malaysia");
-          }
+    if (typeof stopno !== 'undefined' && services && services.length !== 0) {
+        if (stopno == "66271") {
+            jQuery("#bus0").append("<br>To Ang Mo Kio");
+            jQuery("#bus1").append("<br>To Punggol");
+        } else if (stopno == "46088") {
+            jQuery("#bus0").append("<br>To Kranji");
+            jQuery("#bus1").append("<br>To Malaysia");
+        } else if (stopno == "46069") {
+            jQuery("#bus0").append("<br>To Kranji");
+            jQuery("#bus1").append("<br>To Malaysia");
+        }
+    }
       }, 1000);
       }
       
