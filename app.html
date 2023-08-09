@@ -372,6 +372,11 @@ h2.stoptitle {
       }).addTo(map);
 
       
+function clearFavorites() {
+    document.cookie = "fav=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    window.alert("Your favourites have been cleared. The changes will take effect the next time you reopen the app.");
+}
+
 function getCookie(name) {
   const re = new RegExp(name + "=([^;]+)");
   const value = re.exec(document.cookie);
@@ -379,20 +384,24 @@ function getCookie(name) {
 }
 
 let fav1 = getCookie("fav");
-
 let topBarElements = [];
-let topBarHTML = "";
 
-if (fav1 !== null){
-  const fav = fav1.split(",");
-  for(let i=0; i<fav.length; i++){
-    const stopno = fav[i];
-    const stopname = bus_dict[parseInt(stopno)][2];
-    topBarElements.push('<a class="waves-effect waves-light btn modal-trigger brown" href="#tableofresults" onclick="javascript:stopno='+stopno+';redir()">'+stopname+'</a>');
-  }
-  topBarHTML = topBarElements.join("");
+if (fav1) {
+    const fav = fav1.split(",");
+
+    for(let i=0; i<fav.length; i++) {
+        const stopno = fav[i];
+        const stopname = bus_dict[parseInt(stopno)] && bus_dict[parseInt(stopno)][2];
+        
+        if (stopname) {
+            topBarElements.push(`<a class="waves-effect waves-light btn modal-trigger brown" href="#tableofresults" onclick="javascript:stopno=${stopno};redir()">${stopname}</a>`);
+        }
+    }
+
+    topBarElements.push('<a class="waves-effect waves-light btn modal-trigger brown" onclick="clearFavorites()">Clear Favourites</a>');
+    topBarHTML = topBarElements.join("");
 } else {
-  topBarHTML = 'None right now :(. Add some bus stops to your favourites by pressing the star icon on any bus stop!';
+    topBarHTML = 'None right now :(. Add some bus stops to your favourites by pressing the star icon on any bus stop!';
 }
 
 jQuery("#topbar").prepend('<h6>Your favourite bus stops:</h6>' + topBarHTML);
