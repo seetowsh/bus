@@ -385,7 +385,7 @@ let topBarHTML = "";
 
 if (fav1 !== null){
   const fav = fav1.split(",");
-  for(let i=1; i<fav.length; i++){
+  for(let i=0; i<fav.length; i++){
     const stopno = fav[i];
     const stopname = bus_dict[parseInt(stopno)][2];
     topBarElements.push('<a class="waves-effect waves-light btn modal-trigger brown" href="#tableofresults" onclick="javascript:stopno='+stopno+';redir()">'+stopname+'</a>');
