@@ -595,7 +595,7 @@ setInterval(function () {
         $("#time").append(htmlRows.join(""));
     }
 
-    if (typeof nuscode !== 'undefined' && typeof nusservices !== 'undefined' && nusservices.length > 0) {
+      if (typeof nuscode !== 'undefined' && typeof nusservices !== 'undefined' && nusservices.length > 0) {
         nusservices.forEach((service, i) => {
             if (service["name"].charAt(0) !== "P") {
                   let busno = nusservices[i]["name"];
@@ -616,9 +616,9 @@ setInterval(function () {
                     nusarrtime2 = fancyTimeFormat(nusservices[i]["_etas"][2]["eta_s"]);
                   }
                   $("#time").append('<tr><td id="nus' + i + '"><a href="https://landtransportguru.net/nus-isb-'+busno+'/" target="_blank">' + busno + '</a></td><td><p id="nus' + i + '0" class="nusbustime">' + nusarrtime0 + '</p></td><td><p id="nus' + i + '1" class="nusbustime">' + nusarrtime1 + '</p></td><td><p id="nus' + i + '2" class="nusbustime">' + nusarrtime2 + '</p></td></tr>');   
-                }
-              }
-          }
+            }
+        });
+    }
           
       
     if (typeof stopno !== 'undefined' && services && services.length !== 0) {
@@ -633,7 +633,7 @@ setInterval(function () {
             jQuery("#bus1").append("<br>To Malaysia");
         }
     }
-      }, 1000);
+}, 1000);
       }
       
       
