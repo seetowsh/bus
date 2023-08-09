@@ -585,11 +585,6 @@ setInterval(function () {
     let htmlRows = [];
 
     if (typeof services !== 'undefined' && services.length > 0) {
-
-      if (services.length === 0) {
-    // Show a message informing the user that no buses are arriving
-    $("#time").append('<tr><td colspan="4">No buses arriving at the moment.</td></tr>');
-} else {
         services.forEach((service, i) => {
             let busno = service["ServiceNo"];
 
@@ -617,7 +612,6 @@ setInterval(function () {
         htmlRows.push(rowHtml);
         });
         $("#time").append(htmlRows.join(""));
-      }
     }
 
     let nusRows = [];
@@ -642,7 +636,11 @@ if (typeof nusservices !== 'undefined') {
 
     $("#time").append(nusRows.join(""));
 
-          
+if (services.length === 0 && nusservices.length === 0) {
+    // Show a message informing the user that no buses are arriving
+    $("#time").append('<tr><td colspan="4">We received a response but there was no information. Are buses running at this time? Is this a valid stop ID? The API may be temporarily down. <br>HTTP 200 ==> Empty response body.</td></tr>');
+};
+
       
     if (typeof stopno !== 'undefined' && services && services.length !== 0) {
         if (stopno == "66271") {
