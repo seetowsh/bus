@@ -707,37 +707,38 @@ if (services.length === 0 && nusservices === undefined) {
       });
     </script>
     <script>
-
 function activatenearby() { 
-    // Change the text of the "refresh locations" button
+    // Inform the user
     $('#nearbycheck').text("Checking, please wait...");
 
     // Fetch the geolocation data
     navigator.geolocation.getCurrentPosition(function(position) {
         $.get(`https://bus.api.seetow.sg/TS?lat=${position.coords.latitude}&long=${position.coords.longitude}`)
             .done(function(htmlResponse) {
-                // Parse and append the new results
+                // Parse the response to extract relevant information
                 const $parsedResponse = $(htmlResponse);
                 let locations = '';
+
                 $parsedResponse.each(function() {
                     const stopDetails = $(this).find('.name').text().split(':');
+
                     if (stopDetails && stopDetails.length === 2) {
                         const stopno = Number(stopDetails[0].trim());
                         const stopname = stopDetails[1].trim();
+
                         if (!isNaN(stopno) && stopname) {
                             locations += `<a class="waves-effect waves-light btn modal-trigger brown" href="#tableofresults" onclick="javascript:stopno=${stopno};redir()">${stopname}</a>`;
                         }
                     }
                 });
 
+                // Update the DOM once to reduce reflows
                 $('#mehmeh').html($parsedResponse);
                 $('#locationlive').html(locations);
-
-                // Reset the button's text to its original value
-                $('#nearbycheck').text("Refresh Locations");
+                $('#nearbycheck2').remove();
             })
             .fail(function(jqXHR, textStatus, errorThrown) {
-                $('#nearbycheck').text("Failed to get data. Try Again?").addClass('error-class');
+                $('#nearbycheck').text(textStatus).addClass('error-class'); 
             });
     }, function(error) {
         switch(error.code) {
@@ -755,6 +756,7 @@ function activatenearby() {
         }
     });
 }
+
 
 
     </script>
