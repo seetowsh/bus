@@ -461,7 +461,7 @@ function fancyTimeFormat(duration) {
       $("#locbutton").html('<a class="btn waves-effect waves-light modal-trigger" href="https://www.google.com/maps/@?api=1&map_action=pano&viewpoint='+bus_dict[parseInt(stopno)][0]+','+bus_dict[parseInt(stopno)][1]+'" target="_blank">location</a>');
       
       
-      url = "https://bus.api.seetow.sg/LTA?id="+stopno;
+      url = "https://misty-king-3f2c.seetow.workers.dev/LTA?id="+stopno;
         
         if (stopno > 100000) {
         stopid = "NUS"
@@ -477,7 +477,7 @@ function fancyTimeFormat(duration) {
       
       });
       
-      nusurl = "https://bus.api.seetow.sg/NUS?id="+nuscode;
+      nusurl = "https://misty-king-3f2c.seetow.workers.dev/NUS?id="+nuscode;
       console.log(nusurl);  
       
         if (nuscode !== undefined) {
@@ -713,7 +713,7 @@ function activatenearby() {
 
     // Fetch the geolocation data
     navigator.geolocation.getCurrentPosition(function(position) {
-        $.get(`https://bus.api.seetow.sg/TS?lat=${position.coords.latitude}&long=${position.coords.longitude}`)
+        $.get(`https://misty-king-3f2c.seetow.workers.dev/TS?lat=${position.coords.latitude}&long=${position.coords.longitude}`)
             .done(function(htmlResponse) {
                 // Parse the response to extract relevant information
                 const $parsedResponse = $(htmlResponse);
