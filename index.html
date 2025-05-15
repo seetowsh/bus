@@ -311,6 +311,16 @@ h2.stoptitle {
         <a class="modal-close waves-effect waves-green btn-flat">Close</a>
       </div>
     </div>
+    <div id="outsideModal" class="modal">
+  <div class="modal-content">
+    <h4 id="modalTitle">Outside Supported Area</h4>
+    <p id="modalMessage">You are detected to be outside Singapore.</p>
+  </div>
+  <div class="modal-footer" id="modalButtons">
+    <!-- Buttons will be inserted dynamically -->
+  </div>
+</div>
+
     <script src="/static/nusdict.js"></script>
     <script src="/static/materialize.js"></script>
     <script src="/static/geojson2.js"></script>
@@ -717,11 +727,54 @@ if (services.length === 0 && nusservices === undefined) {
         }
       }
     </script>
-    <script>
-      navigator.geolocation.getCurrentPosition(function(position) {
-      var marker = L.marker([position.coords.latitude,position.coords.longitude]).addTo(map);
-      });
-    </script>
+<script>
+  const singaporeBounds = L.latLngBounds(
+    L.latLng(1.199572, 103.552020),
+    L.latLng(1.506417, 104.058765)
+  );
+
+  const londonBounds = L.latLngBounds(
+    L.latLng(51.237141, -0.581279),
+    L.latLng(51.736466, 0.468455)
+  );
+
+  navigator.geolocation.getCurrentPosition(function(position) {
+    const userLatLng = L.latLng(position.coords.latitude, position.coords.longitude);
+    L.marker(userLatLng).addTo(map);
+
+    let modalTitle = document.getElementById('modalTitle');
+    let modalMessage = document.getElementById('modalMessage');
+    let modalButtons = document.getElementById('modalButtons');
+
+    if (!singaporeBounds.contains(userLatLng)) {
+      if (londonBounds.contains(userLatLng)) {
+        // User is in Greater London
+        modalTitle.innerText = "Detected in London";
+        modalMessage.innerText = "You appear to be in Greater London. This app is optimised for Singapore. Would you like to check out local bus services?";
+        modalButtons.innerHTML = `
+          <a href="#" class="modal-close waves-effect waves-green btn-flat">Try London Mode</a>
+          <a class="modal-close waves-effect waves-green btn-flat">Ignore</a>
+        `;
+      } else {
+        // Outside both SG and London
+        modalTitle.innerText = "Outside Supported Area";
+        modalMessage.innerText = "You are detected to be outside Singapore.";
+        modalButtons.innerHTML = `
+          <a href="https://seetow.sg" class="modal-close waves-effect waves-green btn-flat">Go to Homepage</a>
+          <a class="modal-close waves-effect waves-green btn-flat">Ignore</a>
+        `;
+      }
+
+      // Show modal
+      const instance = M.Modal.getInstance(document.getElementById('outsideModal'));
+      if (instance) instance.open();
+    }
+
+  }, function(error) {
+    console.error("Geolocation error:", error.message);
+  });
+</script>
+
     <script>
 function activatenearby() { 
     // Inform the user
