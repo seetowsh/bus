@@ -153,7 +153,7 @@ h2.stoptitle {
               <div id="topbar"></div>
               <br />
               <h6>Nearby bus stops (nearest to furthest):</h6>
-              <div id="locationlive"><a class="waves-effect waves-light btn modal-trigger brown" id="nearbycheck2" onclick="javascript:activatenearby()"><span id="nearbycheck">Find nearby bus stops</span></a></div>
+              <div id="locationlive"><a class="waves-effect waves-light btn modal-trigger brown" id="nearbycheck2" onclick="javascript:activatenearby()"><span id="nearbycheck">Loading nearby stops...</span></a></div>
               <div id="mehmeh" style="display:none;"></div>
               <br>
               <h6>Bus stop map</h6>
@@ -701,55 +701,7 @@ if (services.length === 0 && nusservices === undefined) {
 
 
     <script>
-function activatenearby() { 
-    // Inform the user
-    $('#nearbycheck').text("Checking, please wait...");
 
-    // Fetch the geolocation data
-    navigator.geolocation.getCurrentPosition(function(position) {
-        $.get(`https://misty-king-3f2c.seetow.workers.dev/TS?lat=${position.coords.latitude}&long=${position.coords.longitude}`)
-            .done(function(htmlResponse) {
-                // Parse the response to extract relevant information
-                const $parsedResponse = $(htmlResponse);
-                let locations = '';
-
-                $parsedResponse.each(function() {
-                    const stopDetails = $(this).find('.name').text().split(':');
-
-                    if (stopDetails && stopDetails.length === 2) {
-                        const stopno = Number(stopDetails[0].trim());
-                        const stopname = stopDetails[1].trim();
-
-                        if (!isNaN(stopno) && stopname) {
-                            locations += `<a class="waves-effect waves-light btn modal-trigger brown" href="#tableofresults" onclick="javascript:stopno=${stopno};redir()">${stopname}</a>`;
-                        }
-                    }
-                });
-
-                // Update the DOM once to reduce reflows
-                $('#mehmeh').html($parsedResponse);
-                $('#locationlive').html(locations);
-                $('#nearbycheck2').remove();
-            })
-            .fail(function(jqXHR, textStatus, errorThrown) {
-                $('#nearbycheck').text(textStatus).addClass('error-class'); 
-            });
-    }, function(error) {
-        switch(error.code) {
-            case error.PERMISSION_DENIED:
-                $('#nearbycheck').text("User denied the request for Geolocation.").addClass('error-class');
-                break;
-            case error.POSITION_UNAVAILABLE:
-                $('#nearbycheck').text("Location information is unavailable.").addClass('error-class');
-                break;
-            case error.TIMEOUT:
-                $('#nearbycheck').text("The request to get user location timed out.").addClass('error-class');
-                break;
-            default:
-                $('#nearbycheck').text("An unknown error occurred.").addClass('error-class');
-        }
-    });
-}
 
 
 
@@ -790,6 +742,12 @@ function activatenearby() {
         }
       }))
     };
+
+    const stopButtons = geojson.features.map(f => {
+  return `<a class="waves-effect waves-light btn modal-trigger brown" href="#tableofresults" onclick="javascript:stopno='${f.properties.stopid}';redir()">${f.properties.name}</a>`;
+}).join("");
+
+    $('#locationlive').html(stopButtons);
 
     L.geoJSON(geojson, {
       pointToLayer: function (feature, latlng) {
