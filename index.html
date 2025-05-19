@@ -786,7 +786,7 @@ function activatenearby() {
   map.setView(userLatLng, 15);
 
   const radius = 500; // meters
-  const apiUrl = `https://api.tfl.gov.uk/StopPoint?lat=${position.coords.latitude}&lon=${position.coords.longitude}&radius=${radius}&modes=bus`;
+  const apiUrl = `https://api.tfl.gov.uk/StopPoint?lat=${position.coords.latitude}&lon=${position.coords.longitude}&radius=${radius}&stopTypes=NaptanPublicBusCoachTram`;
 
   try {
     const res = await fetch(apiUrl);
