@@ -149,11 +149,11 @@ h2.stoptitle {
               <hr>
               <div id="topbar"></div>
               <br />
-              <h6>Nearby bus stops (nearest to furthest):</h6>
               <h6>Bus stop map</h6>
               <p>Click or tap on the red markers to get the results</p>
               <div id="map"></div>
-              <br>
+              <br /><hr /><br />
+              <h6>Nearby bus stops (nearest to furthest):</h6>
               <div id="locationlive"><a class="waves-effect waves-light btn modal-trigger brown" id="nearbycheck2" onclick="javascript:activatenearby()"><span id="nearbycheck">Loading nearby stops...</span></a></div>
               <div id="mehmeh" style="display:none;"></div>
             </div>
@@ -164,7 +164,7 @@ h2.stoptitle {
     <footer class="page-footer black">
       <div class="footer-copyright">
         <div class="container">
-          &copy; 2014-2024 <a class="orange-text text-lighten-3" href="https://seetow.sg">See Tow</a> Technologies (CRN: 202258286G).
+          &copy; 2014-2025 <a class="orange-text text-lighten-3" href="https://seetow.sg">See Tow</a> Technologies (CRN: 202258286G).
           <br />
           <a class="orange-text text-lighten-3 modal-trigger" href="#licenses">OSS Licenses</a>
           <div id="google_translate_element"></div>
@@ -309,9 +309,7 @@ h2.stoptitle {
       </div>
     </div>
 
-    <script src="/static/nusdict.js"></script>
     <script src="/static/materialize.js"></script>
-    <script src="/static/geojson2.js"></script>
     <script src="/static/stopdata.js"></script>
     <script>
       var panorama;
@@ -735,7 +733,7 @@ navigator.geolocation.getCurrentPosition(async function(position) {
           coordinates: [stop.lon, stop.lat]
         },
         properties: {
-          name: `${stop.commonName}${stop.stopLetter ? ' (Stop ' + stop.stopLetter + ')' : ''}`
+          name: `${stop.commonName}${stop.stopLetter ? ' (' + stop.indicator + ')' : ''}`
         }
       }))
     };
