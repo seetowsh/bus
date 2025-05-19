@@ -743,9 +743,10 @@ if (services.length === 0 && nusservices === undefined) {
       }))
     };
 
-    const stopButtons = geojson.features.map(f => {
-  return `<a class="waves-effect waves-light btn modal-trigger brown" href="#tableofresults" onclick="javascript:stopno='${f.properties.stopid}';redir()">${f.properties.name}</a>`;
+const stopButtons = geojson.features.map(f => {
+  return `<a class="waves-effect waves-light btn modal-trigger brown" href="#tableofresults" onclick="javascript:stopno=&quot;${f.properties.stopid}&quot;;redir()">${f.properties.name}</a>`;
 }).join("");
+
 
     $('#locationlive').html(stopButtons);
 
