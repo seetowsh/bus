@@ -604,7 +604,7 @@ setInterval(function () {
             let arrtime = calculateArrivalTime(service["NextBus"]["EstimatedArrival"], timenow);
             let arrtime2 = calculateArrivalTime(service["NextBus2"]["EstimatedArrival"], timenow);
             let arrtime3 = calculateArrivalTime(service["NextBus3"]["EstimatedArrival"], timenow);
-
+;
             let wab = getWAB(service["NextBus"]);
             let wab2 = getWAB(service["NextBus2"]);
             let wab3 = getWAB(service["NextBus3"]);
@@ -654,7 +654,7 @@ if (services.length === 0 && nusservices === undefined) {
     $("#time").append('<tr><td colspan="4">We received a response but there was no information. Are buses running at this time? Is this a valid stop ID? The API may be temporarily down. <br>HTTP 200 ==> Empty response body.</td></tr>');
 };
       
-      
+},1000)     
     
     </script>
     <script>
