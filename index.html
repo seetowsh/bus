@@ -343,12 +343,7 @@ map = new L.Map('map', {
     attribution: '&copy; 2025 Google, TfL'
   })
 });
-      
-      
-      
-      
-        });
-      map.on('locationerror', (err) => {
+    map.on('locationerror', (err) => {
     console.error("Location access denied:", err.message);
     // Optionally provide some feedback to the user.
       });
