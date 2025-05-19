@@ -653,22 +653,6 @@ if (services.length === 0 && nusservices === undefined) {
     // Show a message informing the user that no buses are arriving
     $("#time").append('<tr><td colspan="4">We received a response but there was no information. Are buses running at this time? Is this a valid stop ID? The API may be temporarily down. <br>HTTP 200 ==> Empty response body.</td></tr>');
 };
-
-      
-    if (typeof stopno !== 'undefined' && services && services.length !== 0) {
-        if (stopno == "66271") {
-            jQuery("#bus0").append("<br>To Ang Mo Kio");
-            jQuery("#bus1").append("<br>To Punggol");
-        } else if (stopno == "46088") {
-            jQuery("#bus0").append("<br>To Kranji");
-            jQuery("#bus1").append("<br>To Malaysia");
-        } else if (stopno == "46069") {
-            jQuery("#bus0").append("<br>To Kranji");
-            jQuery("#bus1").append("<br>To Malaysia");
-        }
-    }
-}, 1000);
-      }
       
       
     
@@ -785,7 +769,7 @@ function activatenearby() {
   L.marker(userLatLng).addTo(map);
   map.setView(userLatLng, 15);
 
-  const radius = 500; // meters
+  const radius = 1000; // meters
   const apiUrl = `https://api.tfl.gov.uk/StopPoint?lat=${position.coords.latitude}&lon=${position.coords.longitude}&radius=${radius}&stopTypes=NaptanPublicBusCoachTram`;
 
   try {
