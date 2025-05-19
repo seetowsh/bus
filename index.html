@@ -712,37 +712,56 @@ if (services.length === 0 && nusservices === undefined) {
       });
     </script>
 <script>
+function getCompassDescription(letter) {
+  const map = { N: "North", S: "South", E: "East", W: "West" };
+  return map[letter] || null;
+}
+
 navigator.geolocation.getCurrentPosition(async function(position) {
   const userLatLng = L.latLng(position.coords.latitude, position.coords.longitude);
   L.marker(userLatLng).addTo(map);
   map.setView(userLatLng, 15);
 
-  const radius = 1000; // meters
+  const radius = 1000;
   const apiUrl = `https://api.tfl.gov.uk/StopPoint?lat=${position.coords.latitude}&lon=${position.coords.longitude}&radius=${radius}&stopTypes=NaptanPublicBusCoachTram`;
 
   try {
     const res = await fetch(apiUrl);
     const data = await res.json();
 
+    // Group stops by commonName
+    const grouped = {};
+    for (const stop of data.stopPoints) {
+      const name = stop.commonName;
+      if (!grouped[name]) grouped[name] = [];
+
+      // Derive compass direction from stopLetter if it looks like ->X
+      let cleanLetter = stop.stopLetter;
+      if (cleanLetter && cleanLetter.startsWith("->") && cleanLetter.length === 3) {
+        const compass = getCompassDescription(cleanLetter.charAt(2));
+        if (compass) cleanLetter = compass;
+      }
+
+      grouped[name].push({
+        id: stop.naptanId,
+        name,
+        letter: cleanLetter,
+        lat: stop.lat,
+        lon: stop.lon
+      });
+    }
+
+    // Add GeoJSON markers
     const geojson = {
       type: "FeatureCollection",
-      features: data.stopPoints.map(stop => ({
+      features: Object.values(grouped).flat().map(stop => ({
         type: "Feature",
-        geometry: {
-          type: "Point",
-          coordinates: [stop.lon, stop.lat]
-        },
+        geometry: { type: "Point", coordinates: [stop.lon, stop.lat] },
         properties: {
-          name: `${stop.commonName}${stop.stopLetter ? ' (' + stop.indicator + ')' : ''}`
+          name: `${stop.name}${stop.letter ? ' (Stop ' + stop.letter + ')' : ''}`
         }
       }))
     };
-
-    const stopButtons = geojson.features.map(f => {
-      return `<a class="waves-effect waves-light btn modal-trigger brown" href="#tableofresults" onclick=\"javascript:stopno=&quot;${f.properties.name}&quot;;redir()\">${f.properties.name}</a>`;
-    }).join("");
-
-    $('#locationlive').html(stopButtons);
 
     L.geoJSON(geojson, {
       pointToLayer: function (feature, latlng) {
@@ -760,8 +779,24 @@ navigator.geolocation.getCurrentPosition(async function(position) {
       }
     }).addTo(map);
 
+    // Build collapsible HTML buttons
+    let outputHtml = "<ul class='collapsible'>";
+    for (const [groupName, stops] of Object.entries(grouped)) {
+      outputHtml += `<li><div class='collapsible-header brown-text'>${groupName}</div><div class='collapsible-body'>`;
+      for (const stop of stops) {
+        const label = stop.letter ? `Stop ${stop.letter}` : "Unnamed Stop";
+        outputHtml += `<a class='waves-effect waves-light btn modal-trigger brown' href='#tableofresults' onclick=\"javascript:stopno='${stop.id}';redir()\">${label}</a>`;
+      }
+      outputHtml += `</div></li>`;
+    }
+    outputHtml += "</ul>";
+
+    $('#locationlive').html(outputHtml);
+    var elems = document.querySelectorAll('.collapsible');
+    M.Collapsible.init(elems);
   } catch (err) {
     console.error("Failed to fetch TfL stops:", err);
+    $('#locationlive').html('<a class="waves-effect waves-light btn red darken-3 disabled">Failed to load nearby stops</a>');
   }
 }, function(error) {
   console.warn("Geolocation error:", error.message);
