@@ -311,15 +311,6 @@ h2.stoptitle {
         <a class="modal-close waves-effect waves-green btn-flat">Close</a>
       </div>
     </div>
-    <div id="outsideModal" class="modal">
-  <div class="modal-content">
-    <h4 id="modalTitle">Outside Supported Area</h4>
-    <p id="modalMessage">You are detected to be outside Singapore.</p>
-  </div>
-  <div class="modal-footer" id="modalButtons">
-    <!-- Buttons will be inserted dynamically -->
-  </div>
-</div>
 
     <script src="/static/nusdict.js"></script>
     <script src="/static/materialize.js"></script>
@@ -342,15 +333,16 @@ h2.stoptitle {
       });
       var map, infoWindow;
       
-        map = new L.Map('map', {
-          center: {lat: 1.290270, lng: 103.851959},
-          zoom: 17,
-          minZoom: 14,
-          layers: new L.TileLayer("https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}",{
-      bounds: [[1.506417, 103.552020], [1.199572, 104.058765]],
-      subdomains:['mt0','mt1','mt2','mt3'],
-      attribution: '&copy; 2022 Google, SLA',          
-      }),
+map = new L.Map('map', {
+  center: { lat: 51.509865, lng: -0.118092 }, // Central London
+  zoom: 14,
+  minZoom: 12,
+  layers: new L.TileLayer("https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}", {
+    bounds: [51.237141, -0.581279],[51.736466, 0.468455],
+    subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
+    attribution: '&copy; 2025 Google, TfL'
+  })
+});
       
       
       
@@ -727,53 +719,7 @@ if (services.length === 0 && nusservices === undefined) {
         }
       }
     </script>
-<script>
-  const singaporeBounds = L.latLngBounds(
-    L.latLng(1.199572, 103.552020),
-    L.latLng(1.506417, 104.058765)
-  );
 
-  const londonBounds = L.latLngBounds(
-    L.latLng(51.237141, -0.581279),
-    L.latLng(51.736466, 0.468455)
-  );
-
-  navigator.geolocation.getCurrentPosition(function(position) {
-    const userLatLng = L.latLng(position.coords.latitude, position.coords.longitude);
-    L.marker(userLatLng).addTo(map);
-
-    let modalTitle = document.getElementById('modalTitle');
-    let modalMessage = document.getElementById('modalMessage');
-    let modalButtons = document.getElementById('modalButtons');
-
-    if (!singaporeBounds.contains(userLatLng)) {
-      if (londonBounds.contains(userLatLng)) {
-        // User is in Greater London
-        modalTitle.innerText = "Detected in London";
-        modalMessage.innerText = "You appear to be in Greater London. This app is optimised for Singapore. Would you like to check out local bus services?";
-        modalButtons.innerHTML = `
-          <a href="#" class="modal-close waves-effect waves-green btn-flat">Try London Mode</a>
-          <a class="modal-close waves-effect waves-green btn-flat">Ignore</a>
-        `;
-      } else {
-        // Outside both SG and London
-        modalTitle.innerText = "Outside Supported Area";
-        modalMessage.innerText = "You are detected to be outside Singapore.";
-        modalButtons.innerHTML = `
-          <a href="https://seetow.sg" class="modal-close waves-effect waves-green btn-flat">Go to Homepage</a>
-          <a class="modal-close waves-effect waves-green btn-flat">Ignore</a>
-        `;
-      }
-
-      // Show modal
-      const instance = M.Modal.getInstance(document.getElementById('outsideModal'));
-      if (instance) instance.open();
-    }
-
-  }, function(error) {
-    console.error("Geolocation error:", error.message);
-  });
-</script>
 
     <script>
 function activatenearby() { 
@@ -837,6 +783,57 @@ function activatenearby() {
         document.getElementById("field1btn").click();
       }
       });
+    </script>
+    <script>
+      navigator.geolocation.getCurrentPosition(async function(position) {
+  const userLatLng = L.latLng(position.coords.latitude, position.coords.longitude);
+  L.marker(userLatLng).addTo(map);
+  map.setView(userLatLng, 15);
+
+  const radius = 500; // meters
+  const apiUrl = `https://api.tfl.gov.uk/StopPoint?lat=${position.coords.latitude}&lon=${position.coords.longitude}&radius=${radius}&modes=bus`;
+
+  try {
+    const res = await fetch(apiUrl);
+    const data = await res.json();
+
+    const geojson = {
+      type: "FeatureCollection",
+      features: data.stopPoints.map(stop => ({
+        type: "Feature",
+        geometry: {
+          type: "Point",
+          coordinates: [stop.lon, stop.lat]
+        },
+        properties: {
+          name: stop.commonName,
+          stopid: stop.naptanId
+        }
+      }))
+    };
+
+    L.geoJSON(geojson, {
+      pointToLayer: function (feature, latlng) {
+        return L.circleMarker(latlng, {
+          radius: 6,
+          fillColor: "#ff7800",
+          color: "#000",
+          weight: 1,
+          opacity: 1,
+          fillOpacity: 0.8
+        });
+      },
+      onEachFeature: function (feature, layer) {
+        layer.bindPopup(`<a href="#tableofresults" class="modal-trigger" onClick="javascript: stopno='${feature.properties.stopid}'; redir()">${feature.properties.name} (${feature.properties.stopid})</a>`);
+      }
+    }).addTo(map);
+
+  } catch (err) {
+    console.error("Failed to fetch TfL stops:", err);
+  }
+}, function(error) {
+  console.warn("Geolocation error:", error.message);
+});
     </script>
   </body>
 </html>
