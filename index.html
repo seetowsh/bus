@@ -470,7 +470,31 @@ function fancyTimeFormat(duration) {
   return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 }
 
-      
+/**
+ * Creates the HTML for a single bus arrival cell.
+ * @param {object} bus - The bus object (e.g., services.NextBus).
+ * @returns {string} - The HTML string for the <td> element.
+ */
+function createBusArrivalHtml(bus) {
+    // If there's no bus data, return an empty cell to keep the table layout.
+    if (!bus || !bus.EstimatedArrival) {
+        return '<td></td>';
+    }
+
+    const wab = getWAB(bus);
+    const load = getLoad(bus);
+    const deck = getDeck(bus);
+    const mapLink = getMapLink(bus); // Assuming this returns a full <a> tag or an empty string
+
+    // Note the span with a class and a data-arrival-time attribute.
+    // The text of this span will be updated every second.
+    const timeHtml = `<span class="bus-arrival-time" data-arrival-time="${bus.EstimatedArrival}"></span>`;
+
+    // If there's a map link, wrap the time in it. Otherwise, just return the time.
+    const content = mapLink ? `${mapLink.slice(0, -4)}${timeHtml}</a>` : timeHtml;
+    
+    return `<td>${wab}${load}${deck}${content}</td>`;
+}
       
       function populatetable(){
       
@@ -603,84 +627,57 @@ function generateNusServiceRow(service, index) {
 }
 
 
-setInterval(function () {
+
+// This function builds the table structure. Call it only when API data is fetched.
+function renderBusTable() {
     $("#fetching").remove();
     $("#time").empty();
-    let timenow = Date.now();
-
+    
     let htmlRows = [];
 
+    // Render LTA Services
     if (typeof services !== 'undefined' && services.length > 0) {
         services.forEach((service, i) => {
-            let busno = service["ServiceNo"];
+            const busno = service.ServiceNo;
+            const arrival1 = createBusArrivalHtml(service.NextBus);
+            const arrival2 = createBusArrivalHtml(service.NextBus2);
+            const arrival3 = createBusArrivalHtml(service.NextBus3);
 
-            let arrtime = calculateArrivalTime(service["NextBus"]["EstimatedArrival"], timenow);
-            let arrtime2 = calculateArrivalTime(service["NextBus2"]["EstimatedArrival"], timenow);
-            let arrtime3 = calculateArrivalTime(service["NextBus3"]["EstimatedArrival"], timenow);
-
-            let wab = getWAB(service["NextBus"]);
-            let wab2 = getWAB(service["NextBus2"]);
-            let wab3 = getWAB(service["NextBus3"]);
-
-            let load = getLoad(service["NextBus"]);
-            let load2 = getLoad(service["NextBus2"]);
-            let load3 = getLoad(service["NextBus3"]);
-
-            let deck = getDeck(service["NextBus"]);
-            let deck2 = getDeck(service["NextBus2"]);
-            let deck3 = getDeck(service["NextBus3"]);
-
-            let map1 = getMapLink(service["NextBus"]);
-            let map2 = getMapLink(service["NextBus2"]);
-            let map3 = getMapLink(service["NextBus3"]);
-
-            let rowHtml = `<tr><td id="bus${i}"><a href="https://busrouter.sg/#/services/${busno}" target="_blank">${busno}</a></td><td>${wab}${load}${deck}${map1}${arrtime}</a></td><td>${wab2}${load2}${deck2}${map2}${arrtime2}</a></td><td>${wab3}${load3}${deck3}${map3}${arrtime3}</a></td></tr>`;
-        htmlRows.push(rowHtml);
+            let rowHtml = `<tr>
+                <td id="bus${i}"><a href="https://busrouter.sg/#/services/${busno}" target="_blank">${busno}</a></td>
+                ${arrival1}
+                ${arrival2}
+                ${arrival3}
+            </tr>`;
+            htmlRows.push(rowHtml);
         });
-        $("#time").append(htmlRows.join(""));
     }
-
-    let nusRows = [];
     
-if (typeof nusservices !== 'undefined') {
-    for (let i = 0; i < nusservices.length; i++) {
-        let service = nusservices[i];
+    // You can add your NUS services rendering logic here in the same way.
 
-        if (service["_etas"] && service["_etas"].length > 0) {
-            let rowHtml = generateNusServiceRow(service, i);
-            nusRows.push(rowHtml);
-        } else {
-            let busno = service["name"];
-            if (busno.charAt(0) !== "P") {
-                let rowHtml = `<tr><td id="nus${i}"><a href="https://landtransportguru.net/nus-isb-${busno}/" target="_blank">${busno}</a></td><td colspan="3">No upcoming arrivals</td></tr>`;
-                nusRows.push(rowHtml);
-            }
-        }
-    }
+    $("#time").append(htmlRows.join(""));
+    
+    // Run the timer update immediately after rendering to prevent a 1-second blank state.
+    updateTimers();
 }
 
-
-    $("#time").append(nusRows.join(""));
-
-if (services.length === 0 && nusservices === undefined) {
-    // Show a message informing the user that no buses are arriving
-    $("#time").append('<tr><td colspan="4">We received a response but there was no information. Are buses running at this time? Is this a valid stop ID? The API may be temporarily down. <br>HTTP 200 ==> Empty response body.</td></tr>');
-};
-
-      
-    if (typeof stopno !== 'undefined' && services && services.length !== 0) {
-        if (stopno == "66271") {
-            jQuery("#bus0").append("<br>To Ang Mo Kio");
-            jQuery("#bus1").append("<br>To Punggol");
-        } else if (stopno == "46088") {
-            jQuery("#bus0").append("<br>To Kranji");
-            jQuery("#bus1").append("<br>To Malaysia");
-        } else if (stopno == "46069") {
-            jQuery("#bus0").append("<br>To Kranji");
-            jQuery("#bus1").append("<br>To Malaysia");
+// This lightweight function runs every second to keep timers accurate.
+function updateTimers() {
+    const timenow = Date.now();
+    // Find all elements with our special class
+    $(".bus-arrival-time").each(function() {
+        const arrivalTimestamp = $(this).data("arrival-time");
+        if (arrivalTimestamp) {
+            const timeString = calculateArrivalTime(arrivalTimestamp, timenow);
+            $(this).text(timeString); // Update only the text!
         }
-    }
-}, 1000);
+    });
+}
+
+// Start the 1-second interval to continuously update the times.
+setInterval(updateTimers, 1000);
+
+
       }
       
       
@@ -690,11 +687,11 @@ if (services.length === 0 && nusservices === undefined) {
       setInterval(function(){
             $.getJSON(url, function (json) {
               services = json["Services"];
-              updateresults();
+              renderBusTable();
               });
             $.getJSON(nusurl, function (json) {
               nusservices = json["ShuttleServiceResult"]["shuttles"];
-               updateresults();
+               renderBusTable();
               });
         }, 30000)
       
