@@ -538,6 +538,16 @@ function createBusArrivalHtml(bus) {
                 htmlRows.push(rowHtml);
             });
         }
+
+    if ($timeTableBody.is(':empty')) {
+        const noResultsHtml = `
+            <tr>
+                <td colspan="4" style="text-align: center;">
+                    No bus services were found for this stop.
+                </td>
+            </tr>`;
+        $timeTableBody.append(noResultsHtml);
+    }
         
         // You would add your NUS services rendering logic here in the same way
 
