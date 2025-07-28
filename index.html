@@ -474,27 +474,34 @@ jQuery("#topbar").prepend('<h6>Your favourite bus stops:</h6>' + topBarHTML);
         return "";
     }
     
-    function getMapLink(bus) {
-        return (bus["Latitude"] == 0) ? "" : `<a target="_blank" href="https://www.google.com.sg/maps/search/${bus["Latitude"]},${bus["Longitude"]}">`;
+function getMapLink(bus) {
+    // Return an empty string if there's no location data
+    if (bus["Latitude"] == 0) {
+        return "";
     }
+    // Return a complete <a>...</a> tag
+    return `<a target="_blank" href="https://www.google.com.sg/maps/search/${bus["Latitude"]},${bus["Longitude"]}"></a>`;
+}
     
     // --- Main Rendering Functions (Now in Global Scope) ---
 
     /**
      * Creates the HTML for a single bus arrival cell.
      */
-    function createBusArrivalHtml(bus) {
-        if (!bus || !bus.EstimatedArrival) return '<td></td>';
+function createBusArrivalHtml(bus) {
+    if (!bus || !bus.EstimatedArrival) return '<td></td>';
 
-        const wab = getWAB(bus);
-        const load = getLoad(bus);
-        const deck = getDeck(bus);
-        const mapLink = getMapLink(bus);
-        const timeHtml = `<span class="bus-arrival-time" data-arrival-time="${bus.EstimatedArrival}"></span>`;
-        const content = mapLink ? `${mapLink.slice(0, -4)}${timeHtml}</a>` : timeHtml;
-        
-        return `<td>${wab}${load}${deck}${content}</td>`;
-    }
+    const wab = getWAB(bus);
+    const load = getLoad(bus);
+    const deck = getDeck(bus);
+    const mapLink = getMapLink(bus); // This now returns a complete <a></a> tag or ""
+    const timeHtml = `<span class="bus-arrival-time" data-arrival-time="${bus.EstimatedArrival}"></span>`;
+
+    // If a mapLink exists, insert the time inside it. Otherwise, just use the time HTML.
+    const content = mapLink ? mapLink.replace('</a>', `${timeHtml}</a>`) : timeHtml;
+
+    return `<td>${wab}${load}${deck}${content}</td>`;
+}
 
     /**
      * This lightweight function runs every second to keep timers accurate.
