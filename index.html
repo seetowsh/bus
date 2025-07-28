@@ -503,6 +503,21 @@ function createBusArrivalHtml(bus) {
     return `<td>${wab}${load}${deck}${content}</td>`;
 }
 
+
+function createNusArrivalHtml(eta) {
+    // If there's no arrival data, return an empty cell.
+    if (!eta || !eta.ts) {
+        return '<td></td>';
+    }
+
+    // The 'ts' value from the NUS API needs to be parsed by the Date object.
+    // The format "YYYY-MM-DD HH:mm:ss" is luckily understood by it directly.
+    const timeHtml = `<span class="bus-arrival-time" data-arrival-time="${eta.ts}"></span>`;
+    
+    // NUS buses don't have map links, so we just return the time.
+    return `<td>${timeHtml}</td>`;
+}
+
     /**
      * This lightweight function runs every second to keep timers accurate.
      */
@@ -520,25 +535,52 @@ function createBusArrivalHtml(bus) {
     /**
      * Builds the entire bus table structure from the 'services' and 'nusservices' variables.
      */
-    function renderBusTable() {
-        $("#fetching").remove();
-        $("#time").empty();
-        
-        let htmlRows = [];
+/**
+ * Builds the entire bus table structure from both LTA and NUS service variables.
+ */
+function renderBusTable() {
+    // Define and cache the jQuery selector for the table body here
+    const $timeTableBody = $("#time");
 
-        // Render LTA Services
-        if (services && services.length > 0) {
-            services.forEach((service, i) => {
-                const rowHtml = `<tr>
-                    <td id="bus${i}"><a href="https://busrouter.sg/#/services/${service.ServiceNo}" target="_blank">${service.ServiceNo}</a></td>
-                    ${createBusArrivalHtml(service.NextBus)}
-                    ${createBusArrivalHtml(service.NextBus2)}
-                    ${createBusArrivalHtml(service.NextBus3)}
-                </tr>`;
-                htmlRows.push(rowHtml);
-            });
-        }
+    // Clear previous results
+    $timeTableBody.empty();
+    
+    let htmlRows = [];
 
+    // --- Render LTA Services ---
+    if (services && services.length > 0) {
+        services.forEach((service, i) => {
+            const rowHtml = `<tr>
+                <td><a href="https://busrouter.sg/#/services/${service.ServiceNo}" target="_blank">${service.ServiceNo}</a></td>
+                ${createBusArrivalHtml(service.NextBus)}
+                ${createBusArrivalHtml(service.NextBus2)}
+                ${createBusArrivalHtml(service.NextBus3)}
+            </tr>`;
+            htmlRows.push(rowHtml);
+        });
+    }
+    
+    // --- Render NUS Services ---
+    if (nusservices && nusservices.length > 0) {
+        nusservices.forEach(shuttle => {
+            const arrival1 = shuttle._etas[0];
+            const arrival2 = shuttle._etas[1];
+            const arrival3 = shuttle._etas[2];
+
+            const rowHtml = `<tr>
+                <td>${shuttle.name} <span style="color: #003D7C; font-weight: bold;">(NUS)</span></td>
+                ${createNusArrivalHtml(arrival1)}
+                ${createNusArrivalHtml(arrival2)}
+                ${createNusArrivalHtml(arrival3)}
+            </tr>`;
+            htmlRows.push(rowHtml);
+        });
+    }
+
+    // Use the cached variable to append all rows
+    $timeTableBody.append(htmlRows.join(""));
+    
+    // Use the cached variable again for the "empty" check
     if ($timeTableBody.is(':empty')) {
         const noResultsHtml = `
             <tr>
@@ -548,13 +590,10 @@ function createBusArrivalHtml(bus) {
             </tr>`;
         $timeTableBody.append(noResultsHtml);
     }
-        
-        // You would add your NUS services rendering logic here in the same way
 
-        $("#time").append(htmlRows.join(""));
-        updateresults(); // Update the "last fetched" timestamp
-        updateTimers(); // Run the timer update immediately
-    }
+    updateresults();
+    updateTimers();
+}
 
     // --- Data Fetching and Initialization ---
     
