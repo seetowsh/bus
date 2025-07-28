@@ -429,278 +429,174 @@ jQuery("#topbar").prepend('<h6>Your favourite bus stops:</h6>' + topBarHTML);
       function redirlegacy(code){
       window.location.href = "https://bus.seetow.sg/results?stop="+code;
       }
-      function redir(){
-      populatetable();
-      }
-      
-      
-function updatecookie() {
-    const EXPIRY_TIME_MS = 5000000 * 36000; // 5,000,000 seconds
-    let now = Date.now();
-    let expireTime = now + EXPIRY_TIME_MS;
-    let cookieValue;
+<script>
 
-    // If fav1 exists and is not empty, append stopno to it. Otherwise, set fav1 to stopno.
-    if (fav1) {
-        cookieValue = fav1 + "," + stopno.toString();
-    } else {
-        cookieValue = stopno.toString();
-    }
-
-    let cookieString = "fav=" + cookieValue + ";expires=" + new Date(expireTime).toUTCString() + ";path=/";
-    document.cookie = cookieString;
-
-    if (bus_dict && bus_dict[parseInt(stopno)]) {
-        alert("The bus stop " + bus_dict[parseInt(stopno)][2] + " has been added!");
-    } else {
-        alert("Bus stop added!");
-    }
-}
-
-      fav1 = getCookie("fav");
-
-
-
-
-function fancyTimeFormat(duration) {
-  const hours = Math.floor(duration / 3600);
-  const minutes = Math.floor((duration % 3600) / 60);
-  const seconds = Math.floor(duration % 60);
   
-  return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-}
+    // --- Global Variables ---
+    let services = [];
+    let nusservices = [];
+    let stopno;
+    let url;
+    let nusurl;
 
-/**
- * Creates the HTML for a single bus arrival cell.
- * @param {object} bus - The bus object (e.g., services.NextBus).
- * @returns {string} - The HTML string for the <td> element.
- */
-function createBusArrivalHtml(bus) {
-    // If there's no bus data, return an empty cell to keep the table layout.
-    if (!bus || !bus.EstimatedArrival) {
-        return '<td></td>';
-    }
+    // --- Helper Functions (Now in Global Scope) ---
 
-    const wab = getWAB(bus);
-    const load = getLoad(bus);
-    const deck = getDeck(bus);
-    const mapLink = getMapLink(bus); // Assuming this returns a full <a> tag or an empty string
-
-    // Note the span with a class and a data-arrival-time attribute.
-    // The text of this span will be updated every second.
-    const timeHtml = `<span class="bus-arrival-time" data-arrival-time="${bus.EstimatedArrival}"></span>`;
-
-    // If there's a map link, wrap the time in it. Otherwise, just return the time.
-    const content = mapLink ? `${mapLink.slice(0, -4)}${timeHtml}</a>` : timeHtml;
-    
-    return `<td>${wab}${load}${deck}${content}</td>`;
-}
-      
-      function populatetable(){
-      
-      nuscode = nusstopdict[stopno]
-      
-      function minTommss(minutes){
+    function minTommss(minutes) {
         var sign = minutes < 0 ? "-" : "";
         var min = Math.floor(Math.abs(minutes));
         var sec = Math.floor((Math.abs(minutes) * 60) % 60);
         return sign + (min < 10 ? "0" : "") + min + ":" + (sec < 10 ? "0" : "") + sec;
-      };
-      updateresults();
-      
-      $("#locbutton").html('<a class="btn waves-effect waves-light modal-trigger" href="https://www.google.com/maps/@?api=1&map_action=pano&viewpoint='+bus_dict[parseInt(stopno)][0]+','+bus_dict[parseInt(stopno)][1]+'" target="_blank">location</a>');
-      
-      
-      url = "https://misty-king-3f2c.seetow.workers.dev/LTA?id="+stopno;
+    };
+
+    function calculateArrivalTime(time, timenow) {
+        const fakeTime = +new Date(time);
+        if (isNaN(fakeTime)) return '';
         
-        if (stopno > 100000) {
-        stopid = "NUS"
-        } else {
-        stopid = stopno  
-        }
-          
-      $("#hm").text(bus_dict[parseInt(stopno)][2]+' ('+stopid+')');
-      $.getJSON(url, function (json) {
-        services = json["Services"];
-      
-        let timenow = Date.now();
-      
-      });
-      
-      nusurl = "https://misty-king-3f2c.seetow.workers.dev/NUS?id="+nuscode;
-      console.log(nusurl);  
-      
-        if (nuscode !== undefined) {
-      $.getJSON(nusurl, function (json) {
-        nusservices = json["ShuttleServiceResult"]["shuttles"];
-      
-        let timenow = Date.now();
-      
-      })} else {
-          nusservices = undefined;
-      };
-      
-      
-function calculateArrivalTime(time, timenow) {
-    const fakeTime = +new Date(time);
-
-    // Handle if the time is not valid
-    if (isNaN(fakeTime)) {
-        return '';
+        const timeMin = (fakeTime - timenow) / 60000;
+        let timeStr = minTommss(timeMin);
+        
+        return (timeStr.charAt(0) == "-") ? "Very soon!" : timeStr + " mins";
     }
 
-    const timeMs = fakeTime - timenow;
-    const timeMin = timeMs / 60000;
-    let timeStr = minTommss(timeMin);
-
-    if (timeStr.charAt(0) == "-") {
-        timeStr = "Very soon!";
-    } else {
-        timeStr = timeStr + "&nbsp;mins";
+    function getWAB(bus) {
+        return (bus["Feature"] === "WAB" || bus["Load"] === "") ? '' : '<i style="color:red" class="material-icons">accessible</i>';
     }
 
-    return timeStr;
-}
-
-function getWAB(bus) {
-    if (bus["Feature"] == "WAB" || bus["Load"] == "") {
-        return '';
-    } else {
-        return '<i style="color:red" class="material-icons">accessible</i>';
-    }
-}
-
-function getLoad(bus) {
-    if (bus["Load"] == "SDA") {
-        return '<i class="material-icons">directions_walk</i>';
-    } else if (bus["Load"] == "SEA") {
-        return '<i class="material-icons">airline_seat_recline_normal</i>';
-    } else if (bus["Load"] == "LSD") {
-        return '<i class="material-icons">wc</i>';
-    } else {
+    function getLoad(bus) {
+        if (bus["Load"] === "SDA") return '<i class="material-icons">directions_walk</i>';
+        if (bus["Load"] === "SEA") return '<i class="material-icons">airline_seat_recline_normal</i>';
+        if (bus["Load"] === "LSD") return '<i class="material-icons">wc</i>';
         return "";
     }
-}
 
-function getDeck(bus) {
-    if (bus["Type"] == "SD") {
-        return '<i class="material-icons">filter_1</i> ';
-    } else if (bus["Type"] == "DD") {
-        return '<i class="material-icons">filter_2</i> ';
-    } else if (bus["Type"] == "BD") {
-        return '&#127345;&#65039;';
-    } else {
+    function getDeck(bus) {
+        if (bus["Type"] === "SD") return '<i class="material-icons">filter_1</i> ';
+        if (bus["Type"] === "DD") return '<i class="material-icons">filter_2</i> ';
+        if (bus["Type"] === "BD") return '🅱️';
         return "";
     }
-}
-
-function getMapLink(bus) {
-    if (bus["Latitude"] == 0) {
-        return "";
-    } else {
-        return '<a target="_blank" href="https://www.google.com.sg/maps/search/' + bus["Latitude"] + ',' + bus["Longitude"] + '">';
-    }
-}
-
-function formatNusEta(etaObj) {
-    if (!etaObj || !etaObj["eta_s"]) return "";
-    let formattedTime = fancyTimeFormat(etaObj["eta_s"]);
-    return (formattedTime.charAt(0) == "-") ? "Very soon!" : formattedTime;
-}
-
-function generateNusServiceRow(service, index) {
-    if (!service || service.name.charAt(0) === "P") return "";
-
-    let busno = service.name;
-    let nusarrtime0 = service["_etas"] && service["_etas"][0] ? formatNusEta(service["_etas"][0]) : "No data";
-    let nusarrtime1 = service["_etas"] && service["_etas"][1] ? formatNusEta(service["_etas"][1]) : "No data";
-    let nusarrtime2 = service["_etas"] && service["_etas"][2] ? formatNusEta(service["_etas"][2]) : "No data";
-
-    return `<tr>
-                <td id="nus${index}">
-                    <a href="https://landtransportguru.net/nus-isb-${busno}/" target="_blank">${busno}</a>
-                </td>
-                <td><p id="nus${index}0" class="nusbustime">${nusarrtime0}</p></td>
-                <td><p id="nus${index}1" class="nusbustime">${nusarrtime1}</p></td>
-                <td><p id="nus${index}2" class="nusbustime">${nusarrtime2}</p></td>
-            </tr>`;
-}
-
-
-
-// This function builds the table structure. Call it only when API data is fetched.
-function renderBusTable() {
-    $("#fetching").remove();
-    $("#time").empty();
     
-    let htmlRows = [];
+    function getMapLink(bus) {
+        return (bus["Latitude"] == 0) ? "" : `<a target="_blank" href="https://www.google.com.sg/maps/search/${bus["Latitude"]},${bus["Longitude"]}">`;
+    }
+    
+    // --- Main Rendering Functions (Now in Global Scope) ---
 
-    // Render LTA Services
-    if (typeof services !== 'undefined' && services.length > 0) {
-        services.forEach((service, i) => {
-            const busno = service.ServiceNo;
-            const arrival1 = createBusArrivalHtml(service.NextBus);
-            const arrival2 = createBusArrivalHtml(service.NextBus2);
-            const arrival3 = createBusArrivalHtml(service.NextBus3);
+    /**
+     * Creates the HTML for a single bus arrival cell.
+     */
+    function createBusArrivalHtml(bus) {
+        if (!bus || !bus.EstimatedArrival) return '<td></td>';
 
-            let rowHtml = `<tr>
-                <td id="bus${i}"><a href="https://busrouter.sg/#/services/${busno}" target="_blank">${busno}</a></td>
-                ${arrival1}
-                ${arrival2}
-                ${arrival3}
-            </tr>`;
-            htmlRows.push(rowHtml);
+        const wab = getWAB(bus);
+        const load = getLoad(bus);
+        const deck = getDeck(bus);
+        const mapLink = getMapLink(bus);
+        const timeHtml = `<span class="bus-arrival-time" data-arrival-time="${bus.EstimatedArrival}"></span>`;
+        const content = mapLink ? `${mapLink.slice(0, -4)}${timeHtml}</a>` : timeHtml;
+        
+        return `<td>${wab}${load}${deck}${content}</td>`;
+    }
+
+    /**
+     * This lightweight function runs every second to keep timers accurate.
+     */
+    function updateTimers() {
+        const timenow = Date.now();
+        $(".bus-arrival-time").each(function() {
+            const arrivalTimestamp = $(this).data("arrival-time");
+            if (arrivalTimestamp) {
+                const timeString = calculateArrivalTime(arrivalTimestamp, timenow);
+                $(this).text(timeString);
+            }
         });
     }
-    
-    // You can add your NUS services rendering logic here in the same way.
 
-    $("#time").append(htmlRows.join(""));
-    
-    // Run the timer update immediately after rendering to prevent a 1-second blank state.
-    updateTimers();
-}
+    /**
+     * Builds the entire bus table structure from the 'services' and 'nusservices' variables.
+     */
+    function renderBusTable() {
+        $("#fetching").remove();
+        $("#time").empty();
+        
+        let htmlRows = [];
 
-// This lightweight function runs every second to keep timers accurate.
-function updateTimers() {
-    const timenow = Date.now();
-    // Find all elements with our special class
-    $(".bus-arrival-time").each(function() {
-        const arrivalTimestamp = $(this).data("arrival-time");
-        if (arrivalTimestamp) {
-            const timeString = calculateArrivalTime(arrivalTimestamp, timenow);
-            $(this).text(timeString); // Update only the text!
+        // Render LTA Services
+        if (services && services.length > 0) {
+            services.forEach((service, i) => {
+                const rowHtml = `<tr>
+                    <td id="bus${i}"><a href="https://busrouter.sg/#/services/${service.ServiceNo}" target="_blank">${service.ServiceNo}</a></td>
+                    ${createBusArrivalHtml(service.NextBus)}
+                    ${createBusArrivalHtml(service.NextBus2)}
+                    ${createBusArrivalHtml(service.NextBus3)}
+                </tr>`;
+                htmlRows.push(rowHtml);
+            });
         }
-    });
-}
+        
+        // You would add your NUS services rendering logic here in the same way
 
-// Start the 1-second interval to continuously update the times.
-setInterval(updateTimers, 1000);
+        $("#time").append(htmlRows.join(""));
+        updateresults(); // Update the "last fetched" timestamp
+        updateTimers(); // Run the timer update immediately
+    }
 
-
-      }
-      
-      
+    // --- Data Fetching and Initialization ---
     
-    </script>
-    <script>
-      setInterval(function(){
-            $.getJSON(url, function (json) {
-              services = json["Services"];
-              renderBusTable();
-              });
-            $.getJSON(nusurl, function (json) {
-              nusservices = json["ShuttleServiceResult"]["shuttles"];
-               renderBusTable();
-              });
-        }, 30000)
-      
-      function updateresults() {
-      todayresult = new Date();
-      timeresult = todayresult.toLocaleTimeString();
-      $("#resultupdate").text(timeresult)
-      }
-       
+    /**
+     * Fetches data from both LTA and NUS APIs, then renders the table.
+     */
+    function fetchDataAndRender() {
+        const ltaPromise = $.getJSON(url).done(json => services = json["Services"] || []).fail(() => services = []);
+        const nusPromise = nusurl ? $.getJSON(nusurl).done(json => nusservices = json?.ShuttleServiceResult?.shuttles || []).fail(() => nusservices = []) : Promise.resolve();
+
+        // Wait for both API calls to complete before rendering the table
+        Promise.all([ltaPromise, nusPromise]).then(renderBusTable);
+    }
+
+    /**
+     * Updates the "last fetched" timestamp in the UI.
+     */
+    function updateresults() {
+        const todayresult = new Date();
+        const timeresult = todayresult.toLocaleTimeString();
+        $("#resultupdate").text(timeresult);
+    }
+    
+    /**
+     * This is the main entry point, called when a user searches for a stop.
+     */
+    function populatetable() {
+        const nuscode = nusstopdict[stopno];
+        const stopName = bus_dict[parseInt(stopno)] ? bus_dict[parseInt(stopno)][2] : "Unknown Stop";
+        const stopid = stopno > 100000 ? "NUS" : stopno;
+
+        url = `https://misty-king-3f2c.seetow.workers.dev/LTA?id=${stopno}`;
+        nusurl = nuscode ? `https://misty-king-3f2c.seetow.workers.dev/NUS?id=${nuscode}` : null;
+        
+        $("#hm").text(`${stopName} (${stopid})`);
+        
+        // Set up the location button link
+        const coords = bus_dict[parseInt(stopno)];
+        if(coords) {
+          $("#locbutton").html(`<a class="btn waves-effect waves-light" href="https://www.google.com/maps/search/?api=1&query=${coords[0]},${coords[1]}" target="_blank">location</a>`);
+        }
+
+        fetchDataAndRender(); // Fetch data for the first time
+    }
+
+    function redir() {
+        populatetable();
+    }
+    
+    // --- Timed Intervals ---
+
+    // Interval to re-fetch data every 30 seconds
+    setInterval(fetchDataAndRender, 30000);
+
+    // Interval to update the countdown display every 1 second
+    setInterval(updateTimers, 1000);
+</script>
       
       
       
