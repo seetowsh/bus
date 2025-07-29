@@ -537,30 +537,34 @@ function createNusArrivalHtml(eta) {
  */
 function renderBusTable() {
     const $timeTableBody = $("#time");
-
-    // Clear previous results
     $timeTableBody.empty();
     
     let htmlRows = [];
 
+    // --- DEBUGGING: See what's in the arrays before rendering ---
+    console.log("LTA Services to render:", services);
+    console.log("NUS Services to render:", nusservices);
+    // -----------------------------------------------------------
+
     // --- Render LTA Services ---
     if (services && services.length > 0) {
         services.forEach((service, i) => {
-            const rowHtml = `<tr>
-                <td><a href="https://busrouter.sg/#/services/${service.ServiceNo}" target="_blank">${service.ServiceNo}</a></td>
-                ${createBusArrivalHtml(service.NextBus)}
-                ${createBusArrivalHtml(service.NextBus2)}
-                ${createBusArrivalHtml(service.NextBus3)}
-            </tr>`;
-            htmlRows.push(rowHtml);
+            // Guard against unexpected data types in the services array
+            if (service && service.ServiceNo) {
+                const rowHtml = `<tr>
+                    <td><a href="https://busrouter.sg/#/services/${service.ServiceNo}" target="_blank">${service.ServiceNo}</a></td>
+                    ${createBusArrivalHtml(service.NextBus)}
+                    ${createBusArrivalHtml(service.NextBus2)}
+                    ${createBusArrivalHtml(service.NextBus3)}
+                </tr>`;
+                htmlRows.push(rowHtml);
+            }
         });
     }
     
     // --- Render NUS Services ---
     if (nusservices && nusservices.length > 0) {
         nusservices.forEach(shuttle => {
-            
-            // **THE FIX IS HERE:** Check if the shuttle object has arrival data before proceeding.
             if (shuttle && shuttle._etas && shuttle._etas.length > 0) {
                 const arrival1 = shuttle._etas[0];
                 const arrival2 = shuttle._etas[1];
@@ -574,14 +578,11 @@ function renderBusTable() {
                 </tr>`;
                 htmlRows.push(rowHtml);
             }
-            // If a shuttle object has no _etas array, it will now be safely skipped.
         });
     }
 
-    // Append all generated rows (both LTA and NUS) to the table
     $timeTableBody.append(htmlRows.join(""));
     
-    // Check if the table is still empty after attempting to render everything
     if ($timeTableBody.is(':empty')) {
         const noResultsHtml = `
             <tr>
