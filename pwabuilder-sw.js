@@ -1,5 +1,7 @@
 // This is the service worker with the combined offline experience (Offline page + Offline copy of pages)
 
+importScripts('/OneSignalSDKWorker.js');
+
 const CACHE = "pwabuilder-offline-page";
 
 // TODO: replace the following with the correct offline fallback page i.e.: const offlineFallbackPage = "offline.html";
