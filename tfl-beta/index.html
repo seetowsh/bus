@@ -20,13 +20,8 @@
     <meta name="google-signin-client_id" content="35800995045-u54nb2hltd3kl9vuhrhjq3eca2k5110u.apps.googleusercontent.com">
     <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" />
-    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-    <script>
-      (adsbygoogle = window.adsbygoogle || []).push({
-        google_ad_client: "ca-pub-9218984794093639",
-        enable_page_level_ads: true
-      });
-    </script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9218984794093639"
+     crossorigin="anonymous"></script>
     <script>
       function goBack() {
           window.history.back();
@@ -40,7 +35,7 @@
       background-color: #7CFC00;
       }
       body {
-      font-family: system-ui, "San Francisco", "Helvetica Neue", Helvetica
+      font-family: Aptos, Bierstadt, "San Francisco", "Helvetica Neue", Helvetica
       }
   nav .brand-logo {
     overflow: hidden;
@@ -482,33 +477,16 @@ function fancyTimeFormat(duration) {
       $("#locbutton").html('<a class="btn waves-effect waves-light modal-trigger" href="https://www.google.com/maps/@?api=1&map_action=pano&viewpoint='+bus_dict[parseInt(stopno)][0]+','+bus_dict[parseInt(stopno)][1]+'" target="_blank">location</a>');
       
       
-      url = "https://bus.api.seetow.sg/LTA?id="+stopno;
-        
-        if (stopno > 100000) {
-        stopid = "NUS"
-        } else {
-        stopid = stopno  
-        }
+      url = "https://api.tfl.gov.uk/StopPoint/490000119N/arrivals";
           
-      $("#hm").text(bus_dict[parseInt(stopno)][2]+' ('+stopid+')');
+      $("#hm").text("Hyde Park Corner Tube (Stop N)");
       $.getJSON(url, function (json) {
-        services = json["Services"];
+        services = json;
       
         let timenow = Date.now();
       
       });
-      
-      nusurl = "https://bus.api.seetow.sg/NUS?id="+nuscode;
-      console.log(nusurl);  
-      
-        if (nuscode !== undefined) {
-      $.getJSON(nusurl, function (json) {
-        nusservices = json["ShuttleServiceResult"]["shuttles"];
-      
-        let timenow = Date.now();
-      
-      })};
-      
+            
       
 function calculateArrivalTime(time, timenow) {
     const fakeTime = +new Date(time);
@@ -531,69 +509,19 @@ function calculateArrivalTime(time, timenow) {
     return timeStr;
 }
 
-function getWAB(bus) {
-    if (bus["Feature"] == "WAB" || bus["Load"] == "") {
-        return '';
-    } else {
-        return '<i style="color:red" class="material-icons">accessible</i>';
-    }
-}
+function getBusNumber(bigblock) {
+  return bigblock[timeToStation];
+};
 
-function getLoad(bus) {
-    if (bus["Load"] == "SDA") {
-        return '<i class="material-icons">directions_walk</i>';
-    } else if (bus["Load"] == "SEA") {
-        return '<i class="material-icons">airline_seat_recline_normal</i>';
-    } else if (bus["Load"] == "LSD") {
-        return '<i class="material-icons">wc</i>';
-    } else {
-        return "";
-    }
-}
 
-function getDeck(bus) {
-    if (bus["Type"] == "SD") {
-        return '<i class="material-icons">filter_1</i> ';
-    } else if (bus["Type"] == "DD") {
-        return '<i class="material-icons">filter_2</i> ';
-    } else if (bus["Type"] == "BD") {
-        return '&#127345;&#65039;';
-    } else {
-        return "";
-    }
-}
 
-function getMapLink(bus) {
-    if (bus["Latitude"] == 0) {
-        return "";
-    } else {
-        return '<a target="_blank" href="https://www.google.com.sg/maps/search/' + bus["Latitude"] + ',' + bus["Longitude"] + '">';
-    }
-}
-
-function formatNusEta(etaObj) {
-    if (!etaObj || !etaObj["eta_s"]) return "";
-    let formattedTime = fancyTimeFormat(etaObj["eta_s"]);
+function formatTflEta(etaObj) {
+    if (!etaObj || !etaObj["timeToStation"]) return "";
+    let formattedTime = fancyTimeFormat(etaObj["timeToStation"]);
     return (formattedTime.charAt(0) == "-") ? "Very soon!" : formattedTime;
 }
 
-function generateNusServiceRow(service, index) {
-    if (!service || service.name.charAt(0) === "P") return "";
 
-    let busno = service.name;
-    let nusarrtime0 = service["_etas"] && service["_etas"][0] ? formatNusEta(service["_etas"][0]) : "No data";
-    let nusarrtime1 = service["_etas"] && service["_etas"][1] ? formatNusEta(service["_etas"][1]) : "No data";
-    let nusarrtime2 = service["_etas"] && service["_etas"][2] ? formatNusEta(service["_etas"][2]) : "No data";
-
-    return `<tr>
-                <td id="nus${index}">
-                    <a href="https://landtransportguru.net/nus-isb-${busno}/" target="_blank">${busno}</a>
-                </td>
-                <td><p id="nus${index}0" class="nusbustime">${nusarrtime0}</p></td>
-                <td><p id="nus${index}1" class="nusbustime">${nusarrtime1}</p></td>
-                <td><p id="nus${index}2" class="nusbustime">${nusarrtime2}</p></td>
-            </tr>`;
-}
 
 
 setInterval(function () {
@@ -605,57 +533,27 @@ setInterval(function () {
 
     if (typeof services !== 'undefined' && services.length > 0) {
         services.forEach((service, i) => {
-            let busno = service["ServiceNo"];
+            let busno = service["lineName"];
 
-            let arrtime = calculateArrivalTime(service["NextBus"]["EstimatedArrival"], timenow);
-            let arrtime2 = calculateArrivalTime(service["NextBus2"]["EstimatedArrival"], timenow);
-            let arrtime3 = calculateArrivalTime(service["NextBus3"]["EstimatedArrival"], timenow);
+            let arrtime = formatTflEta(service["timeToStation"]); 
 
-            let wab = getWAB(service["NextBus"]);
-            let wab2 = getWAB(service["NextBus2"]);
-            let wab3 = getWAB(service["NextBus3"]);
 
-            let load = getLoad(service["NextBus"]);
-            let load2 = getLoad(service["NextBus2"]);
-            let load3 = getLoad(service["NextBus3"]);
-
-            let deck = getDeck(service["NextBus"]);
-            let deck2 = getDeck(service["NextBus2"]);
-            let deck3 = getDeck(service["NextBus3"]);
-
-            let map1 = getMapLink(service["NextBus"]);
-            let map2 = getMapLink(service["NextBus2"]);
-            let map3 = getMapLink(service["NextBus3"]);
-
-            let rowHtml = `<tr><td id="bus${i}"><a href="https://busrouter.sg/#/services/${busno}" target="_blank">${busno}</a></td><td>${wab}${load}${deck}${map1}${arrtime}</a></td><td>${wab2}${load2}${deck2}${map2}${arrtime2}</a></td><td>${wab3}${load3}${deck3}${map3}${arrtime3}</a></td></tr>`;
+            let rowHtml = `<tr><td id="bus${i}"><a href="https://busrouter.sg/#/services/${busno}" target="_blank">${busno}</a></td><td>${arrtime}</a></td></tr>`;
         htmlRows.push(rowHtml);
         });
         $("#time").append(htmlRows.join(""));
     }
 
-    let nusRows = [];
-    
-if (typeof nusservices !== 'undefined') {
-    for (let i = 0; i < nusservices.length; i++) {
-        let service = nusservices[i];
 
-        if (service["_etas"] && service["_etas"].length > 0) {
-            let rowHtml = generateNusServiceRow(service, i);
-            nusRows.push(rowHtml);
-        } else {
-            let busno = service["name"];
-            if (busno.charAt(0) !== "P") {
-                let rowHtml = `<tr><td id="nus${i}"><a href="https://landtransportguru.net/nus-isb-${busno}/" target="_blank">${busno}</a></td><td colspan="3">No upcoming arrivals</td></tr>`;
-                nusRows.push(rowHtml);
-            }
-        }
-    }
-}
 
 
     $("#time").append(nusRows.join(""));
 
-          
+if (services.length === 0 && nusservices === undefined) {
+    // Show a message informing the user that no buses are arriving
+    $("#time").append('<tr><td colspan="4">We received a response but there was no information. Are buses running at this time? Is this a valid stop ID? The API may be temporarily down. <br>HTTP 200 ==> Empty response body.</td></tr>');
+};
+
       
     if (typeof stopno !== 'undefined' && services && services.length !== 0) {
         if (stopno == "66271") {
@@ -728,7 +626,7 @@ function activatenearby() {
 
     // Fetch the geolocation data
     navigator.geolocation.getCurrentPosition(function(position) {
-        $.get(`https://bus.api.seetow.sg/TS?lat=${position.coords.latitude}&long=${position.coords.longitude}`)
+        $.get(`https://misty-king-3f2c.seetow.workers.dev/TS?lat=${position.coords.latitude}&long=${position.coords.longitude}`)
             .done(function(htmlResponse) {
                 // Parse the response to extract relevant information
                 const $parsedResponse = $(htmlResponse);
