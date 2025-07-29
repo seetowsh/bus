@@ -123,11 +123,18 @@ h2.stoptitle {
 
 <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
 <script>
-  window.OneSignalDeferred = window.OneSignalDeferred || [];
-  OneSignalDeferred.push(function(OneSignal) {
-    OneSignal.init({
-      appId: "b019c6f8-fd71-4f16-835b-0a755e2c29ea",
-      serviceWorkerPath: "pwabuilder-sw.js"
+  // We wrap everything inside navigator.serviceWorker.ready
+  // This ensures your service worker is active before we try to initialize OneSignal
+  navigator.serviceWorker.ready.then(function(registration) {
+    console.log('Service Worker is ready, initializing OneSignal...');
+
+    // Your original OneSignal code goes here
+    window.OneSignalDeferred = window.OneSignalDeferred || [];
+    OneSignalDeferred.push(function(OneSignal) {
+      OneSignal.init({
+        appId: "b019c6f8-fd71-4f16-835b-0a755e2c29ea",
+        serviceWorkerPath: "pwabuilder-sw.js"
+      });
     });
   });
 </script>
