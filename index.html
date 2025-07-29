@@ -532,14 +532,10 @@ function createNusArrivalHtml(eta) {
         });
     }
 
-    /**
-     * Builds the entire bus table structure from the 'services' and 'nusservices' variables.
-     */
 /**
  * Builds the entire bus table structure from both LTA and NUS service variables.
  */
 function renderBusTable() {
-    // Define and cache the jQuery selector for the table body here
     const $timeTableBody = $("#time");
 
     // Clear previous results
@@ -563,24 +559,29 @@ function renderBusTable() {
     // --- Render NUS Services ---
     if (nusservices && nusservices.length > 0) {
         nusservices.forEach(shuttle => {
-            const arrival1 = shuttle._etas[0];
-            const arrival2 = shuttle._etas[1];
-            const arrival3 = shuttle._etas[2];
+            
+            // **THE FIX IS HERE:** Check if the shuttle object has arrival data before proceeding.
+            if (shuttle && shuttle._etas && shuttle._etas.length > 0) {
+                const arrival1 = shuttle._etas[0];
+                const arrival2 = shuttle._etas[1];
+                const arrival3 = shuttle._etas[2];
 
-            const rowHtml = `<tr>
-                <td>${shuttle.name} <span style="color: #003D7C; font-weight: bold;">(NUS)</span></td>
-                ${createNusArrivalHtml(arrival1)}
-                ${createNusArrivalHtml(arrival2)}
-                ${createNusArrivalHtml(arrival3)}
-            </tr>`;
-            htmlRows.push(rowHtml);
+                const rowHtml = `<tr>
+                    <td>${shuttle.name} <span style="color: #003D7C; font-weight: bold;">(NUS)</span></td>
+                    ${createNusArrivalHtml(arrival1)}
+                    ${createNusArrivalHtml(arrival2)}
+                    ${createNusArrivalHtml(arrival3)}
+                </tr>`;
+                htmlRows.push(rowHtml);
+            }
+            // If a shuttle object has no _etas array, it will now be safely skipped.
         });
     }
 
-    // Use the cached variable to append all rows
+    // Append all generated rows (both LTA and NUS) to the table
     $timeTableBody.append(htmlRows.join(""));
     
-    // Use the cached variable again for the "empty" check
+    // Check if the table is still empty after attempting to render everything
     if ($timeTableBody.is(':empty')) {
         const noResultsHtml = `
             <tr>
