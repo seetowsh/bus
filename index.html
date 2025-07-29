@@ -541,11 +541,6 @@ function renderBusTable() {
     
     let htmlRows = [];
 
-    // --- DEBUGGING: See what's in the arrays before rendering ---
-    console.log("LTA Services to render:", services);
-    console.log("NUS Services to render:", nusservices);
-    // -----------------------------------------------------------
-
     // --- Render LTA Services ---
     if (services && services.length > 0) {
         services.forEach((service, i) => {
