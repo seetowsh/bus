@@ -171,7 +171,7 @@ h2.stoptitle {
               <div id="topbar"></div>
               <br />
               <h6>Nearby bus stops (nearest to furthest):</h6>
-              <div id="locationlive"><a class="waves-effect waves-light btn modal-trigger brown" id="nearbycheck2" onclick="javascript:activatenearby()"><span id="nearbycheck">Find nearby bus stops</span></a></div>
+              <div id="locationlive"><a class="waves-effect waves-light btn brown" id="nearbycheck2" onclick="javascript:activatenearby()"><span id="nearbycheck">Find nearby bus stops</span></a></div>
               <div id="mehmeh" style="display:none;"></div>
               <br>
               <h6>Bus stop map</h6>
@@ -435,7 +435,7 @@ if (fav1) {
         }
     }
 
-    topBarElements.push('<a class="waves-effect waves-light btn modal-trigger brown" onclick="clearFavorites()">Clear Favourites</a>');
+    topBarElements.push('<a class="waves-effect waves-light btn brown" onclick="clearFavorites()">Clear Favourites</a>');
     topBarHTML = topBarElements.join("");
 } else {
     topBarHTML = 'None right now :(. Add some bus stops to your favourites by pressing the star icon on any bus stop!';
