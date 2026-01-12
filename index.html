@@ -172,7 +172,6 @@ h2.stoptitle {
               <br />
               <h6>Nearby bus stops (nearest to furthest):</h6>
               <div id="locationlive"><a class="waves-effect waves-light btn modal-trigger brown" id="nearbycheck2" onclick="javascript:activatenearby()"><span id="nearbycheck">Find nearby bus stops</span></a></div>
-              <div id="mehmeh" style="display:none;"></div>
               <br>
               <h6>Bus stop map</h6>
               <p>Click or tap on the red markers to get the results</p>
@@ -185,7 +184,7 @@ h2.stoptitle {
     <footer class="page-footer black">
       <div class="footer-copyright">
         <div class="container">
-          &copy; 2014-2024 <a class="orange-text text-lighten-3" href="https://seetow.sg">See Tow</a> Technologies (CRN: 202258286G).
+          &copy; 2014-2026 <a class="orange-text text-lighten-3" href="https://seetow.sg">See Tow</a> Technologies (CRN: 202258286G).
           <br />
           <a class="orange-text text-lighten-3 modal-trigger" href="#licenses">OSS Licenses</a>
           <div id="google_translate_element"></div>
@@ -355,6 +354,9 @@ h2.stoptitle {
       }
     </script>
     <script>
+
+      const ROUGH_KM_IN_DEGREES = 0.01;
+
       $(document).ready(function(){
         $('.modal').modal();
       });
@@ -737,40 +739,71 @@ function renderBusTable() {
 </script>
 
     <script>
-function activatenearby() { 
-    // Inform the user
-    $('#nearbycheck').text("Checking, please wait...");
+function activatenearby() {
+  $('#nearbycheck').text("Calculating nearby stops...");
 
-    // Fetch the geolocation data
-    navigator.geolocation.getCurrentPosition(function(position) {
-        $.get(`https://misty-king-3f2c.seetow.workers.dev/TS?lat=${position.coords.latitude}&long=${position.coords.longitude}`)
-            .done(function(htmlResponse) {
-                // Parse the response to extract relevant information
-                const $parsedResponse = $(htmlResponse);
-                let locations = '';
+  if (!navigator.geolocation) {
+    $('#nearbycheck').text("Geolocation is not supported.").addClass('error-class');
+    return;
+  }
 
-                $parsedResponse.each(function() {
-                    const stopDetails = $(this).find('.name').text().split(':');
+  navigator.geolocation.getCurrentPosition(function(position) {
+    const userLat = position.coords.latitude;
+    const userLong = position.coords.longitude;
+    
+    let stopsWithDistance = [];
 
-                    if (stopDetails && stopDetails.length === 2) {
-                        const stopno = Number(stopDetails[0].trim());
-                        const stopname = stopDetails[1].trim();
+    // START TIMER (Optional: to prove to yourself how fast it is)
+    const startTime = performance.now();
 
-                        if (!isNaN(stopno) && stopname) {
-                            locations += `<a class="waves-effect waves-light btn modal-trigger brown" href="#tableofresults" onclick="javascript:stopno=${stopno};redir()">${stopname}</a>`;
-                        }
-                    }
-                });
+    for (const [stopId, data] of Object.entries(bus_dict)) {
+        // Safety check
+        if (!data || data.length < 3) continue;
 
-                // Update the DOM once to reduce reflows
-                $('#mehmeh').html($parsedResponse);
-                $('#locationlive').html(locations);
-                $('#nearbycheck2').remove();
-            })
-            .fail(function(jqXHR, textStatus, errorThrown) {
-                $('#nearbycheck').text(textStatus).addClass('error-class'); 
+        const stopLat = data[0];
+        const stopLng = data[1];
+
+        // --- THE OPTIMIZATION: "The First Pass Filter" ---
+        // Simple subtraction is much faster than Trigonometry.
+        // If the stop is too far North/South or East/West, skip it.
+        if (Math.abs(userLat - stopLat) > ROUGH_KM_IN_DEGREES) continue;
+        if (Math.abs(userLong - stopLng) > ROUGH_KM_IN_DEGREES) continue;
+
+        // --- EXPENSIVE CALCULATION ---
+        // Only runs for stops inside the ~1km box
+        const dist = getDistanceFromLatLonInKm(userLat, userLong, stopLat, stopLng);
+
+        // Optional: Hard cap at 1km for the final list too
+        if (dist <= 1.0) { 
+             stopsWithDistance.push({
+                id: stopId,
+                name: data[2],
+                distance: dist
             });
-    }, function(error) {
+        }
+    }
+
+    // Sort by distance
+    stopsWithDistance.sort((a, b) => a.distance - b.distance);
+
+    const endTime = performance.now();
+    console.log(`Found ${stopsWithDistance.length} stops in ${endTime - startTime}ms`);
+
+    // --- Render Top 5 ---
+    const top5 = stopsWithDistance.slice(0, 5);
+    
+    let locations = '';
+    if (top5.length > 0) {
+        top5.forEach(stop => {
+             locations += `<a class="waves-effect waves-light btn modal-trigger brown" href="#tableofresults" onclick="javascript:stopno=${stop.id};redir()">${stop.name}</a>`;
+        });
+        $('#locationlive').html(locations);
+        $('#nearbycheck2').remove(); 
+    } else {
+        $('#nearbycheck').text("No bus stops found within 1km.");
+    }
+
+  }, function(error) {
         switch(error.code) {
             case error.PERMISSION_DENIED:
                 $('#nearbycheck').text("User denied the request for Geolocation.").addClass('error-class');
