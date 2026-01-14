@@ -162,14 +162,14 @@ h2.stoptitle {
             <p class="center">Enter a bus stop ID to view the next buses</p>
             <div class="input-field col s6 offset-s3">
               <input placeholder="Bus Stop ID (4 or 5 digits)" id="field1" name="field1" type="number">
-              <a class="waves-effect waves-light btn modal-trigger" id="field1btn" href="#tableofresults" onClick="javascript: stopno=document.getElementById('field1').value;redir()">Search</a>
+              <a class="waves-effect waves-light btn modal-trigger orange darken-3" id="field1btn" href="#tableofresults" onClick="javascript: stopno=document.getElementById('field1').value;redir()">Search</a>
             </div>
             <div class="input-field col s12">
               <hr>
               <div id="topbar"></div>
               <br />
               <h6>Nearby bus stops (nearest to furthest):</h6>
-              <div id="locationlive"><a class="waves-effect waves-light btn brown" id="nearbycheck2" onclick="javascript:activatenearby()"><span id="nearbycheck">Find nearby bus stops</span></a></div>
+              <div id="locationlive"><a class="waves-effect waves-light btn orange darken-3" id="nearbycheck2" onclick="javascript:activatenearby()"><span id="nearbycheck">Find nearby bus stops</span></a></div>
               <div id="mehmeh" style="display:none;"></div>
               <br>
               <h6>Bus stop map</h6>
@@ -429,11 +429,11 @@ if (fav1) {
         const stopname = bus_dict[parseInt(stopno)] && bus_dict[parseInt(stopno)][2];
         
         if (stopname) {
-            topBarElements.push(`<a class="waves-effect waves-light btn modal-trigger brown" href="#tableofresults" onclick="javascript:stopno=${stopno};redir()">${stopname}</a>`);
+            topBarElements.push(`<a class="waves-effect waves-light btn modal-trigger orange darken-3" href="#tableofresults" onclick="javascript:stopno=${stopno};redir()">${stopname}</a>`);
         }
     }
 
-    topBarElements.push('<a class="waves-effect waves-light btn brown" onclick="clearFavorites()">Clear Favourites</a>');
+    topBarElements.push('<a class="waves-effect waves-light btn orange darken-3" onclick="clearFavorites()">Clear Favourites</a>');
     topBarHTML = topBarElements.join("");
 } else {
     topBarHTML = 'None right now :(. Add some bus stops to your favourites by pressing the star icon on any bus stop!';
@@ -837,7 +837,7 @@ function activatenearby() {
     let locations = '';
     if (top5.length > 0) {
         top5.forEach(stop => {
-             locations += `<a class="waves-effect waves-light btn modal-trigger brown" href="#tableofresults" onclick="javascript:stopno=${stop.id};redir()">${stop.name}</a>`;
+             locations += `<a class="waves-effect waves-light btn modal-trigger orange darken-3" href="#tableofresults" onclick="javascript:stopno=${stop.id};redir()">${stop.name}</a>`;
         });
         $('#locationlive').html(locations);
         $('#nearbycheck2').remove(); 
