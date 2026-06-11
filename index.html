@@ -250,6 +250,35 @@
         top: 16px;
         right: 16px;
       }
+      /* --- Modern MD3 Transparent Input Fix --- */
+      .input-field {
+        /* 1. Turn off the default solid container fill color */
+        --md-sys-color-surface-container-highest: transparent;
+        
+        /* 2. Optional: Adjust the line indicator colors to match your dark/light tokens */
+        --md-sys-color-on-surface-variant: var(--text-color);
+      }
+
+      /* Strip the forced background and handle the focus underline state seamlessly */
+      .input-field input[type=text]#bus-search-input {
+        background-color: transparent !important;
+        box-shadow: none !important;
+        /* Let the framework handle its native height so the label coordinates line up! */
+      }
+
+      /* Fix the search icon prefix placement so it lines up with the native text baseline */
+      .input-field .prefix {
+        top: 12px !important;
+        color: var(--text-color) !important;
+      }
+
+      /* Keep our crisp stop ID badge readable */
+      .search-stop-id {
+        color: var(--text-color) !important;
+        font-weight: 600;
+        font-size: 0.95rem;
+        opacity: 0.7;
+      }
     </style>
 
     <script src="static/stopdata.js"></script>
@@ -295,19 +324,19 @@
         </div>
 
         <div id="search-pane" class="view-pane">
-          <div style="padding:20px;"><h4>Search Form Base Content</h4> <div class="row" style="padding: 20px;">
-  <div class="input-field col s12 m8 offset-m2">
-    <i class="material-icons prefix">search</i>
-    <input type="text" id="bus-search-input" placeholder="Enter bus stop name (e.g., Bt Merah)">
-    <label for="bus-search-input" class="active">Search Bus Stops by Name</label>
-  </div>
-  
-  <div class="col s12 m8 offset-m2">
-    <ul class="collection sidebar-nav-menu" id="search-results-list">
-      <li class="collection-item muted-text">Type a location above to view matching stops...</li>
-    </ul>
-  </div>
-</div></div>
+          <div class="row" style="padding: 20px;">
+            <div class="input-field col s12 m8 offset-m2">
+              <i class="material-icons prefix">search</i>
+              <input type="text" id="bus-search-input" placeholder=" ">
+              <label for="bus-search-input">Search Bus Stops by Name</label>
+            </div>
+            
+            <div class="col s12 m8 offset-m2">
+              <ul class="collection" id="search-results-list">
+                <li class="collection-item muted-text">Type a location above to view matching stops...</li>
+              </ul>
+            </div>
+          </div>
         </div>
 
         <div id="fav-pane" class="view-pane">

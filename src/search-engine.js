@@ -76,10 +76,10 @@ document.addEventListener('DOMContentLoaded', () => {
       
       li.innerHTML = `
         <div>
-          <i class="material-icons left" style="margin-right:10px;">place</i>
+          <i class="material-icons left" style="margin-right:10px; color: var(--md-sys-color-primary);">place</i>
           <strong>${stop.name}</strong>
         </div>
-        <span class="badge" style="position:relative; float:none;">${stop.id}</span>
+        <span class="search-stop-id">${stop.id}</span>
       `;
 
       // Operational Event Handler: Tap to pop up the real-time timings
