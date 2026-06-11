@@ -250,34 +250,39 @@
         top: 16px;
         right: 16px;
       }
-      /* --- Modern MD3 Transparent Input Fix --- */
+
       .input-field {
-        /* 1. Turn off the default solid container fill color */
+        /* Turn off the default solid container fill color */
         --md-sys-color-surface-container-highest: transparent;
+        --md-sys-color-on-surface-variant: var(--text-color); /* */
         
-        /* 2. Optional: Adjust the line indicator colors to match your dark/light tokens */
-        --md-sys-color-on-surface-variant: var(--text-color);
+        /* Ensure the container doesn't force extra top padding meant for a label */
+        padding-top: 0 !important;
+        display: flex;
+        align-items: center;
       }
 
-      /* Strip the forced background and handle the focus underline state seamlessly */
+      /* Let the input occupy the full height cleanly and center text vertically */
       .input-field input[type=text]#bus-search-input {
-        background-color: transparent !important;
-        box-shadow: none !important;
-        /* Let the framework handle its native height so the label coordinates line up! */
+        background-color: transparent !important; /* */
+        box-shadow: none !important; /* */
+        height: 56px !important;    /* Standard comfortable MD3 touch target height */
+        margin: 0 !important;
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
       }
 
-      /* Fix the search icon prefix placement so it lines up with the native text baseline */
+      /* Center the search icon prefix perfectly with the vertical midpoint of the input */
       .input-field .prefix {
-        top: 12px !important;
-        color: var(--text-color) !important;
+        top: 50% !important;
+        transform: translateY(-50%);
+        color: var(--text-color) !important; /* */
       }
 
-      /* Keep our crisp stop ID badge readable */
-      .search-stop-id {
-        color: var(--text-color) !important;
-        font-weight: 600;
-        font-size: 0.95rem;
-        opacity: 0.7;
+      /* Adjust the padding on the input so the text doesn't crash into the centered icon */
+      .input-field .prefix ~ input {
+        margin-left: 3rem !important;
+        width: calc(100% - 3rem) !important;
       }
     </style>
 
@@ -307,7 +312,7 @@
             <i class="material-icons">search</i><span>Search Stops</span>
           </li>
           <li class="collection-item" data-target="fav-pane">
-            <i class="material-icons">star</i><span>Saved Favorites</span>
+            <i class="material-icons">star</i><span>Saved Favourites</span>
           </li>
         </ul>
       </section>
@@ -325,17 +330,17 @@
 
         <div id="search-pane" class="view-pane">
           <div class="row" style="padding: 20px;">
+            
             <div class="input-field col s12 m8 offset-m2">
               <i class="material-icons prefix">search</i>
-              <input type="text" id="bus-search-input" placeholder=" ">
-              <label for="bus-search-input">Search Bus Stops by Name</label>
+              <input type="text" id="bus-search-input" placeholder="Search stops by name or ID">
             </div>
-            
+
             <div class="col s12 m8 offset-m2">
-              <ul class="collection" id="search-results-list">
-                <li class="collection-item muted-text">Type a location above to view matching stops...</li>
-              </ul>
+              <ul class="collection sidebar-nav-menu" id="search-results-list">
+                </ul>
             </div>
+
           </div>
         </div>
 
@@ -364,7 +369,7 @@
         <li class="tab">
           <a href="#fav-pane">
             <i class="material-icons">star</i>
-            <span>Favorites</span>
+            <span>Favourites</span>
           </a>
         </li>
       </ul>
