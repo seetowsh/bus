@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>See Tow Bus</title>
     
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Livvic|Nunito+Sans|Material+Icons&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@materializecss/materialize@2.3.3/dist/css/materialize.min.css">
     
@@ -19,6 +19,7 @@
         --surface-color: #ffffff;
         --text-color: #212121;
         --border-color: #e0e0e0;
+        --active-alpha: rgba(0, 0, 0, 0.05);
       }
 
       body, html {
@@ -27,7 +28,7 @@
         height: 100%;
         width: 100%;
         overflow: hidden;
-        font-family: Aptos, Bierstadt, "San Francisco", "Helvetica Neue", Helvetica;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         background-color: var(--bg-color);
         color: var(--text-color);
       }
@@ -39,6 +40,7 @@
           --surface-color: #1e1e1e;
           --text-color: #f5f5f5;
           --border-color: #333333;
+          --active-alpha: rgba(255, 255, 255, 0.1);
         }
         nav {
           background-color: #1e1e1e !important;
@@ -47,9 +49,20 @@
         nav .brand-logo, nav .brand-logo i {
           color: #ffffff !important;
         }
-        .card, .results-overlay, .desktop-sidebar, .bottom-nav-container, .tab-pane {
+        .card, .results-overlay, .desktop-sidebar, .bottom-nav-container, .view-pane {
           background-color: var(--surface-color) !important;
           color: var(--text-color) !important;
+        }
+        .collection, .collection-item {
+          background-color: var(--surface-color) !important;
+          border-color: var(--border-color) !important;
+          color: var(--text-color) !important;
+        }
+        .collection .collection-item.active {
+          background-color: var(--active-alpha) !important;
+        }
+        .collection .collection-item i {
+          color: #ffffff !important;
         }
         .tabs {
           background-color: var(--surface-color) !important;
@@ -62,7 +75,7 @@
         }
       }
 
-      /* --- Persistent Global Top Bar --- */
+      /* --- Centered Global Top Bar --- */
       nav {
         height: var(--nav-height);
         line-height: var(--nav-height);
@@ -74,7 +87,16 @@
         width: 100%;
         z-index: 1000;
       }
+      nav .nav-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+      }
       nav .brand-logo {
+        position: relative !important;
+        left: auto !important;
+        transform: none !important;
         color: #212121;
         display: flex;
         align-items: center;
@@ -82,7 +104,7 @@
         font-size: 1.4rem;
       }
 
-      /* --- App Workspace Container --- */
+      /* --- App Workspace Layout --- */
       .app-workspace {
         position: absolute;
         top: var(--nav-height);
@@ -98,26 +120,82 @@
         height: 100%;
         background-color: #ffffff;
         border-right: 1px solid var(--border-color);
-        display: flex;
-        flex-direction: column;
         z-index: 10;
       }
+      .sidebar-nav-menu {
+        border: none !important;
+        margin: 0;
+      }
+      .sidebar-nav-menu .collection-item {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 20px;
+        font-size: 1.1rem;
+        color: var(--text-color);
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+      }
+      .sidebar-nav-menu .collection-item:hover {
+        background-color: var(--active-alpha);
+      }
+/* --- Align Desktop Sidebar with Modern MD3 Tokens --- */
+.sidebar-nav-menu .collection-item.active {
+  /* Match the primary theme color the button is pulling */
+  background-color: var(--md-sys-color-primary) !important;
+  /* Automatically use the mathematically correct high-contrast text color */
+  color: var(--md-sys-color-on-primary) !important;
+  font-weight: 600;
+}
 
-      /* --- Primary Interactive Map Base --- */
-      #map-canvas {
+/* Force the icon inside the active sidebar item to adapt as well */
+.sidebar-nav-menu .collection-item.active i {
+  color: var(--md-sys-color-on-primary) !important;
+}
+
+/* Create a modern, dynamic hover state using the primary color at 10% opacity */
+.sidebar-nav-menu .collection-item:hover {
+  background-color: color-mix(in srgb, var(--md-sys-color-primary) 10%, transparent) !important;
+  color: var(--md-sys-color-primary) !important;
+}
+.sidebar-nav-menu .collection-item:hover i {
+  color: var(--md-sys-color-primary) !important;
+}
+
+      /* --- Central Split Screen Workspaces --- */
+      .content-container {
         flex-grow: 1;
         height: 100%;
         position: relative;
-        z-index: 1;
+      }
+
+      /* --- Universal Tab View Panes --- */
+      .view-pane {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.2s ease-in-out;
+        background-color: var(--bg-color);
+      }
+      .view-pane.active {
+        opacity: 1;
+        pointer-events: auto;
+        z-index: 2;
+      }
+      #map-pane {
+        z-index: 1; /* Keep map layer working smoothly in base memory */
+        opacity: 1;
+        pointer-events: auto;
       }
 
       /* --- Mobile Bottom Navigation Viewport Adjustments --- */
       @media only screen and (max-width: 992px) {
         .app-workspace {
           height: calc(100vh - var(--nav-height) - var(--bottom-nav-height));
-        }
-        #map-canvas {
-          width: 100vw;
         }
       }
 
@@ -158,7 +236,7 @@
         width: 100vw;
         height: calc(100vh - var(--nav-height));
         background-color: #ffffff;
-        z-index: 500;
+        z-index: 2000;
         transform: translateY(100%);
         transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1);
         overflow-y: auto;
@@ -173,15 +251,18 @@
         right: 16px;
       }
     </style>
+
+    <script src="static/stopdata.js"></script>
+
+    <script type="module" src="src/search-engine.js"></script>
+
   </head>
   <body>
 
     <header>
       <nav>
-        <div class="nav-wrapper container-fluid px-3">
-          <a href="#" class="brand-logo">
-            <i class="material-icons">directions_bus</i>See Tow Bus
-          </a>
+        <div class="nav-wrapper">
+            <a href="#" class="brand-logo center" style="font-family:Livvic;color:#000;font-size: 1.8rem;"><span class="material-icons">directions_bus</span> See Tow Bus</a>
         </div>
       </nav>
     </header>
@@ -189,33 +270,70 @@
     <main class="app-workspace">
       
       <section class="desktop-sidebar hide-on-med-and-down" id="sidebar-panel">
-        <div class="p-3">
-          <h5>Navigation</h5>
-          <p class="muted-text">Desktop Controls container wrapper</p>
-        </div>
+        <ul class="collection sidebar-nav-menu">
+          <li class="collection-item active" data-target="map-pane">
+            <i class="material-icons">map</i><span>Map View</span>
+          </li>
+          <li class="collection-item" data-target="search-pane">
+            <i class="material-icons">search</i><span>Search Stops</span>
+          </li>
+          <li class="collection-item" data-target="fav-pane">
+            <i class="material-icons">star</i><span>Saved Favorites</span>
+          </li>
+        </ul>
       </section>
 
-      <section id="map-canvas">
-        </section>
+      <section class="content-container">
+        
+        <div id="map-pane" class="view-pane active">
+          <div style="padding:20px;"><h4>Map Canvas Base Layer</h4> <button 
+  class="btn filled" 
+  style="margin: 20px;" 
+  onclick="window.showResultsOverlay()">
+  <i class="material-icons left">bug_report</i> QA: Open Results Panel
+</button></div>
+        </div>
+
+        <div id="search-pane" class="view-pane">
+          <div style="padding:20px;"><h4>Search Form Base Content</h4> <div class="row" style="padding: 20px;">
+  <div class="input-field col s12 m8 offset-m2">
+    <i class="material-icons prefix">search</i>
+    <input type="text" id="bus-search-input" placeholder="Enter bus stop name (e.g., Bt Merah)">
+    <label for="bus-search-input" class="active">Search Bus Stops by Name</label>
+  </div>
+  
+  <div class="col s12 m8 offset-m2">
+    <ul class="collection sidebar-nav-menu" id="search-results-list">
+      <li class="collection-item muted-text">Type a location above to view matching stops...</li>
+    </ul>
+  </div>
+</div></div>
+        </div>
+
+        <div id="fav-pane" class="view-pane">
+          <div style="padding:20px;"><h4>User Saved Favourites</h4></div>
+        </div>
+
+      </section>
 
     </main>
 
     <footer class="bottom-nav-container hide-on-large-only">
-      <ul class="tabs tabs-fixed-width transparent">
+      <ul class="tabs tabs-fixed-width transparent" id="mobile-tabs-nav">
         <li class="tab">
-          <a class="active" href="#map-tab">
+          <a class="active" href="#map-pane">
             <i class="material-icons">map</i>
             <span>Map</span>
           </a>
         </li>
         <li class="tab">
-          <a href="#search-tab">
+          <a href="#search-pane">
             <i class="material-icons">search</i>
             <span>Search</span>
           </a>
         </li>
         <li class="tab">
-          <a href="#fav-tab">
+          <a href="#fav-pane">
             <i class="material-icons">star</i>
             <span>Favorites</span>
           </a>
@@ -230,30 +348,70 @@
       <div class="container">
         <h4>Bus Arrival Timings</h4>
         <hr>
-        </div>
+        <button class="btn" onclick="window.hideResultsOverlay()">Back to Navigation</button>
+      </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@materializecss/materialize@2.3.3/dist/js/materialize.min.js"></script>
     
     <script>
       document.addEventListener('DOMContentLoaded', () => {
-        // Automatically initialize all core Materialize components present
-        M.AutoInit();
-
-        // Target references for state manipulation tests
+        // Targets for layout tracking
+        const viewPanes = document.querySelectorAll('.view-pane');
+        const sidebarItems = document.querySelectorAll('.sidebar-nav-menu .collection-item');
         const resultsPanel = document.getElementById('results-panel');
         const closeResultsBtn = document.getElementById('close-results-btn');
 
-        // Accessible functions to trigger your sweep up display framework natively
-        window.showResultsOverlay = () => {
-          resultsPanel.classList.add('active');
+        // Global View Transition Coordinator
+        window.switchAppView = (targetPaneId) => {
+          viewPanes.forEach(pane => {
+            if (pane.id === targetPaneId) {
+              pane.classList.add('active');
+            } else if (pane.id !== 'map-pane') {
+              // Keep map pane structurally appended but drop visual layer
+              pane.classList.remove('active');
+            }
+          });
+
+          // Sync Desktop Sidebar UI elements status
+          sidebarItems.forEach(item => {
+            if (item.getAttribute('data-target') === targetPaneId) {
+              item.classList.add('active');
+            } else {
+              item.classList.remove('active');
+            }
+          });
+
+          // Sync Mobile Tabs UI elements status
+          const tabInstance = M.Tabs.getInstance(document.getElementById('mobile-tabs-nav'));
+          if (tabInstance) {
+            tabInstance.select(targetPaneId);
+          }
         };
 
-        window.hideResultsOverlay = () => {
-          resultsPanel.classList.remove('active');
-        };
+        // Wire up Desktop Sidebar selection tracking
+        sidebarItems.forEach(item => {
+          item.addEventListener('click', () => {
+            const target = item.getAttribute('data-target');
+            window.switchAppView(target);
+          });
+        });
 
+        // Initialize Materialize Mobile Navigation tabs configuration
+        M.Tabs.init(document.getElementById('mobile-tabs-nav'), {
+          onShow: (tabContentElement) => {
+            // Trigger dynamic sync when mobile elements are swiped/tapped
+            window.switchAppView(tabContentElement.id);
+          }
+        });
+
+        // High-Performance Overlay Controls
+        window.showResultsOverlay = () => { resultsPanel.classList.add('active'); };
+        window.hideResultsOverlay = () => { resultsPanel.classList.remove('active'); };
         closeResultsBtn.addEventListener('click', window.hideResultsOverlay);
+
+        // Global Auto-Initialization for leftover Materialize component triggers
+        M.AutoInit();
       });
     </script>
   </body>
