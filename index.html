@@ -1,604 +1,877 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-JRBX99XR10"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      
+      gtag('config', 'G-JRBX99XR10');
+    </script>
+    <meta name="description" content="The best bus time app.">
     <link rel="manifest" href="manifest.json">
-    <title>See Tow Bus</title>
-    
-    <link href="https://fonts.googleapis.com/css?family=Livvic|Nunito+Sans|Material+Icons&display=swap" rel="stylesheet">
-    
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@materializecss/materialize@2.3.3/dist/css/materialize.min.css">
-    
-    <style>
-      /* --- Root Core Variables & Reset --- */
-      :root {
-        --nav-height: 64px;
-        --sidebar-width: 300px;
-        --bottom-nav-height: 56px;
-        --bg-color: #fafafa;
-        --surface-color: #ffffff;
-        --text-color: #212121;
-        --border-color: #e0e0e0;
-        --active-alpha: rgba(0, 0, 0, 0.05);
+    <meta name="theme-color" content="#FFFFFF">
+    <link rel="apple-touch-icon" href="https://i.imgur.com/9tVaenz.png">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="google-signin-client_id" content="35800995045-u54nb2hltd3kl9vuhrhjq3eca2k5110u.apps.googleusercontent.com">
+    <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" />
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9218984794093639"
+     crossorigin="anonymous"></script>
+    <script>
+      function goBack() {
+          window.history.back();
       }
-
-      body, html {
-        margin: 0;
-        padding: 0;
-        height: 100%;
-        width: 100%;
-        overflow: hidden;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        background-color: var(--bg-color);
-        color: var(--text-color);
+    </script>
+    <style type="text/css">
+      .instagram-media{
+      margin: 15px auto !important;
       }
-
-      /* --- Automatic CSS Dark Mode Handling --- */
+      .red-bg {
+      background-color: #7CFC00;
+      }
+      body {
+      font-family: Aptos, Bierstadt, "San Francisco", "Helvetica Neue", Helvetica
+      }
+  nav .brand-logo {
+    overflow: hidden;
+    white-space: nowrap;
+}
+h2.stoptitle {
+  font-size: 10vmin;
+}
+@media screen and (min-width: 600px) {
+  h2.stoptitle {
+     font-size: 3.56rem;
+  }
+}
+@media only screen and (max-width: 992.99px) {
+.modal {
+  width: 100% !important;
+}}
+      footer {
+      bottom: 0;
+      }
+      .button109 {
+      background-color: #4CAF50; /* Green */
+      border: none;
+      color: white;
+      padding: 5px 10px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      }
+      input[type=submit]:hover {
+      background-color: blue;
+      }
+      #topbar{
+      width: 100%;
+      }
+      #map {
+      height: 600px;
+      }
       @media (prefers-color-scheme: dark) {
-        :root {
-          --bg-color: #121212;
-          --surface-color: #1e1e1e;
-          --text-color: #f5f5f5;
-          --border-color: #333333;
-          --active-alpha: rgba(255, 255, 255, 0.1);
-        }
-        nav {
-          background-color: #1e1e1e !important;
-          border-bottom: 1px solid var(--border-color);
-        }
-        nav .brand-logo, nav .brand-logo i {
-          color: #ffffff !important;
-        }
-        .card, .results-overlay, .desktop-sidebar, .bottom-nav-container, .view-pane {
-          background-color: var(--surface-color) !important;
-          color: var(--text-color) !important;
-        }
-        .collection, .collection-item {
-          background-color: var(--surface-color) !important;
-          border-color: var(--border-color) !important;
-          color: var(--text-color) !important;
-        }
-        .collection .collection-item.active {
-          background-color: var(--active-alpha) !important;
-        }
-        .collection .collection-item i {
-          color: #ffffff !important;
-        }
-        .tabs {
-          background-color: var(--surface-color) !important;
-        }
-        .tabs .tab a {
-          color: rgba(255, 255, 255, 0.7) !important;
-        }
-        .tabs .tab a.active {
-          color: #ffffff !important;
-        }
+      body{
+      background-color: #333;
+      color: white !important;
       }
-
-      /* --- Centered Global Top Bar --- */
-      nav {
-        height: var(--nav-height);
-        line-height: var(--nav-height);
-        background-color: #ffffff;
-        box-shadow: 0 2px 2px 0 rgba(0,0,0,0.05);
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        z-index: 1000;
+      button, input, optgroup, select, textarea {
+      color: white !important;
       }
-      nav .nav-wrapper {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100%;
+      .input-field label {
+      color: white;
       }
-      nav .brand-logo {
-        position: relative !important;
-        left: auto !important;
-        transform: none !important;
-        color: #212121;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        font-size: 1.4rem;
+      .modal .modal-content {
+      background-color: #333;
       }
-
-      /* --- App Workspace Layout --- */
-      .app-workspace {
-        position: absolute;
-        top: var(--nav-height);
-        left: 0;
-        width: 100%;
-        height: calc(100vh - var(--nav-height));
-        display: flex;
+      .collapsible-header{
+      background-color: #333 !important;
       }
-
-      /* --- Desktop Sidebar Layout --- */
-      .desktop-sidebar {
-        width: var(--sidebar-width);
-        height: 100%;
-        background-color: #ffffff;
-        border-right: 1px solid var(--border-color);
-        z-index: 10;
       }
-      .sidebar-nav-menu {
-        border: none !important;
-        margin: 0;
-      }
-      .sidebar-nav-menu .collection-item {
-        display: flex;
-        align-items: center;
-        gap: 16px;
-        padding: 20px;
-        font-size: 1.1rem;
-        color: var(--text-color);
-        cursor: pointer;
-        transition: background-color 0.2s ease;
-      }
-      .sidebar-nav-menu .collection-item:hover {
-        background-color: var(--active-alpha);
-      }
-/* --- Align Desktop Sidebar with Modern MD3 Tokens --- */
-.sidebar-nav-menu .collection-item.active {
-  /* Match the primary theme color the button is pulling */
-  background-color: var(--md-sys-color-primary) !important;
-  /* Automatically use the mathematically correct high-contrast text color */
-  color: var(--md-sys-color-on-primary) !important;
-  font-weight: 600;
-}
-
-/* Force the icon inside the active sidebar item to adapt as well */
-.sidebar-nav-menu .collection-item.active i {
-  color: var(--md-sys-color-on-primary) !important;
-}
-
-/* Create a modern, dynamic hover state using the primary color at 10% opacity */
-.sidebar-nav-menu .collection-item:hover {
-  background-color: color-mix(in srgb, var(--md-sys-color-primary) 10%, transparent) !important;
-  color: var(--md-sys-color-primary) !important;
-}
-.sidebar-nav-menu .collection-item:hover i {
-  color: var(--md-sys-color-primary) !important;
-}
-
-      /* --- Central Split Screen Workspaces --- */
-      .content-container {
-        flex-grow: 1;
-        height: 100%;
-        position: relative;
-      }
-
-      /* --- Universal Tab View Panes --- */
-      .view-pane {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        opacity: 0;
-        pointer-events: none;
-        transition: opacity 0.2s ease-in-out;
-        background-color: var(--bg-color);
-      }
-      .view-pane.active {
-        opacity: 1;
-        pointer-events: auto;
-        z-index: 2;
-      }
-      #map-pane {
-        z-index: 1; /* Keep map layer working smoothly in base memory */
-        opacity: 1;
-        pointer-events: auto;
-      }
-
-      /* --- Mobile Bottom Navigation Viewport Adjustments --- */
-      @media only screen and (max-width: 992px) {
-        .app-workspace {
-          height: calc(100vh - var(--nav-height) - var(--bottom-nav-height));
-        }
-      }
-
-      /* --- Mobile Bottom Nav Bar Styling --- */
-      .bottom-nav-container {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        height: var(--bottom-nav-height);
-        z-index: 1000;
-        background-color: #ffffff;
-        border-top: 1px solid var(--border-color);
-      }
-      .bottom-nav-container .tabs {
-        height: 100%;
-      }
-      .bottom-nav-container .tabs .tab a {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        line-height: normal;
-        height: 100%;
-        padding-top: 4px;
-        font-size: 0.75rem;
-      }
-      .bottom-nav-container .tabs .tab a i {
-        margin-bottom: 2px;
-        font-size: 1.5rem;
-      }
-
-      /* --- Custom Non-Blocking Full Overlay (Sits underneath Top Bar) --- */
-      /* --- Custom Non-Blocking Full Overlay (Sits underneath Top Bar) --- */
-            .results-overlay {
-              position: fixed;
-              top: var(--nav-height);
-              left: 0;
-              width: 100vw;
-              height: calc(100dvh - var(--nav-height));
-              background-color: var(--surface-color); /* Automatically handles system theme transitions */
-              z-index: 2000;
-              transform: translateY(100%);
-              transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1);
-              
-              /* Convert container to flex layout to handle multi-zone layout stacking */
-              display: flex;
-              flex-direction: column;
-              overflow: hidden; /* Prevents the outer window casing from scrolling */
-              padding: 0;       /* Padding is moved to inner layout fragments */
-            }
-            .results-overlay.active {
-              transform: translateY(0);
-            }
-            .close-overlay-btn {
-              position: absolute;
-              top: 16px;
-              right: 16px;
-              z-index: 2010; /* Ensures the close handle floats on top of scrolling data grids */
-            }
-
-            /* Inner content block that handles vertical scrolling independently */
-            .results-scroller {
-              flex-grow: 1;
-              overflow-y: auto;
-            }
-
-            /* Persistent Black Bottom Footer from Old App Specs */
-            /* Persistent Integrated Bottom Footer */
-                  .results-footer {
-                    margin-top: auto;
-                    padding: 16px 0 !important;
-                    /* Pulls the clean background color from your light/dark mode variables */
-                    background-color: var(--surface-color) !important;
-                    border-top: 1px solid var(--border-color);
-                  }
-                  .results-footer .footer-copyright {
-                    background-color: transparent !important;
-                    color: var(--text-color) !important;
-                    font-size: 0.85rem;
-                  }
-                  
-                  /* Fix the layout breakdown by forcing the link to render inline */
-                  .results-footer .footer-copyright a.footer-link {
-                    display: inline !important;
-                    white-space: nowrap;
-                    /* Dynamically matches your theme's primary choice (the button color) */
-                    color: var(--md-sys-color-primary) !important;
-                    font-weight: 600;
-                    text-decoration: underline;
-                  }
-
-      .input-field {
-        /* Turn off the default solid container fill color */
-        --md-sys-color-surface-container-highest: transparent;
-        --md-sys-color-on-surface-variant: var(--text-color); /* */
-        
-        /* Ensure the container doesn't force extra top padding meant for a label */
-        padding-top: 0 !important;
-        display: flex;
-        align-items: center;
-      }
-
-      /* Let the input occupy the full height cleanly and center text vertically */
-      .input-field input[type=text]#bus-search-input {
-        background-color: transparent !important; /* */
-        box-shadow: none !important; /* */
-        height: 56px !important;    /* Standard comfortable MD3 touch target height */
-        margin: 0 !important;
-        padding-top: 0 !important;
-        padding-bottom: 0 !important;
-      }
-
-      /* Center the search icon prefix perfectly with the vertical midpoint of the input */
-      .input-field .prefix {
-        top: 50% !important;
-        transform: translateY(-50%);
-        color: var(--text-color) !important; /* */
-      }
-
-      /* Adjust the padding on the input so the text doesn't crash into the centered icon */
-      .input-field .prefix ~ input {
-        margin-left: 3rem !important;
-        width: calc(100% - 3rem) !important;
-      }
-      /* --- Seamless Leaflet Popup Theme Integration --- */
-      .leaflet-popup-content-wrapper, .leaflet-popup-tip {
-        /* Syncs automatically with your light/dark mode custom layout tokens */
-        background-color: var(--surface-color) !important;
-        color: var(--text-color) !important;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
-        border-radius: 12px !important;
-      }
-      
-      .leaflet-popup-content {
-        margin: 12px 14px !important;
-        font-family: inherit !important;
-      }
-      
-      /* Make sure Leaflet's built-in close "X" handle respects your contrast colors */
-      .leaflet-popup-close-button {
-        color: var(--text-color) !important;
-        opacity: 0.4;
-        padding: 6px !important;
-      }
-      .leaflet-popup-close-button:hover {
-        opacity: 0.8;
-        background: transparent !important;
-      }
-      /* --- Isolated Search Results Presentation Layout --- */
-      /* --- Isolated Search Results Presentation Layout --- */
-            #search-results-list.collection {
-              border: none !important;
-              box-shadow: none !important;
-              margin: 0 !important;
-              background: transparent !important;
-            }
-            
-            #search-results-list.collection .collection-item {
-              /* FIX: Added 8px of internal horizontal safety padding to prevent character clipping */
-              padding: 20px 8px !important; 
-              border-left: none !important;
-              border-right: none !important;
-              border-top: none !important;
-              border-bottom: 1px solid var(--border-color) !important;
-              background: transparent !important;
-            }
-            
-            /* Prevents a trailing line underneath the final list row */
-            #search-results-list.collection .collection-item:last-child {
-              border-bottom: none !important;
-            }
     </style>
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css" />
-    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
 
-    <script src="static/geojson2.js"></script>
+    <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.css" />
+    <link href="https://fonts.googleapis.com/css?family=Livvic|Nunito+Sans&display=swap" rel="stylesheet">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.js"></script>
+    <script>
+      window.addEventListener("load", function(){
+      window.cookieconsent.initialise({
+        "palette": {
+          "popup": {
+            "background": "#edeff5",
+            "text": "#838391"
+          },
+          "button": {
+            "background": "#4b81e8"
+          }
+        },
+        "theme": "classic",
+        "position": "bottom-left",
+        "content": {
+          "message": "See Tow Bus uses cookies to ensure you get the best experience on our website."
+        }
+      })});
+    </script>
 
-    <script type="module" src="src/search-engine.js"></script>
-    <script type="module" src="src/map-engine.js"></script>
-    <script type="module" src="src/favourites.js"></script>
+<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+<script>
+  // We wrap everything inside navigator.serviceWorker.ready
+  // This ensures your service worker is active before we try to initialize OneSignal
+  navigator.serviceWorker.ready.then(function(registration) {
+    console.log('Service Worker is ready, initializing OneSignal...');
 
+    // Your original OneSignal code goes here
+    window.OneSignalDeferred = window.OneSignalDeferred || [];
+    OneSignalDeferred.push(function(OneSignal) {
+      OneSignal.init({
+        appId: "b019c6f8-fd71-4f16-835b-0a755e2c29ea",
+        serviceWorkerPath: "pwabuilder-sw.js"
+      });
+    });
+  });
+</script>
+    <title>See Tow Bus</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://rawcdn.githack.com/Hi1307/ltabus/b896c394/flaticon.css" rel="stylesheet">
+    <link href="/static/materialize.css" rel="stylesheet">
   </head>
   <body>
 
-    <header>
-      <nav>
-        <div class="nav-wrapper">
-            <a href="#" class="brand-logo center" style="font-family:Livvic;color:#000;font-size: 1.8rem;"><span class="material-icons">directions_bus</span> See Tow Bus</a>
-        </div>
-      </nav>
-    </header>
+  <div class="navbar-fixed">
+    <nav style="background-color: #fff;">
+      <div class="nav-wrapper">
+        <a href="#" class="brand-logo center" style="font-family:Livvic;color:#000"><span class="material-icons">directions_bus</span> See Tow Bus</a>
+      </div>
+    </nav>
+  </div>
 
-    <main class="app-workspace">
-      
-      <section class="desktop-sidebar hide-on-med-and-down" id="sidebar-panel">
-        <ul class="collection sidebar-nav-menu">
-          <li class="collection-item" data-target="map-pane">
-            <i class="material-icons">map</i><span>Map View</span>
+    <div class="container">
+      <div class="section">
+        <div class="row">
+
+          <div class='onesignal-customlink-container'></div>
+
+          <meta name="viewport" content="width=device-width, initial-scale=1">
+          <div id="stopsearch">
+            <p class="center">Enter a bus stop ID to view the next buses</p>
+            <div class="input-field col s6 offset-s3">
+              <input placeholder="Bus Stop ID (4 or 5 digits)" id="field1" name="field1" type="number">
+              <a class="waves-effect waves-light btn modal-trigger orange darken-3" id="field1btn" href="#tableofresults" onClick="javascript: stopno=document.getElementById('field1').value;redir()">Search</a>
+            </div>
+            <div class="input-field col s12">
+              <hr>
+              <div id="topbar"></div>
+              <br />
+              <h6>Nearby bus stops (nearest to furthest):</h6>
+              <div id="locationlive"><a class="waves-effect waves-light btn orange darken-3" id="nearbycheck2" onclick="javascript:activatenearby()"><span id="nearbycheck">Find nearby bus stops</span></a></div>
+              <div id="mehmeh" style="display:none;"></div>
+              <br>
+              <h6>Bus stop map</h6>
+              <p>Click or tap on the red markers to get the results</p>
+              <div id="map"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <footer class="page-footer black">
+      <div class="footer-copyright">
+        <div class="container">
+          &copy; 2014-2026 <a class="orange-text text-lighten-3" href="https://seetow.sg">See Tow</a> Technologies (CRN: 202258286G).
+          <br />
+          <a class="orange-text text-lighten-3 modal-trigger" href="#licenses">OSS Licenses</a>
+          <div id="google_translate_element"></div>
+          <script type="text/javascript">
+            function googleTranslateElementInit() {
+              new google.translate.TranslateElement({pageLanguage: 'en', includedLanguages: 'ja,ko,ms,ta,zh-CN', layout: google.translate.TranslateElement.FloatPosition.TOP_LEFT}, 'google_translate_element');
+            }
+          </script><script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+          <div id="outdated"></div>
+        </div>
+      </div>
+    </footer>
+    <div id="legend" class="modal">
+      <div class="modal-content">
+        <table class="striped responsive-table">
+          <br />
+          <thead>
+            <th>Legend</th>
+          </thead>
+          <tr>
+            <td>Space</td>
+            <td><i class="material-icons">airline_seat_recline_normal</i>Seating available</td>
+            <td><i class="material-icons">directions_walk</i>Standing space</td>
+            <td><i class="material-icons">wc</i>Limited standing space</td>
+          </tr>
+          <tr>
+            <td>Type of bus</td>
+            <td><i class="material-icons">filter_1</i> Single decker</td>
+            <td><i class="material-icons">filter_2</i> Double decker</td>
+            <td>🅱️ Bendy/Articulated bus</td>
+          </tr>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <a class="modal-close waves-effect waves-green btn-flat">Close</a>
+      </div>
+    </div>
+    <div id="licenses" class="modal">
+      <div class="modal-content">
+        <ul class="collapsible">
+          <li>
+            <div class="collapsible-header">Cookie Consent</div>
+            <div class="collapsible-body"><span>
+              MIT License
+              <br>
+              Copyright (c) 2019 Osano, Inc., A Public Benefit Corporation
+              <br>
+              <a href="https://github.com/osano/cookieconsent/blob/dev/LICENSE">Read more</a>
+            </span></div>
           </li>
-          <li class="collection-item" data-target="search-pane">
-            <i class="material-icons">search</i><span>Search Stops</span>
+          <li>
+            <div class="collapsible-header">Data.gov.sg</div>
+            <div class="collapsible-body"><span>Data provided by Data.gov.sg on See Tow Bus is licensed under the <a href="https://data.gov.sg/open-data-licence">Singapore Open Data License</a>. </span></div>
           </li>
-          <li class="collection-item" data-target="fav-pane">
-            <i class="material-icons">star</i><span>Saved Favourites</span>
+          <li>
+            <div class="collapsible-header">Electron</div>
+            <div class="collapsible-body"><span>
+              MIT License
+              <br>
+              Copyright (c) Electron contributors<br>
+              Copyright (c) 2013-2020 GitHub Inc.
+              <br>
+              <a href="https://github.com/electron/electron/blob/main/LICENSE">Read more</a>
+            </span></div>
+          </li>
+          <li>
+            <div class="collapsible-header">Google Fonts</div>
+            <div class="collapsible-body"><span>Fonts are licensed under the Open Fonts License.</span></div>
+          </li>
+          <li>
+            <div class="collapsible-header">jQuery</div>
+            <div class="collapsible-body"><span>Licensed under the MIT License. Copyright 2024 jQuery, Inc.
+
+<br />Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+<br />The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+<br />THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+</span></div>
+          </li>
+          <li>
+            <div class="collapsible-header">Leaflet</div>
+            <div class="collapsible-body"><span>Licensed under BSD Version 3.</span></div>
+          </li>
+          <li>
+            <div class="collapsible-header">Materialize</div>
+            <div class="collapsible-body"><span>Copyright (c) 2014-2019 Materialize.
+              
+<br />Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+<br />The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+<br />THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+</span></div>
+          </li>
+          <li>
+            <div class="collapsible-header">Open Government Products</div>
+            <div class="collapsible-body"><span>Copyright 2018 Government Technology Agency.
+              
+<br />Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+<br />The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+<br />THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+</span></div>
+          </li>
+          <li>
+            <div class="collapsible-header">OpenStreetMap</div>
+            <div class="collapsible-body"><span>Copyright 2024 OpenStreetMap Contributors.</span></div>
           </li>
         </ul>
-      </section>
-
-      <section class="content-container">
-        <div id="welcome-pane" class="view-pane active">
-          <div class="container" style="padding: 40px 20px; max-width: 600px;">
-            <div class="card-content center-align">
-              <i class="material-icons large" style="color: var(--md-sys-color-primary);">explore</i>
-              <h4>Welcome to the new See Tow Bus (v3.0)!</h4>
-              <p class="flow-text" style="font-size: 1.1rem; margin-top: 20px;">
-                See Tow Bus turns 10 in 2026. We've completely overhauled the layout and added some new features to make navigating Singapore's bus network even faster.
-              </p>
-              
-              <div class="left-align" style="margin: 30px 0; padding: 20px; background: rgba(0,0,0,0.02); border-radius: 8px;">
-                <p>You can now search bus stops by name* and stop code (in addition to nearby bus stops)</p>
-                <p>New tabbed navigation means less time finding your stop</p>
-                <p>Results loading got even (average 15%) faster, with 10 year old scripts being replaced with up to date ones.</p>
-                <p><i class="font-size:8px">*Searching by name requires a relatively recent phone made after 2021 otherwise it'll be very slow.</i></p>
-                <p><i class="font-size:8px">Recent browser required (must support ECMAScript 2022) for most functionality to work correctly.</i></p>
-
-              </div>
-
-              <p class="flow-text" style="font-size: 1.1rem; margin-top: 20px; margin-bottom: 20px;">
-              Please continue to report issues on GitHub or the usual channels.
-              </p>
-
-              <button class="btn filled btn-large" style="width:100%;" onclick="window.switchAppView('map-pane')">Ok can</button>
-            </div>
-          </div>
+      </div>
+      <div class="modal-footer">
+        <a class="modal-close waves-effect waves-green btn-flat">Close</a>
+      </div>
+    </div>
+    <div id="tableofresults" class="modal">
+      <div class="modal-content">
+        <div id="resultstable">
+          <h2 class="center stoptitle"><span id="hm"></span></h2>
+          <p class="center"><a class="btn waves-effect waves-light modal-close"><i class="material-icons">arrow_back</i></a><span id="locbutton"></span><a class="btn waves-effect waves-light modal-trigger" href="#legend">legend</a><a class="btn waves-effect waves-light" onClick="updatecookie();"><i class="material-icons">star</i></a></p>
+          <p class="center">Results were last fetched from the server at <span id="resultupdate"></span></p>
+          <table>
+            <thead>
+              <th style=min-width:90px>Bus</th>
+              <th style=min-width:90px>Time (1)</th>
+              <th style=min-width:90px>Time (2)</th>
+              <th style=min-width:90px>Time (3)</th>
+            </thead>
+            <tbody id="time">
+              <tr id="fetching">
+                <td colspan="5">
+                  <p style="text-align:center">Calculating timings. Please wait.</p>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-        
-        <div id="map-pane" class="view-pane active" style="display: flex; flex-direction: column; width: 100%; height: 100%;">
-          <div id="map" style="flex-grow: 1; width: 100%; height: 100%;"></div>
-        </div>
+      </div>
+      <div class="modal-footer">
+        <a class="modal-close waves-effect waves-green btn-flat">Close</a>
+      </div>
+    </div>
+    <div id="outsideModal" class="modal">
+  <div class="modal-content">
+    <h4 id="modalTitle">Outside Supported Area</h4>
+    <p id="modalMessage">You are detected to be outside Singapore.</p>
+  </div>
+  <div class="modal-footer" id="modalButtons">
+    <!-- Buttons will be inserted dynamically -->
+  </div>
+</div>
 
-        <div id="search-pane" class="view-pane">
-          <div class="row" style="padding: 20px;">
-            
-            <div class="input-field col s12 m8 offset-m2">
-              <i class="material-icons prefix">search</i>
-              <input type="text" id="bus-search-input" placeholder="Search stops by name or ID">
-            </div>
-
-            <div class="col s12 m8 offset-m2">
-              <ul class="collection" id="search-results-list">
-                </ul>
-            </div>
-
-          </div>
-        </div>
-
-        <div id="fav-pane" class="view-pane">
-          <div class="container" style="padding-top: 24px; padding-bottom: 32px;">
-            <h4 style="font-family: Livvic; font-weight: 600; margin-bottom: 20px;">Your Favourites</h4>
-            
-            <div id="favourites-pane-content"></div>
-          </div>
-        </div>
-
-      </section>
-
-    </main>
-
-    <footer class="bottom-nav-container hide-on-large-only">
-      <ul class="tabs tabs-fixed-width transparent" id="mobile-tabs-nav">
-        <li class="tab" style="display: none !important;">
-          <a class="active" href="#welcome-pane">Welcome</a>
-        </li>
-        
-        <li class="tab"><a href="#map-pane"><i class="material-icons">map</i><span>Map</span></a></li>
-        <li class="tab"><a href="#search-pane"><i class="material-icons">search</i><span>Search</span></a></li>
-        <li class="tab"><a href="#fav-pane"><i class="material-icons">star</i><span>Favourites</span></a></li>
-      </ul>
-    </footer>
-
-    <div id="results-panel" class="results-overlay">
-          
-          <button class="btn-floating btn-flat waves-effect close-overlay-btn" id="close-results-btn">
-            <i class="material-icons black-text">close</i>
-          </button>
-          
-          <div class="results-scroller">
-            <div class="container" style="padding-top: 30px; padding-bottom: 30px;">
-              <h4>Bus Arrival Timings</h4>
-              <hr>
-              
-            </div>
-          </div>
-          
-          <footer class="results-footer">
-                  <div class="footer-copyright">
-                    <div class="container center-align">
-                      © 2014-2026 <a class="footer-link" href="https://seetow.sg" target="_blank">See Tow</a> Technologies (CRN: 202258286G).
-                    </div>
-                  </div>
-                </footer>
-
-        </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/@materializecss/materialize@2.3.3/dist/js/materialize.min.js"></script>
-    
-    <script type="module">
-      import { closeTimingPanel } from './src/transit-api.js';
-
-      // --- PROGRESSIVE WEB APP (PWA) SERVICE WORKER REGISTRATION ---
-        // Intuition: Safely checks browser capability, then fires the background thread 
-        // at the root scope so it can securely cache your application shell modules.
-        if ('serviceWorker' in navigator) {
-          window.addEventListener('load', () => {
-            navigator.serviceWorker.register('./pwabuilder-sw.js', { scope: './' })
-              .then((registration) => {
-                console.log('[PWA] ServiceWorker successfully mounted to scope:', registration.scope);
-              })
-              .catch((error) => {
-                console.error('[PWA] ServiceWorker installation crashed:', error);
-              });
+    <script src="/static/nusdict.js"></script>
+    <script src="/static/materialize.js"></script>
+    <script src="/static/geojson2.js"></script>
+    <script src="/static/stopdata.js"></script>
+    <script>
+      var panorama;
+      function initialize() {
+        panorama = new google.maps.StreetViewPanorama(document.getElementById('street-view'),
+          {
+            position: {lat: bus_dict[parseInt(stopno)][0], lng: bus_dict[parseInt(stopno)][1]},
+            pov: {heading: 0, pitch: 0},
+            zoom: 1
           });
+      }
+    </script>
+    <script>
+      $(document).ready(function(){
+        $('.modal').modal();
+      });
+      var map, infoWindow;
+      
+        map = new L.Map('map', {
+          center: {lat: 1.290270, lng: 103.851959},
+          zoom: 17,
+          minZoom: 14,
+          preferCanvas: true,
+          layers: new L.TileLayer("https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}",{
+      bounds: [[1.506417, 103.552020], [1.199572, 104.058765]],
+      subdomains:['mt0','mt1','mt2','mt3'],
+      attribution: '&copy; 2022 Google, SLA',          
+      }),
+      
+      
+      
+      
+        });
+      map.on('locationerror', (err) => {
+    console.error("Location access denied:", err.message);
+    // Optionally provide some feedback to the user.
+      });
+
+        map.locate({setView: true, minZoom: 15});
+      
+      function onEachFeature(feature, layer) {
+        var popupContent = '<a href="#tableofresults" class="modal-trigger" onClick="javascript: stopno='+feature.properties.busstopcode+';redir()">'+feature.properties.description+'('+feature.properties.busstopcode+')</a>';
+      layer.bindPopup(popupContent);
+      }
+      
+      
+      L.geoJSON(seetowbusgeojson, {
+      
+      style: function (feature) {
+      return feature.properties && feature.properties.style;
+      },
+      
+      onEachFeature: onEachFeature,
+      
+      pointToLayer: function (feature, latlng) {
+      return L.circleMarker(latlng, {
+        radius: 6,
+        fillColor: "#ff7800",
+        color: "#000",
+        weight: 1,
+        opacity: 1,
+        fillOpacity: 0.8
+      });
+      }
+      }).addTo(map);
+
+      
+function clearFavorites() {
+    document.cookie = "fav=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    window.alert("Your favourites have been cleared. The changes will take effect the next time you reopen the app.");
+}
+
+function getCookie(name) {
+  const re = new RegExp(name + "=([^;]+)");
+  const value = re.exec(document.cookie);
+  return (value != null) ? unescape(value[1]) : null;
+}
+
+let fav1 = getCookie("fav");
+let topBarElements = [];
+
+if (fav1) {
+    const fav = fav1.split(",");
+
+    for(let i=0; i<fav.length; i++) {
+        const stopno = fav[i];
+        const stopname = bus_dict[parseInt(stopno)] && bus_dict[parseInt(stopno)][2];
+        
+        if (stopname) {
+            topBarElements.push(`<a class="waves-effect waves-light btn modal-trigger orange darken-3" href="#tableofresults" onclick="javascript:stopno=${stopno};redir()">${stopname}</a>`);
+        }
+    }
+
+    topBarElements.push('<a class="waves-effect waves-light btn orange darken-3" onclick="clearFavorites()">Clear Favourites</a>');
+    topBarHTML = topBarElements.join("");
+} else {
+    topBarHTML = 'None right now :(. Add some bus stops to your favourites by pressing the star icon on any bus stop!';
+}
+
+jQuery("#topbar").prepend('<h6>Your favourite bus stops:</h6>' + topBarHTML);
+
+      
+      
+      function redirlegacy(code){
+      window.location.href = "https://bus.seetow.sg/results?stop="+code;
+      }
+
+      function updatecookie() {
+    const EXPIRY_TIME_MS = 5000000 * 36000; // 5,000,000 seconds
+    let now = Date.now();
+    let expireTime = now + EXPIRY_TIME_MS;
+    let cookieValue;
+
+    // If fav1 exists and is not empty, append stopno to it. Otherwise, set fav1 to stopno.
+    if (fav1) {
+        cookieValue = fav1 + "," + stopno.toString();
+    } else {
+        cookieValue = stopno.toString();
+    }
+
+    let cookieString = "fav=" + cookieValue + ";expires=" + new Date(expireTime).toUTCString() + ";path=/";
+    document.cookie = cookieString;
+
+    if (bus_dict && bus_dict[parseInt(stopno)]) {
+        alert("The bus stop " + bus_dict[parseInt(stopno)][2] + " has been added!");
+    } else {
+        alert("Bus stop added!");
+    }
+}
+
+      fav1 = getCookie("fav");
+
+
+  
+    // --- Global Variables ---
+    let services = [];
+    let nusservices = [];
+    let stopno;
+    let url;
+    let nusurl;
+
+    // --- Helper Functions (Now in Global Scope) ---
+
+    function minTommss(minutes) {
+        var sign = minutes < 0 ? "-" : "";
+        var min = Math.floor(Math.abs(minutes));
+        var sec = Math.floor((Math.abs(minutes) * 60) % 60);
+        return sign + (min < 10 ? "0" : "") + min + ":" + (sec < 10 ? "0" : "") + sec;
+    };
+
+    function calculateArrivalTime(time, timenow) {
+        const fakeTime = +new Date(time);
+        if (isNaN(fakeTime)) return '';
+        
+        const timeMin = (fakeTime - timenow) / 60000;
+        let timeStr = minTommss(timeMin);
+        
+        return (timeStr.charAt(0) == "-") ? "Very soon!" : timeStr + " mins";
+    }
+
+    function getWAB(bus) {
+        return (bus["Feature"] === "WAB" || bus["Load"] === "") ? '' : '<i style="color:red" class="material-icons">accessible</i>';
+    }
+
+    function getLoad(bus) {
+        if (bus["Load"] === "SDA") return '<i class="material-icons">directions_walk</i>';
+        if (bus["Load"] === "SEA") return '<i class="material-icons">airline_seat_recline_normal</i>';
+        if (bus["Load"] === "LSD") return '<i class="material-icons">wc</i>';
+        return "";
+    }
+
+    function getDeck(bus) {
+        if (bus["Type"] === "SD") return '<i class="material-icons">filter_1</i> ';
+        if (bus["Type"] === "DD") return '<i class="material-icons">filter_2</i> ';
+        if (bus["Type"] === "BD") return '🅱️';
+        return "";
+    }
+    
+function getMapLink(bus) {
+    // Return an empty string if there's no location data
+    if (bus["Latitude"] == 0) {
+        return "";
+    }
+    // Return a complete <a>...</a> tag
+    return `<a target="_blank" href="https://www.google.com.sg/maps/search/${bus["Latitude"]},${bus["Longitude"]}"></a>`;
+}
+    
+    // --- Main Rendering Functions (Now in Global Scope) ---
+
+    /**
+     * Creates the HTML for a single bus arrival cell.
+     */
+function createBusArrivalHtml(bus) {
+    if (!bus || !bus.EstimatedArrival) return '<td></td>';
+
+    const wab = getWAB(bus);
+    const load = getLoad(bus);
+    const deck = getDeck(bus);
+    const mapLink = getMapLink(bus); // This now returns a complete <a></a> tag or ""
+    const timeHtml = `<span class="bus-arrival-time" data-arrival-time="${bus.EstimatedArrival}"></span>`;
+
+    // If a mapLink exists, insert the time inside it. Otherwise, just use the time HTML.
+    const content = mapLink ? mapLink.replace('</a>', `${timeHtml}</a>`) : timeHtml;
+
+    return `<td>${wab}${load}${deck}${content}</td>`;
+}
+
+
+function createNusArrivalHtml(eta) {
+    // If there's no arrival data, return an empty cell.
+    if (!eta || !eta.ts) {
+        return '<td></td>';
+    }
+
+    // The 'ts' value from the NUS API needs to be parsed by the Date object.
+    // The format "YYYY-MM-DD HH:mm:ss" is luckily understood by it directly.
+    const timeHtml = `<span class="bus-arrival-time" data-arrival-time="${eta.ts}"></span>`;
+    
+    // NUS buses don't have map links, so we just return the time.
+    return `<td>${timeHtml}</td>`;
+}
+
+    /**
+     * This lightweight function runs every second to keep timers accurate.
+     */
+    function updateTimers() {
+        const timenow = Date.now();
+        $(".bus-arrival-time").each(function() {
+            const arrivalTimestamp = $(this).data("arrival-time");
+            if (arrivalTimestamp) {
+                const timeString = calculateArrivalTime(arrivalTimestamp, timenow);
+                $(this).text(timeString);
+            }
+        });
+    }
+
+/**
+ * Builds the entire bus table structure from both LTA and NUS service variables.
+ */
+function renderBusTable() {
+    const $timeTableBody = $("#time");
+    $timeTableBody.empty();
+    
+    let htmlRows = [];
+
+    // --- Render LTA Services ---
+    if (services && services.length > 0) {
+        services.forEach((service, i) => {
+            // Guard against unexpected data types in the services array
+            if (service && service.ServiceNo) {
+                const rowHtml = `<tr>
+                    <td><a href="https://busrouter.sg/#/services/${service.ServiceNo}" target="_blank">${service.ServiceNo}</a></td>
+                    ${createBusArrivalHtml(service.NextBus)}
+                    ${createBusArrivalHtml(service.NextBus2)}
+                    ${createBusArrivalHtml(service.NextBus3)}
+                </tr>`;
+                htmlRows.push(rowHtml);
+            }
+        });
+    }
+    
+    // --- Render NUS Services ---
+    if (nusservices && nusservices.length > 0) {
+        nusservices.forEach(shuttle => {
+            if (shuttle && shuttle._etas && shuttle._etas.length > 0) {
+                const arrival1 = shuttle._etas[0];
+                const arrival2 = shuttle._etas[1];
+                const arrival3 = shuttle._etas[2];
+
+                const rowHtml = `<tr>
+                    <td>${shuttle.name} <span style="color: #003D7C; font-weight: bold;">(NUS)</span></td>
+                    ${createNusArrivalHtml(arrival1)}
+                    ${createNusArrivalHtml(arrival2)}
+                    ${createNusArrivalHtml(arrival3)}
+                </tr>`;
+                htmlRows.push(rowHtml);
+            }
+        });
+    }
+
+    $timeTableBody.append(htmlRows.join(""));
+    
+    if ($timeTableBody.is(':empty')) {
+        const noResultsHtml = `
+            <tr>
+                <td colspan="4" style="text-align: center;">
+                    No bus services were found for this stop.
+                </td>
+            </tr>`;
+        $timeTableBody.append(noResultsHtml);
+    }
+
+    updateresults();
+    updateTimers();
+}
+
+    // --- Data Fetching and Initialization ---
+    
+    /**
+     * Fetches data from both LTA and NUS APIs, then renders the table.
+     */
+    function fetchDataAndRender() {
+        const ltaPromise = $.getJSON(url).done(json => services = json["Services"] || []).fail(() => services = []);
+        const nusPromise = nusurl ? $.getJSON(nusurl).done(json => nusservices = json?.ShuttleServiceResult?.shuttles || []).fail(() => nusservices = []) : Promise.resolve();
+
+        // Wait for both API calls to complete before rendering the table
+        Promise.all([ltaPromise, nusPromise]).then(renderBusTable);
+    }
+
+    /**
+     * Updates the "last fetched" timestamp in the UI.
+     */
+    function updateresults() {
+        const todayresult = new Date();
+        const timeresult = todayresult.toLocaleTimeString();
+        $("#resultupdate").text(timeresult);
+    }
+    
+    /**
+     * This is the main entry point, called when a user searches for a stop.
+     */
+    function populatetable() {
+        const nuscode = nusstopdict[stopno];
+        const stopName = bus_dict[parseInt(stopno)] ? bus_dict[parseInt(stopno)][2] : "Unknown Stop";
+        const stopid = stopno > 100000 ? "NUS" : stopno;
+
+        url = `https://misty-king-3f2c.seetow.workers.dev/LTA?id=${stopno}`;
+        nusurl = nuscode ? `https://misty-king-3f2c.seetow.workers.dev/NUS?id=${nuscode}` : null;
+        
+        $("#hm").text(`${stopName} (${stopid})`);
+        
+        // Set up the location button link
+        const coords = bus_dict[parseInt(stopno)];
+        if(coords) {
+          $("#locbutton").html(`<a class="btn waves-effect waves-light" href="https://www.google.com/maps/search/?api=1&query=${coords[0]},${coords[1]}" target="_blank">location</a>`);
         }
 
-        // --- ONESIGNAL NOTIFICATION ENGINE (DISABLED FOR THIS RELEASE) ---
-        /*
-        navigator.serviceWorker.ready.then((registration) => {
-          console.log('Service Worker is ready, initializing OneSignal...');
-          window.OneSignalDeferred = window.OneSignalDeferred || [];
-          OneSignalDeferred.push(function(OneSignal) {
-            OneSignal.init({
-              appId: "b019c6f8-fd71-4f16-835b-0a755e2c29ea",
-              serviceWorkerPath: "pwabuilder-sw.js"
+        fetchDataAndRender(); // Fetch data for the first time
+    }
+
+    function redir() {
+        populatetable();
+    }
+    
+    // --- Timed Intervals ---
+
+    // Interval to re-fetch data every 30 seconds
+    setInterval(fetchDataAndRender, 30000);
+
+    // Interval to update the countdown display every 1 second
+    setInterval(updateTimers, 1000);
+</script>
+      
+      
+    <script>
+      M.AutoInit();
+    </script>
+    <script>
+      if ("serviceWorker" in navigator) {
+        if (navigator.serviceWorker.controller) {
+          console.log("[PWA Builder] active service worker found, no need to register");
+        } else {
+          // Register the service worker
+          navigator.serviceWorker
+            .register("pwabuilder-sw.js", {
+              scope: "./"
+            })
+            .then(function (reg) {
+              console.log("[PWA Builder] Service worker has been registered for scope: " + reg.scope);
             });
-          });
+        }
+      }
+    </script>
+<script>
+  const singaporeBounds = L.latLngBounds(
+    L.latLng(1.199572, 103.552020),
+    L.latLng(1.506417, 104.058765)
+  );
+
+  const londonBounds = L.latLngBounds(
+    L.latLng(51.237141, -0.581279),
+    L.latLng(51.736466, 0.468455)
+  );
+
+  navigator.geolocation.getCurrentPosition(function(position) {
+    const userLatLng = L.latLng(position.coords.latitude, position.coords.longitude);
+    L.marker(userLatLng).addTo(map);
+
+    let modalTitle = document.getElementById('modalTitle');
+    let modalMessage = document.getElementById('modalMessage');
+    let modalButtons = document.getElementById('modalButtons');
+
+    if (!singaporeBounds.contains(userLatLng)) {
+      if (londonBounds.contains(userLatLng)) {
+        // User is in Greater London
+        modalTitle.innerText = "Detected in London";
+        modalMessage.innerText = "You appear to be in Greater London. This app is optimised for Singapore. Would you like to check out local bus services?";
+        modalButtons.innerHTML = `
+          <a href="#" class="modal-close waves-effect waves-green btn-flat">Try London Mode</a>
+          <a class="modal-close waves-effect waves-green btn-flat">Ignore</a>
+        `;
+      } else {
+        // Outside both SG and London
+        modalTitle.innerText = "Outside Supported Area";
+        modalMessage.innerText = "You are detected to be outside Singapore.";
+        modalButtons.innerHTML = `
+          <a href="https://seetow.sg" class="modal-close waves-effect waves-green btn-flat">Go to Homepage</a>
+          <a class="modal-close waves-effect waves-green btn-flat">Ignore</a>
+        `;
+      }
+
+      // Show modal
+      const instance = M.Modal.getInstance(document.getElementById('outsideModal'));
+      if (instance) instance.open();
+    }
+
+  }, function(error) {
+    console.error("Geolocation error:", error.message);
+  });
+</script>
+
+    <script>
+function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
+  var R = 6371; // Radius of the earth in km
+  var dLat = deg2rad(lat2 - lat1);
+  var dLon = deg2rad(lon2 - lon1);
+  var a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+    Math.sin(dLon / 2) * Math.sin(dLon / 2);
+  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  var d = R * c; // Distance in km
+  return d;
+}
+
+function deg2rad(deg) {
+  return deg * (Math.PI / 180);
+}
+
+const ROUGH_KM_IN_DEGREES = 0.01;
+
+function activatenearby() {
+  $('#nearbycheck').text("Calculating nearby stops...");
+
+  if (!navigator.geolocation) {
+    $('#nearbycheck').text("Geolocation is not supported.").addClass('error-class');
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(function(position) {
+    const userLat = position.coords.latitude;
+    const userLong = position.coords.longitude;
+    
+    let stopsWithDistance = [];
+
+    // START TIMER (Optional: to prove to yourself how fast it is)
+    const startTime = performance.now();
+
+    for (const [stopId, data] of Object.entries(bus_dict)) {
+        // Safety check
+        if (!data || data.length < 3) continue;
+
+        const stopLat = data[0];
+        const stopLng = data[1];
+
+        // --- THE OPTIMIZATION: "The First Pass Filter" ---
+        // Simple subtraction is much faster than Trigonometry.
+        // If the stop is too far North/South or East/West, skip it.
+        if (Math.abs(userLat - stopLat) > ROUGH_KM_IN_DEGREES) continue;
+        if (Math.abs(userLong - stopLng) > ROUGH_KM_IN_DEGREES) continue;
+
+        // --- EXPENSIVE CALCULATION ---
+        // Only runs for stops inside the ~1km box
+        const dist = getDistanceFromLatLonInKm(userLat, userLong, stopLat, stopLng);
+
+        // Optional: Hard cap at 1km for the final list too
+        if (dist <= 1.0) { 
+             stopsWithDistance.push({
+                id: stopId,
+                name: data[2],
+                distance: dist
+            });
+        }
+    }
+
+    // Sort by distance
+    stopsWithDistance.sort((a, b) => a.distance - b.distance);
+
+    const endTime = performance.now();
+    console.log(`Found ${stopsWithDistance.length} stops in ${endTime - startTime}ms`);
+
+    // --- Render Top 5 ---
+    const top5 = stopsWithDistance.slice(0, 5);
+    
+    let locations = '';
+    if (top5.length > 0) {
+        top5.forEach(stop => {
+             locations += `<a class="waves-effect waves-light btn modal-trigger orange darken-3" href="#tableofresults" onclick="javascript:stopno=${stop.id};redir()">${stop.name}</a>`;
         });
-        */
+        $('#locationlive').html(locations);
+        $('#nearbycheck2').remove(); 
+    } else {
+        $('#nearbycheck').text("No bus stops found within 1km.");
+    }
 
-      document.addEventListener('DOMContentLoaded', () => {
-        // Targets for layout tracking
-        const viewPanes = document.querySelectorAll('.view-pane');
-        const sidebarItems = document.querySelectorAll('.sidebar-nav-menu .collection-item');
-        const resultsPanel = document.getElementById('results-panel');
-        const closeResultsBtn = document.getElementById('close-results-btn');
+  }, function(error) {
+        switch(error.code) {
+            case error.PERMISSION_DENIED:
+                $('#nearbycheck').text("User denied the request for Geolocation.").addClass('error-class');
+                break;
+            case error.POSITION_UNAVAILABLE:
+                $('#nearbycheck').text("Location information is unavailable.").addClass('error-class');
+                break;
+            case error.TIMEOUT:
+                $('#nearbycheck').text("The request to get user location timed out.").addClass('error-class');
+                break;
+            default:
+                $('#nearbycheck').text("An unknown error occurred.").addClass('error-class');
+        }
+    });
+}
 
-        // Global View Transition Coordinator
-        window.switchAppView = (targetPaneId) => {
-          viewPanes.forEach(pane => {
-            if (pane.id === targetPaneId) {
-              pane.classList.add('active');
-            } else if (pane.id !== 'map-pane') {
-              // Keep map pane structurally appended but drop visual layer
-              pane.classList.remove('active');
-            }
-          });
 
-          // Sync Desktop Sidebar UI elements status
-          sidebarItems.forEach(item => {
-            if (item.getAttribute('data-target') === targetPaneId) {
-              item.classList.add('active');
-            } else {
-              item.classList.remove('active');
-            }
-          });
 
-          // Sync Mobile Tabs UI elements status
-          const tabInstance = M.Tabs.getInstance(document.getElementById('mobile-tabs-nav'));
-          if (tabInstance) {
-            tabInstance.select(targetPaneId);
-          }
-        };
-
-        // Wire up Desktop Sidebar selection tracking
-        sidebarItems.forEach(item => {
-          item.addEventListener('click', () => {
-            const target = item.getAttribute('data-target');
-            window.switchAppView(target);
-          });
-        });
-
-        // Initialize Materialize Mobile Navigation tabs configuration
-        M.Tabs.init(document.getElementById('mobile-tabs-nav'), {
-          onShow: (tabContentElement) => {
-            // Trigger dynamic sync when mobile elements are swiped/tapped
-            window.switchAppView(tabContentElement.id);
-          }
-        });
-
-        // High-Performance Overlay Controls
-        window.showResultsOverlay = () => { resultsPanel.classList.add('active'); };
-        window.hideResultsOverlay = () => { resultsPanel.classList.remove('active'); };
-        closeResultsBtn.addEventListener('click', window.hideResultsOverlay);
-
-        // Global Auto-Initialization for leftover Materialize component triggers
-        M.AutoInit();
-
-        window.hideResultsOverlay = () => { 
-          resultsPanel.classList.remove('active');
-          closeTimingPanel(); // Kills background tasks instantly
-        };
+    </script>
+    <script>
+      var field1 = document.getElementById("field1");
+      field1.addEventListener("keypress", function(event) {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        document.getElementById("field1btn").click();
+      }
       });
     </script>
   </body>
