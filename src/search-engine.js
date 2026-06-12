@@ -1,20 +1,38 @@
 // src/search-engine.js
 import { fetchNearbyStops } from './geo.js';
+import { openTimingPanel } from './transit-api.js';
 
+// Private sandbox state for this module
 let searchIndex = [];
 
+/**
+ * Parses the global GeoJSON FeatureCollection into a flat, optimized array
+ */
 function initializeSearchIndex() {
-  const rawDict = window.bus_dict;
-  if (!rawDict) {
-    console.error("QA Failure: window.bus_dict was not found on the global scope.");
+  const geojson = window.seetowbusgeojson;
+  
+  if (!geojson || !geojson.features) {
+    console.error("QA Failure: window.seetowbusgeojson was not found on the global scope.");
     return;
   }
 
-  searchIndex = Object.entries(rawDict).map(([id, data]) => ({
-    id: id,
-    name: data[2],
-    normalizedName: data[2].toLowerCase()
-  }));
+  // Parse the up-to-date GeoJSON features array cleanly
+  searchIndex = geojson.features.map(feature => {
+    const props = feature.properties;
+    const coords = feature.geometry.coordinates;
+    const name = props.description;
+
+    return {
+      id: String(props.busstopcode),
+      name: name,
+      normalizedName: name.toLowerCase(),
+      // Remember: GeoJSON specification dictates [Longitude, Latitude] order!
+      lat: coords[1],
+      lng: coords[0]
+    };
+  });
+  
+  console.log(`QA Success: Single-source search index built for ${searchIndex.length} bus stops via GeoJSON.`);
 }
 
 function searchBusStopsByName(queryString) {
@@ -26,37 +44,23 @@ function searchBusStopsByName(queryString) {
     if (stop.id.includes(cleanQuery) || stop.normalizedName.includes(cleanQuery)) {
       matches.push(stop);
     }
-    if (matches.length >= 10) break;
+    if (matches.length >= 10) break; // Matches your updated 10-result limit
   }
   return matches;
 }
 
-/**
- * Shared layout component factor to maintain identical design structure rules
- */
 function renderListRow(leftContentHtml, rightContentHtml, clickCallback) {
   const item = document.createElement('li');
   item.className = 'collection-item';
   item.style.cssText = 'cursor: pointer; display: flex; justify-content: space-between; align-items: center;';
-  
-  item.innerHTML = `
-    <div>${leftContentHtml}</div>
-    ${rightContentHtml}
-  `;
-  
-  if (clickCallback) {
-    item.addEventListener('click', clickCallback);
-  }
+  item.innerHTML = `<div>${leftContentHtml}</div>${rightContentHtml}`;
+  if (clickCallback) item.addEventListener('click', clickCallback);
   return item;
 }
 
-/**
- * Renders the contextual location anchor block when the search query remains unpopulated
- */
 function renderDefaultActionState(container) {
   container.innerHTML = '';
   
-  // Uses your primary MD3 theme color dynamically for the action link text and icon
   const leftHtml = `
     <i class="material-icons left" style="margin-right:10px; color: var(--md-sys-color-primary);">near_me</i>
     <strong style="color: var(--md-sys-color-primary);">Find nearby bus stops</strong>
@@ -64,11 +68,11 @@ function renderDefaultActionState(container) {
   const rightHtml = `<span class="search-stop-id"><i class="material-icons" style="font-size: 1.2rem; opacity: 0.3;">chevron_right</i></span>`;
   
   const actionRow = renderListRow(leftHtml, rightHtml, () => {
-    // Drop interactions immediately and flip the string state to loading
     actionRow.style.pointerEvents = 'none';
     actionRow.querySelector('strong').innerText = "Calculating nearby stops...";
 
-    fetchNearbyStops(window.bus_dict)
+    // PASSING THE SEARCH INDEX: Cleaner execution pipeline
+    fetchNearbyStops(searchIndex)
       .then((closestStops) => {
         container.innerHTML = '';
         
@@ -80,10 +84,8 @@ function renderDefaultActionState(container) {
           return;
         }
 
-        // Output matching locations using the identical layout rhythm parameters
         closestStops.forEach(stop => {
-          // Format distance cleanly to meters if nearby, else show decimal kilometers
-          const distanceLabel = stop.distance < 0.5 
+          const distanceLabel = stop.distance < 0.1 
             ? `${Math.round(stop.distance * 1000)}m` 
             : `${stop.distance.toFixed(2)}km`;
 
@@ -108,20 +110,17 @@ function renderDefaultActionState(container) {
   container.appendChild(actionRow);
 }
 
-// System mounting orchestrator
 document.addEventListener('DOMContentLoaded', () => {
   initializeSearchIndex();
 
   const searchInput = document.getElementById('bus-search-input');
   const resultsContainer = document.getElementById('search-results-list');
 
-  // Enforce structural visibility right out of the gate on launch
   renderDefaultActionState(resultsContainer);
 
   searchInput.addEventListener('input', (e) => {
     const query = e.target.value;
     
-    // Wiping field context smoothly falls back to the location action trigger
     if (!query.trim()) {
       renderDefaultActionState(resultsContainer);
       return;
@@ -133,15 +132,15 @@ document.addEventListener('DOMContentLoaded', () => {
     if (results.length === 0) return;
 
     results.forEach(stop => {
-      const row = renderListRow(
-        `<i class="material-icons left" style="margin-right:10px;">place</i><strong>${stop.name}</strong>`,
-        `<span class="search-stop-id">${stop.id}</span>`, // Uses your existing layout class structure
-        () => {
-          window.stopno = stop.id;
-          window.showResultsOverlay();
-        }
-      );
-      resultsContainer.appendChild(row);
-    });
+          const row = renderListRow(
+            `<i class="material-icons left" style="margin-right:10px;">place</i><strong>${stop.name}</strong>`,
+            `<span class="search-stop-id">${stop.id}</span>`,
+            () => {
+              // This fires instantly on the very first tap!
+              openTimingPanel(stop.id);
+            }
+          );
+          resultsContainer.appendChild(row);
+        });
   });
 });

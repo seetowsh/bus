@@ -229,27 +229,64 @@
       }
 
       /* --- Custom Non-Blocking Full Overlay (Sits underneath Top Bar) --- */
-      .results-overlay {
-        position: fixed;
-        top: var(--nav-height);
-        left: 0;
-        width: 100vw;
-        height: calc(100vh - var(--nav-height));
-        background-color: #ffffff;
-        z-index: 2000;
-        transform: translateY(100%);
-        transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1);
-        overflow-y: auto;
-        padding: 24px;
-      }
-      .results-overlay.active {
-        transform: translateY(0);
-      }
-      .close-overlay-btn {
-        position: absolute;
-        top: 16px;
-        right: 16px;
-      }
+      /* --- Custom Non-Blocking Full Overlay (Sits underneath Top Bar) --- */
+            .results-overlay {
+              position: fixed;
+              top: var(--nav-height);
+              left: 0;
+              width: 100vw;
+              height: calc(100vh - var(--nav-height));
+              background-color: var(--surface-color); /* Automatically handles system theme transitions */
+              z-index: 2000;
+              transform: translateY(100%);
+              transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+              
+              /* Convert container to flex layout to handle multi-zone layout stacking */
+              display: flex;
+              flex-direction: column;
+              overflow: hidden; /* Prevents the outer window casing from scrolling */
+              padding: 0;       /* Padding is moved to inner layout fragments */
+            }
+            .results-overlay.active {
+              transform: translateY(0);
+            }
+            .close-overlay-btn {
+              position: absolute;
+              top: 16px;
+              right: 16px;
+              z-index: 2010; /* Ensures the close handle floats on top of scrolling data grids */
+            }
+
+            /* Inner content block that handles vertical scrolling independently */
+            .results-scroller {
+              flex-grow: 1;
+              overflow-y: auto;
+            }
+
+            /* Persistent Black Bottom Footer from Old App Specs */
+            /* Persistent Integrated Bottom Footer */
+                  .results-footer {
+                    margin-top: auto;
+                    padding: 16px 0 !important;
+                    /* Pulls the clean background color from your light/dark mode variables */
+                    background-color: var(--surface-color) !important;
+                    border-top: 1px solid var(--border-color);
+                  }
+                  .results-footer .footer-copyright {
+                    background-color: transparent !important;
+                    color: var(--text-color) !important;
+                    font-size: 0.85rem;
+                  }
+                  
+                  /* Fix the layout breakdown by forcing the link to render inline */
+                  .results-footer .footer-copyright a.footer-link {
+                    display: inline !important;
+                    white-space: nowrap;
+                    /* Dynamically matches your theme's primary choice (the button color) */
+                    color: var(--md-sys-color-primary) !important;
+                    font-weight: 600;
+                    text-decoration: underline;
+                  }
 
       .input-field {
         /* Turn off the default solid container fill color */
@@ -286,8 +323,7 @@
       }
     </style>
 
-    <script src="static/stopdata.js"></script>
-
+    <script src="static/geojson2.js"></script>
     <script type="module" src="src/search-engine.js"></script>
 
   </head>
@@ -305,7 +341,7 @@
       
       <section class="desktop-sidebar hide-on-med-and-down" id="sidebar-panel">
         <ul class="collection sidebar-nav-menu">
-          <li class="collection-item active" data-target="map-pane">
+          <li class="collection-item" data-target="map-pane">
             <i class="material-icons">map</i><span>Map View</span>
           </li>
           <li class="collection-item" data-target="search-pane">
@@ -318,8 +354,34 @@
       </section>
 
       <section class="content-container">
+        <div id="welcome-pane" class="view-pane active">
+          <div class="container" style="padding: 40px 20px; max-width: 600px;">
+            <div class="card-content center-align">
+              <i class="material-icons large" style="color: var(--md-sys-color-primary);">explore</i>
+              <h4>Welcome to the New See Tow Bus (v3.0)!</h4>
+              <p class="flow-text" style="font-size: 1.1rem; margin-top: 20px;">
+                See Tow Bus turns 10 in 2026. We've completely overhauled the layout and added some new features to make navigating Singapore's bus network faster and more ergonomic.
+              </p>
+              
+              <div class="left-align" style="margin: 30px 0; padding: 20px; background: rgba(0,0,0,0.02); border-radius: 8px;">
+                <p>You can now search bus stops by name* and stop code (in addition to nearby bus stops)</p>
+                <p>New tabbed navigation means less time finding your stop</p>
+                <p>Results loading got even (average 15%) faster, with 10 year old scripts being replaced with up to date ones.</p>
+                <p><i class="font-size:8px">*Searching by name requires a relatively recent phone made after 2021 otherwise it'll be very slow</i></p>
+              </div>
+
+              <p class="flow-text" style="font-size: 1.1rem; margin-top: 20px; margin-bottom: 20px;">
+              Please continue to report issues on GitHub or the usual channels.
+              </p>
+
+              <button class="btn filled btn-large" style="width:100%;" onclick="window.switchAppView('map-pane')">
+                Ok onz!
+              </button>
+            </div>
+          </div>
+        </div>
         
-        <div id="map-pane" class="view-pane active">
+        <div id="map-pane" class="view-pane">
           <div style="padding:20px;"><h4>Map Canvas Base Layer</h4> <button 
   class="btn filled" 
   style="margin: 20px;" 
@@ -354,41 +416,45 @@
 
     <footer class="bottom-nav-container hide-on-large-only">
       <ul class="tabs tabs-fixed-width transparent" id="mobile-tabs-nav">
-        <li class="tab">
-          <a class="active" href="#map-pane">
-            <i class="material-icons">map</i>
-            <span>Map</span>
-          </a>
+        <li class="tab" style="display: none !important;">
+          <a class="active" href="#welcome-pane">Welcome</a>
         </li>
-        <li class="tab">
-          <a href="#search-pane">
-            <i class="material-icons">search</i>
-            <span>Search</span>
-          </a>
-        </li>
-        <li class="tab">
-          <a href="#fav-pane">
-            <i class="material-icons">star</i>
-            <span>Favourites</span>
-          </a>
-        </li>
+        
+        <li class="tab"><a href="#map-pane"><i class="material-icons">map</i><span>Map</span></a></li>
+        <li class="tab"><a href="#search-pane"><i class="material-icons">search</i><span>Search</span></a></li>
+        <li class="tab"><a href="#fav-pane"><i class="material-icons">star</i><span>Favorites</span></a></li>
       </ul>
     </footer>
 
     <div id="results-panel" class="results-overlay">
-      <button class="btn-floating btn-flat waves-effect close-overlay-btn" id="close-results-btn">
-        <i class="material-icons black-text">close</i>
-      </button>
-      <div class="container">
-        <h4>Bus Arrival Timings</h4>
-        <hr>
-        <button class="btn" onclick="window.hideResultsOverlay()">Back to Navigation</button>
-      </div>
-    </div>
+          
+          <button class="btn-floating btn-flat waves-effect close-overlay-btn" id="close-results-btn">
+            <i class="material-icons black-text">close</i>
+          </button>
+          
+          <div class="results-scroller">
+            <div class="container" style="padding-top: 30px; padding-bottom: 30px;">
+              <h4>Bus Arrival Timings</h4>
+              <hr>
+              
+            </div>
+          </div>
+          
+          <footer class="results-footer">
+                  <div class="footer-copyright">
+                    <div class="container center-align">
+                      © 2014-2026 <a class="footer-link" href="https://seetow.sg" target="_blank">See Tow</a> Technologies (CRN: 202258286G).
+                    </div>
+                  </div>
+                </footer>
+
+        </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@materializecss/materialize@2.3.3/dist/js/materialize.min.js"></script>
     
-    <script>
+    <script type="module">
+      import { closeTimingPanel } from './src/transit-api.js';
+
       document.addEventListener('DOMContentLoaded', () => {
         // Targets for layout tracking
         const viewPanes = document.querySelectorAll('.view-pane');
@@ -446,6 +512,11 @@
 
         // Global Auto-Initialization for leftover Materialize component triggers
         M.AutoInit();
+
+        window.hideResultsOverlay = () => { 
+          resultsPanel.classList.remove('active');
+          closeTimingPanel(); // Kills background tasks instantly
+        };
       });
     </script>
   </body>

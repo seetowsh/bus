@@ -1,6 +1,5 @@
 // src/geo.js
 
-// Approximate degree threshold equivalent to a 1km bounding box
 const ROUGH_KM_IN_DEGREES = 0.01;
 
 function deg2rad(deg) {
@@ -20,15 +19,21 @@ function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
 }
 
 /**
- * Obtains user coordinates and filters the global dictionary down to nearby items.
- * @param {Object} busDict The global bus stop dataset array map.
- * @returns {Promise<Array>} A sorted list of the closest 5 stops within 1km.
+ * Obtains user coordinates and filters the normalized index array down to nearby items.
+ * @param {Array} indexArray The pre-compiled modular search index array.
+ * @returns {Promise<Array>} A sorted list of the closest 10 stops within 1km.
  */
-export function fetchNearbyStops(busDict) {
+export function fetchNearbyStops(indexArray) {
   return new Promise((resolve, reject) => {
     if (!navigator.geolocation) {
       return reject(new Error("Spatial features are unsupported by this platform."));
     }
+
+    const geoOptions = {
+      enableHighAccuracy: false,
+      timeout: 6000,             
+      maximumAge: 300000         
+    };
 
     navigator.geolocation.getCurrentPosition(
       (position) => {
@@ -36,37 +41,30 @@ export function fetchNearbyStops(busDict) {
         const userLong = position.coords.longitude;
         let stopsWithDistance = [];
 
-        for (const [stopId, data] of Object.entries(busDict)) {
-          if (!data || data.length < 3) continue;
+        // Direct flat-array iteration (Significantly faster performance)
+        for (const stop of indexArray) {
+          // Check simple bounding boundaries using our normalized property labels
+          if (Math.abs(userLat - stop.lat) > ROUGH_KM_IN_DEGREES) continue;
+          if (Math.abs(userLong - stop.lng) > ROUGH_KM_IN_DEGREES) continue;
 
-          const stopLat = data[0];
-          const stopLng = data[1];
-
-          // --- The First Pass Bounding Box Filter ---
-          if (Math.abs(userLat - stopLat) > ROUGH_KM_IN_DEGREES) continue;
-          if (Math.abs(userLong - stopLng) > ROUGH_KM_IN_DEGREES) continue;
-
-          // Only compute full spherical trigonometry inside the bounding area
-          const dist = getDistanceFromLatLonInKm(userLat, userLong, stopLat, stopLng);
+          const dist = getDistanceFromLatLonInKm(userLat, userLong, stop.lat, stop.lng);
 
           if (dist <= 1.0) {
             stopsWithDistance.push({
-              id: stopId,
-              name: data[2],
+              id: stop.id,
+              name: stop.name,
               distance: dist
             });
           }
         }
 
-        // Sort ascending by geographical distance metrics
         stopsWithDistance.sort((a, b) => a.distance - b.distance);
-
-        // Return only the top 5 closest items back to the UI loop
-        resolve(stopsWithDistance.slice(0, 10));
+        resolve(stopsWithDistance.slice(0, 10)); 
       },
       (error) => {
         reject(error);
-      }
+      },
+      geoOptions
     );
   });
 }
