@@ -85,20 +85,20 @@ function renderDefaultActionState(container) {
         }
 
         closestStops.forEach(stop => {
-          const distanceLabel = stop.distance < 0.1 
-            ? `${Math.round(stop.distance * 1000)}m` 
-            : `${stop.distance.toFixed(2)}km`;
+                  const distanceLabel = stop.distance < 0.1 
+                    ? `${Math.round(stop.distance * 1000)}m` 
+                    : `${stop.distance.toFixed(2)}km`;
 
-          const stopRow = renderListRow(
-            `<i class="material-icons left" style="margin-right:10px;">place</i><strong>${stop.name}</strong>`,
-            `<span class="search-stop-id">${distanceLabel}</span>`,
-            () => {
-              window.stopno = stop.id;
-              window.showResultsOverlay();
-            }
-          );
-          container.appendChild(stopRow);
-        });
+                  const stopRow = renderListRow(
+                    `<i class="material-icons left" style="margin-right:10px;">place</i><strong>${stop.name}</strong>`,
+                    `<span class="search-stop-id">${distanceLabel}</span>`,
+                    () => {
+                      // FIX: Replace legacy window variables with your modular timeline engine
+                      openTimingPanel(stop.id);
+                    }
+                  );
+                  container.appendChild(stopRow);
+                });
       })
       .catch((err) => {
         console.error("Spatial runtime exception:", err);

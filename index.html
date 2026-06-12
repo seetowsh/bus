@@ -235,7 +235,7 @@
               top: var(--nav-height);
               left: 0;
               width: 100vw;
-              height: calc(100vh - var(--nav-height));
+              height: calc(100dvh - var(--nav-height));
               background-color: var(--surface-color); /* Automatically handles system theme transitions */
               z-index: 2000;
               transform: translateY(100%);
@@ -321,10 +321,57 @@
         margin-left: 3rem !important;
         width: calc(100% - 3rem) !important;
       }
+      /* --- Seamless Leaflet Popup Theme Integration --- */
+      .leaflet-popup-content-wrapper, .leaflet-popup-tip {
+        /* Syncs automatically with your light/dark mode custom layout tokens */
+        background-color: var(--surface-color) !important;
+        color: var(--text-color) !important;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
+        border-radius: 12px !important;
+      }
+      
+      .leaflet-popup-content {
+        margin: 12px 14px !important;
+        font-family: inherit !important;
+      }
+      
+      /* Make sure Leaflet's built-in close "X" handle respects your contrast colors */
+      .leaflet-popup-close-button {
+        color: var(--text-color) !important;
+        opacity: 0.4;
+        padding: 6px !important;
+      }
+      .leaflet-popup-close-button:hover {
+        opacity: 0.8;
+        background: transparent !important;
+      }
+      /* --- Isolated Search Results Presentation Layout --- */
+      /* --- Isolated Search Results Presentation Layout --- */
+            #search-results-list.collection {
+              border: none !important;
+              box-shadow: none !important;
+              margin: 0 !important;
+              background: transparent !important;
+            }
+            
+            #search-results-list.collection .collection-item {
+              /* FIX: Added 8px of internal horizontal safety padding to prevent character clipping */
+              padding: 20px 8px !important; 
+              border-left: none !important;
+              border-right: none !important;
+              border-top: none !important;
+              border-bottom: 1px solid var(--border-color) !important;
+              background: transparent !important;
+            }
+            
+            /* Prevents a trailing line underneath the final list row */
+            #search-results-list.collection .collection-item:last-child {
+              border-bottom: none !important;
+            }
     </style>
 
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
 
     <script src="static/geojson2.js"></script>
 
@@ -381,9 +428,7 @@
               Please continue to report issues on GitHub or the usual channels.
               </p>
 
-              <button class="btn filled btn-large" style="width:100%;" onclick="window.switchAppView('map-pane')">
-                Ok onz!
-              </button>
+              <button class="btn filled btn-large" style="width:100%;" onclick="window.switchAppView('map-pane')">Ok can</button>
             </div>
           </div>
         </div>
@@ -401,7 +446,7 @@
             </div>
 
             <div class="col s12 m8 offset-m2">
-              <ul class="collection sidebar-nav-menu" id="search-results-list">
+              <ul class="collection" id="search-results-list">
                 </ul>
             </div>
 
