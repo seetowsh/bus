@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-JRBX99XR10"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      
+      gtag('config', 'G-JRBX99XR10');
+    </script>
+    <meta name="description" content="The best bus time app.">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#FFFFFF">
+    <link rel="apple-touch-icon" href="https://i.imgur.com/9tVaenz.png">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="google-signin-client_id" content="35800995045-u54nb2hltd3kl9vuhrhjq3eca2k5110u.apps.googleusercontent.com">
+    <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" />
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9218984794093639"
+     crossorigin="anonymous"></script>
+    <script>
+      function goBack() {
+          window.history.back();
+      }
+    </script>
+    <style type="text/css">
+      .instagram-media{
+      margin: 15px auto !important;
+      }
+      .red-bg {
+      background-color: #7CFC00;
+      }
+      body {
+      font-family: Aptos, Bierstadt, "San Francisco", "Helvetica Neue", Helvetica
+      }
+  nav .brand-logo {
+    overflow: hidden;
+    white-space: nowrap;
+}
+h2.stoptitle {
+  font-size: 10vmin;
+}
+@media screen and (min-width: 600px) {
+  h2.stoptitle {
+     font-size: 3.56rem;
+  }
+}
+@media only screen and (max-width: 992.99px) {
+.modal {
+  width: 100% !important;
+}}
+      footer {
+      bottom: 0;
+      }
+      .button109 {
+      background-color: #4CAF50; /* Green */
+      border: none;
+      color: white;
+      padding: 5px 10px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      }
+      input[type=submit]:hover {
+      background-color: blue;
+      }
+      #topbar{
+      width: 100%;
+      }
+      #map {
+      height: 600px;
+      }
+      @media (prefers-color-scheme: dark) {
+      body{
+      background-color: #333;
+      color: white !important;
+      }
+      button, input, optgroup, select, textarea {
+      color: white !important;
+      }
+      .input-field label {
+      color: white;
+      }
+      .modal .modal-content {
+      background-color: #333;
+      }
+      .collapsible-header{
+      background-color: #333 !important;
+      }
+      }
+    </style>
+
+    <style>.flex{display:flex}.space-btwn{justify-content:space-between;-webkit-justify-content:space-between}.space-around{justify-content:space-around;-webkit-justify-content:space-around}.align-baseline{-webkit-box-align:baseline;-ms-flex-align:baseline;-ms-grid-row-align:baseline;align-items:baseline;align-self:baseline}.align-flex-end{-webkit-box-align:flex-end;-ms-flex-align:flex-end;-ms-grid-row-align:flex-end;align-items:flex-end;align-self:flex-end}.align-flex-start{-webkit-box-align:flex-start;-ms-flex-align:flex-start;-ms-grid-row-align:flex-start;align-items:flex-start;align-self:flex-start}.align-center{-webkit-box-align:center;-ms-flex-align:center;-ms-grid-row-align:center;align-items:center;align-self:center}.align-stretch{-webkit-box-align:stretch;-ms-flex-align:stretch;-ms-grid-row-align:stretch;align-items:stretch;align-self:stretch}.flex-baseline{align-items:baseline;-ms-flex-item-align:baseline}.flex-flex-end{align-items:flex-end;-ms-flex-item-align:flex-end}.flex-flex-start{align-items:flex-start;-ms-flex-item-align:flex-start}.flex-center{align-items:center;-ms-flex-item-align:center}.flex-stretch{align-items:stretch;-ms-flex-item-align:stretch}.item-baseline{-webkit-box-align:baseline;-ms-flex-align:baseline;-ms-grid-row-align:baseline;align-items:baseline}.item-flex-end{-webkit-box-align:flex-end;-ms-flex-align:flex-end;-ms-grid-row-align:flex-end;align-items:flex-end}.item-flex-start{-webkit-box-align:flex-start;-ms-flex-align:flex-start;-ms-grid-row-align:flex-start;align-items:flex-start}.item-center{-webkit-box-align:center;-ms-flex-align:center;-ms-grid-row-align:center;align-items:center}.item-stretch{-webkit-box-align:stretch;-ms-flex-align:stretch;-ms-grid-row-align:stretch;align-items:stretch}.flex-basis-32{-ms-flex-preferred-size:32%;-webkit-flex-basis:32%;-moz-webkit-flex-basis:32%;flex-basis:32%}.flex-basis-33{-ms-flex-preferred-size:33%;-webkit-flex-basis:33%;-moz-webkit-flex-basis:33%;flex-basis:33%}.flex-basis-49{-ms-flex-preferred-size:49%;-webkit-flex-basis:49%;-moz-webkit-flex-basis:49%;flex-basis:49%}.flex-basis-50{-ms-flex-preferred-size:50%;-webkit-flex-basis:50%;-moz-webkit-flex-basis:50%;flex-basis:50%}.flex-basis-100{-ms-flex-preferred-size:100%;-webkit-flex-basis:100%;-moz-webkit-flex-basis:100%;flex-basis:100%}.flex-1{flex:1!important}.flex-2{flex:2!important}.flex-4{flex:4!important}.justify-flex-start{justify-content:flex-start;-webkit-justify-content:flex-start}.justify-flex-end{justify-content:flex-end;-webkit-justify-content:flex-end}.justify-center{justify-content:center;-webkit-justify-content:center}.justify-space-between{justify-content:space-between;-webkit-justify-content:space-between}.justify-space-around{justify-content:space-around;-webkit-justify-content:space-around}.flex-row{box-sizing:border-box;display:inline-flex;display:flex;display:-webkit-flex;flex-shrink:0;flex-basis:auto;flex-direction:row;flex-wrap:wrap;margin:0;padding:0}.flex-col{box-sizing:border-box;display:inline-flex;display:flex;display:-webkit-flex;flex-shrink:0;flex-basis:auto;flex-direction:column;flex-wrap:wrap;margin:0;padding:0}.flex-nowrap{flex-wrap:nowrap}.flex-noshrink{flex-shrink:0}.flex-col-1,.flex-col-10,.flex-col-11,.flex-col-12,.flex-col-2,.flex-col-3,.flex-col-4,.flex-col-5,.flex-col-6,.flex-col-7,.flex-col-8,.flex-col-9{box-sizing:border-box;flex:0 0 auto;margin:0;padding:0}.flex-col-1{flex-basis:8.333%;width:8.333%}.flex-col-2{flex-basis:16.667%;width:16.667%}.flex-col-3{flex-basis:25%;width:25%}.flex-col-4{flex-basis:33.333%;width:33.333%}.flex-col-5{flex-basis:41.667%;width:41.667%}.flex-col-6{flex-basis:50%;width:50%}.flex-col-7{flex-basis:58.333%;width:58.333%}.flex-col-8{flex-basis:66.667%;width:66.667%}.flex-col-9{flex-basis:75%;width:75%}.flex-col-10{flex-basis:83.333%;width:83.333%}.flex-col-11{flex-basis:91.667%;width:91.667%}.flex-col-12{flex-basis:100%;width:100%}_:-ms-fullscreen,:root .flex-col-12,:root .flex-col-7{flex-basis:auto}app-singpass{width:100%}@media (min-width: 320px) and (max-width: 567px){app-singpass{max-width:354px;width:100%}}app-singpass .singpass-container a{cursor:pointer}app-singpass .singpass-container .singpass-login-icon{width:390px;height:60px;border-radius:6px;outline:2px #CECDD2 solid;outline-offset:-2px}@media (min-width: 320px) and (max-width: 567px){app-singpass .singpass-container .singpass-login-icon{max-width:354px;width:100%}}app-singpass .singpass-container .singpass-instruction{width:420px;margin-top:20px;font-family:Muli Light,sans-serif;text-align:center;letter-spacing:-.166667px;margin-left:-15px}app-singpass .singpass-container .singpass-instruction a{color:#fff;font-family:Muli Bold,sans-serif;font-size:16px;cursor:pointer}app-singpass .singpass-container .singpass-instruction .hidden{display:none}@media (min-width: 320px) and (max-width: 567px){app-singpass .singpass-container .singpass-instruction{max-width:354px;margin-top:11px;margin-left:0;width:100%}app-singpass .singpass-container .singpass-instruction .hidden{display:inline}}
+</style>
+
+    <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.css" />
+    <link href="https://fonts.googleapis.com/css?family=Livvic|Nunito+Sans&display=swap" rel="stylesheet">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.js"></script>
+    <script>
+      window.addEventListener("load", function(){
+      window.cookieconsent.initialise({
+        "palette": {
+          "popup": {
+            "background": "#edeff5",
+            "text": "#838391"
+          },
+          "button": {
+            "background": "#4b81e8"
+          }
+        },
+        "theme": "classic",
+        "position": "bottom-left",
+        "content": {
+          "message": "See Tow Bus uses cookies to ensure you get the best experience on our website."
+        }
+      })});
+    </script>
+    <title>See Tow Bus</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://rawcdn.githack.com/Hi1307/ltabus/b896c394/flaticon.css" rel="stylesheet">
+    <link href="/static/materialize.css" rel="stylesheet">
+  </head>
+  <body>
+
+  <div class="navbar-fixed">
+    <nav style="background-color: #fff;">
+      <div class="nav-wrapper">
+        <a href="#" class="brand-logo center" style="font-family:Livvic;color:#000"><span class="material-icons">directions_bus</span> See Tow Bus</a>
+      </div>
+    </nav>
+  </div>
+
+    <div class="container">
+      <div class="section">
+        <div class="row">
+
+          <app-singpass><div class="singpass-container show-element"><div><a target="_blank" href="https://login.singpass.gov.sg/spservice/?TAM_OP=login&URL=%2Fmga%2Fsps%2Foauth%2Foauth20%2Fauthorize%3Fresponse_type%3Dcode%26client_id%3DNDI-CORE-BRIDGE%26scope%3Dopenid%26state%3D9ab89eb5-8d2a-486e-ba7b-3101900c6046%26redirect_uri%3Dhttps%3A%2F%2Fbus.seetow.sg%2Fauth%2Fsingpass-federation%26ndi_esrvc%3Dsp_portal%26nonce%3DbSXmaAz3DwKM0SNnuSJkX6nxL_8nWIKolZdSqd9eErs%26esrvcID%3DNDI-CORE-BRIDGE"><img class="singpass-login-icon" src="/static/sp-login-button.svg" style="display:block;margin:auto"></a></div></div></app-singpass>
+
+          <meta name="viewport" content="width=device-width, initial-scale=1">
+          <div id="stopsearch">
+            <p class="center">Enter a bus stop ID to view the next buses</p>
+            <div class="input-field col s6 offset-s3">
+              <input placeholder="Bus Stop ID (4 or 5 digits)" id="field1" name="field1" type="number">
+              <a class="waves-effect waves-light btn modal-trigger" id="field1btn" href="#tableofresults" onClick="javascript: stopno=document.getElementById('field1').value;redir()">Search</a>
+            </div>
+            <div class="input-field col s12">
+              <hr>
+              <div id="topbar"></div>
+              <br />
+              <h6>Nearby bus stops (nearest to furthest):</h6>
+              <div id="locationlive"><a class="waves-effect waves-light btn modal-trigger brown" id="nearbycheck2" onclick="javascript:activatenearby()"><span id="nearbycheck">Find nearby bus stops</span></a></div>
+              <div id="mehmeh" style="display:none;"></div>
+              <br>
+              <h6>Bus stop map</h6>
+              <p>Click or tap on the red markers to get the results</p>
+              <div id="map"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <footer class="page-footer black">
+      <div class="footer-copyright">
+        <div class="container">
+          &copy; 2014-2024 <a class="orange-text text-lighten-3" href="https://seetow.sg">See Tow</a> Technologies (CRN: 202258286G).
+          <br />
+          <a class="orange-text text-lighten-3 modal-trigger" href="#licenses">OSS Licenses</a>
+          <div id="google_translate_element"></div>
+          <script type="text/javascript">
+            function googleTranslateElementInit() {
+              new google.translate.TranslateElement({pageLanguage: 'en', includedLanguages: 'ja,ko,ms,ta,zh-CN', layout: google.translate.TranslateElement.FloatPosition.TOP_LEFT}, 'google_translate_element');
+            }
+          </script><script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+          <div id="outdated"></div>
+        </div>
+      </div>
+    </footer>
+    <div id="legend" class="modal">
+      <div class="modal-content">
+        <table class="striped responsive-table">
+          <br />
+          <thead>
+            <th>Legend</th>
+          </thead>
+          <tr>
+            <td>Space</td>
+            <td><i class="material-icons">airline_seat_recline_normal</i>Seating available</td>
+            <td><i class="material-icons">directions_walk</i>Standing space</td>
+            <td><i class="material-icons">wc</i>Limited standing space</td>
+          </tr>
+          <tr>
+            <td>Type of bus</td>
+            <td><i class="material-icons">filter_1</i> Single decker</td>
+            <td><i class="material-icons">filter_2</i> Double decker</td>
+            <td>🅱️ Bendy/Articulated bus</td>
+          </tr>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <a class="modal-close waves-effect waves-green btn-flat">Close</a>
+      </div>
+    </div>
+    <div id="licenses" class="modal">
+      <div class="modal-content">
+        <ul class="collapsible">
+          <li>
+            <div class="collapsible-header">Cookie Consent</div>
+            <div class="collapsible-body"><span>
+              MIT License
+              <br>
+              Copyright (c) 2019 Osano, Inc., A Public Benefit Corporation
+              <br>
+              <a href="https://github.com/osano/cookieconsent/blob/dev/LICENSE">Read more</a>
+            </span></div>
+          </li>
+          <li>
+            <div class="collapsible-header">Data.gov.sg</div>
+            <div class="collapsible-body"><span>Data provided by Data.gov.sg on See Tow Bus is licensed under the <a href="https://data.gov.sg/open-data-licence">Singapore Open Data License</a>. </span></div>
+          </li>
+          <li>
+            <div class="collapsible-header">Electron</div>
+            <div class="collapsible-body"><span>
+              MIT License
+              <br>
+              Copyright (c) Electron contributors<br>
+              Copyright (c) 2013-2020 GitHub Inc.
+              <br>
+              <a href="https://github.com/electron/electron/blob/main/LICENSE">Read more</a>
+            </span></div>
+          </li>
+          <li>
+            <div class="collapsible-header">Google Fonts</div>
+            <div class="collapsible-body"><span>Fonts are licensed under the Open Fonts License.</span></div>
+          </li>
+          <li>
+            <div class="collapsible-header">jQuery</div>
+            <div class="collapsible-body"><span>Licensed under the MIT License. Copyright 2024 jQuery, Inc.
+
+<br />Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+<br />The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+<br />THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+</span></div>
+          </li>
+          <li>
+            <div class="collapsible-header">Leaflet</div>
+            <div class="collapsible-body"><span>Licensed under BSD Version 3.</span></div>
+          </li>
+          <li>
+            <div class="collapsible-header">Materialize</div>
+            <div class="collapsible-body"><span>Copyright (c) 2014-2019 Materialize.
+              
+<br />Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+<br />The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+<br />THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+</span></div>
+          </li>
+          <li>
+            <div class="collapsible-header">Open Government Products</div>
+            <div class="collapsible-body"><span>Copyright 2018 Government Technology Agency.
+              
+<br />Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+<br />The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+<br />THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+</span></div>
+          </li>
+          <li>
+            <div class="collapsible-header">OpenStreetMap</div>
+            <div class="collapsible-body"><span>Copyright 2024 OpenStreetMap Contributors.</span></div>
+          </li>
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <a class="modal-close waves-effect waves-green btn-flat">Close</a>
+      </div>
+    </div>
+    <div id="tableofresults" class="modal">
+      <div class="modal-content">
+        <div id="resultstable">
+          <h2 class="center stoptitle"><span id="hm"></span></h2>
+          <p class="center"><a class="btn waves-effect waves-light modal-close"><i class="material-icons">arrow_back</i></a><span id="locbutton"></span><a class="btn waves-effect waves-light modal-trigger" href="#legend">legend</a><a class="btn waves-effect waves-light" onClick="updatecookie();"><i class="material-icons">star</i></a></p>
+          <p class="center">Results were last fetched from the server at <span id="resultupdate"></span></p>
+          <table>
+            <thead>
+              <th style=min-width:90px>Bus</th>
+              <th style=min-width:90px>Time (1)</th>
+              <th style=min-width:90px>Time (2)</th>
+              <th style=min-width:90px>Time (3)</th>
+            </thead>
+            <tbody id="time">
+              <tr id="fetching">
+                <td colspan="5">
+                  <p style="text-align:center">Calculating timings. Please wait.</p>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <a class="modal-close waves-effect waves-green btn-flat">Close</a>
+      </div>
+    </div>
+    <script src="/static/nusdict.js"></script>
+    <script src="/static/materialize.js"></script>
+    <script src="/static/geojson2.js"></script>
+    <script src="/static/stopdata.js"></script>
+    <script>
+      var panorama;
+      function initialize() {
+        panorama = new google.maps.StreetViewPanorama(document.getElementById('street-view'),
+          {
+            position: {lat: bus_dict[parseInt(stopno)][0], lng: bus_dict[parseInt(stopno)][1]},
+            pov: {heading: 0, pitch: 0},
+            zoom: 1
+          });
+      }
+    </script>
+    <script>
+      $(document).ready(function(){
+        $('.modal').modal();
+      });
+      var map, infoWindow;
+      
+        map = new L.Map('map', {
+          center: {lat: 1.290270, lng: 103.851959},
+          zoom: 17,
+          minZoom: 14,
+          layers: new L.TileLayer("https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}",{
+      bounds: [[1.506417, 103.552020], [1.199572, 104.058765]],
+      subdomains:['mt0','mt1','mt2','mt3'],
+      attribution: '&copy; 2022 Google, SLA',          
+      }),
+      
+      
+      
+      
+        });
+      map.on('locationerror', (err) => {
+    console.error("Location access denied:", err.message);
+    // Optionally provide some feedback to the user.
+      });
+
+        map.locate({setView: true, minZoom: 15});
+      
+      function onEachFeature(feature, layer) {
+        var popupContent = '<a href="#tableofresults" class="modal-trigger" onClick="javascript: stopno='+feature.properties.busstopcode+';redir()">'+feature.properties.description+'('+feature.properties.busstopcode+')</a>';
+      layer.bindPopup(popupContent);
+      }
+      
+      
+      L.geoJSON(seetowbusgeojson, {
+      
+      style: function (feature) {
+      return feature.properties && feature.properties.style;
+      },
+      
+      onEachFeature: onEachFeature,
+      
+      pointToLayer: function (feature, latlng) {
+      return L.circleMarker(latlng, {
+        radius: 6,
+        fillColor: "#ff7800",
+        color: "#000",
+        weight: 1,
+        opacity: 1,
+        fillOpacity: 0.8
+      });
+      }
+      }).addTo(map);
+
+      
+function clearFavorites() {
+    document.cookie = "fav=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    window.alert("Your favourites have been cleared. The changes will take effect the next time you reopen the app.");
+}
+
+function getCookie(name) {
+  const re = new RegExp(name + "=([^;]+)");
+  const value = re.exec(document.cookie);
+  return (value != null) ? unescape(value[1]) : null;
+}
+
+let fav1 = getCookie("fav");
+let topBarElements = [];
+
+if (fav1) {
+    const fav = fav1.split(",");
+
+    for(let i=0; i<fav.length; i++) {
+        const stopno = fav[i];
+        const stopname = bus_dict[parseInt(stopno)] && bus_dict[parseInt(stopno)][2];
+        
+        if (stopname) {
+            topBarElements.push(`<a class="waves-effect waves-light btn modal-trigger brown" href="#tableofresults" onclick="javascript:stopno=${stopno};redir()">${stopname}</a>`);
+        }
+    }
+
+    topBarElements.push('<a class="waves-effect waves-light btn modal-trigger brown" onclick="clearFavorites()">Clear Favourites</a>');
+    topBarHTML = topBarElements.join("");
+} else {
+    topBarHTML = 'None right now :(. Add some bus stops to your favourites by pressing the star icon on any bus stop!';
+}
+
+jQuery("#topbar").prepend('<h6>Your favourite bus stops:</h6>' + topBarHTML);
+
+      
+      
+      function redirlegacy(code){
+      window.location.href = "https://bus.seetow.sg/results?stop="+code;
+      }
+      function redir(){
+      populatetable();
+      }
+      
+      
+function updatecookie() {
+    const EXPIRY_TIME_MS = 5000000 * 36000; // 5,000,000 seconds
+    let now = Date.now();
+    let expireTime = now + EXPIRY_TIME_MS;
+    let cookieValue;
+
+    // If fav1 exists and is not empty, append stopno to it. Otherwise, set fav1 to stopno.
+    if (fav1) {
+        cookieValue = fav1 + "," + stopno.toString();
+    } else {
+        cookieValue = stopno.toString();
+    }
+
+    let cookieString = "fav=" + cookieValue + ";expires=" + new Date(expireTime).toUTCString() + ";path=/";
+    document.cookie = cookieString;
+
+    if (bus_dict && bus_dict[parseInt(stopno)]) {
+        alert("The bus stop " + bus_dict[parseInt(stopno)][2] + " has been added!");
+    } else {
+        alert("Bus stop added!");
+    }
+}
+
+      fav1 = getCookie("fav");
+
+
+
+
+function fancyTimeFormat(duration) {
+  const hours = Math.floor(duration / 3600);
+  const minutes = Math.floor((duration % 3600) / 60);
+  const seconds = Math.floor(duration % 60);
+  
+  return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+}
+
+      
+      
+      function populatetable(){
+      
+      nuscode = nusstopdict[stopno]
+      
+      function minTommss(minutes){
+        var sign = minutes < 0 ? "-" : "";
+        var min = Math.floor(Math.abs(minutes));
+        var sec = Math.floor((Math.abs(minutes) * 60) % 60);
+        return sign + (min < 10 ? "0" : "") + min + ":" + (sec < 10 ? "0" : "") + sec;
+      };
+      updateresults();
+      
+      $("#locbutton").html('<a class="btn waves-effect waves-light modal-trigger" href="https://www.google.com/maps/@?api=1&map_action=pano&viewpoint='+bus_dict[parseInt(stopno)][0]+','+bus_dict[parseInt(stopno)][1]+'" target="_blank">location</a>');
+      
+      
+      url = "https://api.tfl.gov.uk/StopPoint/490000119N/arrivals";
+          
+      $("#hm").text("Hyde Park Corner Tube (Stop N)");
+      $.getJSON(url, function (json) {
+        services = json;
+      
+        let timenow = Date.now();
+      
+      });
+            
+      
+function calculateArrivalTime(time, timenow) {
+    const fakeTime = +new Date(time);
+
+    // Handle if the time is not valid
+    if (isNaN(fakeTime)) {
+        return '';
+    }
+
+    const timeMs = fakeTime - timenow;
+    const timeMin = timeMs / 60000;
+    let timeStr = minTommss(timeMin);
+
+    if (timeStr.charAt(0) == "-") {
+        timeStr = "Very soon!";
+    } else {
+        timeStr = timeStr + "&nbsp;mins";
+    }
+
+    return timeStr;
+}
+
+function getBusNumber(bigblock) {
+  return bigblock[timeToStation];
+};
+
+
+
+function formatTflEta(etaObj) {
+    if (!etaObj || !etaObj["timeToStation"]) return "";
+    let formattedTime = fancyTimeFormat(etaObj["timeToStation"]);
+    return (formattedTime.charAt(0) == "-") ? "Very soon!" : formattedTime;
+}
+
+
+
+
+setInterval(function () {
+    $("#fetching").remove();
+    $("#time").empty();
+    let timenow = Date.now();
+
+    let htmlRows = [];
+
+    if (typeof services !== 'undefined' && services.length > 0) {
+        services.forEach((service, i) => {
+            let busno = service["lineName"];
+
+            let arrtime = formatTflEta(service["timeToStation"]); 
+
+
+            let rowHtml = `<tr><td id="bus${i}"><a href="https://busrouter.sg/#/services/${busno}" target="_blank">${busno}</a></td><td>${arrtime}</a></td></tr>`;
+        htmlRows.push(rowHtml);
+        });
+        $("#time").append(htmlRows.join(""));
+    }
+
+
+
+
+    $("#time").append(nusRows.join(""));
+
+if (services.length === 0 && nusservices === undefined) {
+    // Show a message informing the user that no buses are arriving
+    $("#time").append('<tr><td colspan="4">We received a response but there was no information. Are buses running at this time? Is this a valid stop ID? The API may be temporarily down. <br>HTTP 200 ==> Empty response body.</td></tr>');
+};
+
+      
+    if (typeof stopno !== 'undefined' && services && services.length !== 0) {
+        if (stopno == "66271") {
+            jQuery("#bus0").append("<br>To Ang Mo Kio");
+            jQuery("#bus1").append("<br>To Punggol");
+        } else if (stopno == "46088") {
+            jQuery("#bus0").append("<br>To Kranji");
+            jQuery("#bus1").append("<br>To Malaysia");
+        } else if (stopno == "46069") {
+            jQuery("#bus0").append("<br>To Kranji");
+            jQuery("#bus1").append("<br>To Malaysia");
+        }
+    }
+}, 1000);
+      }
+      
+      
+    
+    </script>
+    <script>
+      setInterval(function(){
+            $.getJSON(url, function (json) {
+              services = json["Services"];
+              updateresults();
+              });
+            $.getJSON(nusurl, function (json) {
+              nusservices = json["ShuttleServiceResult"]["shuttles"];
+               updateresults();
+              });
+        }, 30000)
+      
+      function updateresults() {
+      todayresult = new Date();
+      timeresult = todayresult.toLocaleTimeString();
+      $("#resultupdate").text(timeresult)
+      }
+       
+      
+      
+      
+    </script>
+    <script>
+      M.AutoInit();
+    </script>
+    <script>
+      if ("serviceWorker" in navigator) {
+        if (navigator.serviceWorker.controller) {
+          console.log("[PWA Builder] active service worker found, no need to register");
+        } else {
+          // Register the service worker
+          navigator.serviceWorker
+            .register("pwabuilder-sw.js", {
+              scope: "./"
+            })
+            .then(function (reg) {
+              console.log("[PWA Builder] Service worker has been registered for scope: " + reg.scope);
+            });
+        }
+      }
+    </script>
+    <script>
+      navigator.geolocation.getCurrentPosition(function(position) {
+      var marker = L.marker([position.coords.latitude,position.coords.longitude]).addTo(map);
+      });
+    </script>
+    <script>
+function activatenearby() { 
+    // Inform the user
+    $('#nearbycheck').text("Checking, please wait...");
+
+    // Fetch the geolocation data
+    navigator.geolocation.getCurrentPosition(function(position) {
+        $.get(`https://misty-king-3f2c.seetow.workers.dev/TS?lat=${position.coords.latitude}&long=${position.coords.longitude}`)
+            .done(function(htmlResponse) {
+                // Parse the response to extract relevant information
+                const $parsedResponse = $(htmlResponse);
+                let locations = '';
+
+                $parsedResponse.each(function() {
+                    const stopDetails = $(this).find('.name').text().split(':');
+
+                    if (stopDetails && stopDetails.length === 2) {
+                        const stopno = Number(stopDetails[0].trim());
+                        const stopname = stopDetails[1].trim();
+
+                        if (!isNaN(stopno) && stopname) {
+                            locations += `<a class="waves-effect waves-light btn modal-trigger brown" href="#tableofresults" onclick="javascript:stopno=${stopno};redir()">${stopname}</a>`;
+                        }
+                    }
+                });
+
+                // Update the DOM once to reduce reflows
+                $('#mehmeh').html($parsedResponse);
+                $('#locationlive').html(locations);
+                $('#nearbycheck2').remove();
+            })
+            .fail(function(jqXHR, textStatus, errorThrown) {
+                $('#nearbycheck').text(textStatus).addClass('error-class'); 
+            });
+    }, function(error) {
+        switch(error.code) {
+            case error.PERMISSION_DENIED:
+                $('#nearbycheck').text("User denied the request for Geolocation.").addClass('error-class');
+                break;
+            case error.POSITION_UNAVAILABLE:
+                $('#nearbycheck').text("Location information is unavailable.").addClass('error-class');
+                break;
+            case error.TIMEOUT:
+                $('#nearbycheck').text("The request to get user location timed out.").addClass('error-class');
+                break;
+            default:
+                $('#nearbycheck').text("An unknown error occurred.").addClass('error-class');
+        }
+    });
+}
+
+
+
+    </script>
+    <script>
+      var field1 = document.getElementById("field1");
+      field1.addEventListener("keypress", function(event) {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        document.getElementById("field1btn").click();
+      }
+      });
+    </script>
+  </body>
+</html>
