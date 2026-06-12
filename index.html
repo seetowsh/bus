@@ -323,8 +323,13 @@
       }
     </style>
 
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
     <script src="static/geojson2.js"></script>
+
     <script type="module" src="src/search-engine.js"></script>
+    <script type="module" src="src/map-engine.js"></script>
 
   </head>
   <body>
@@ -367,7 +372,9 @@
                 <p>You can now search bus stops by name* and stop code (in addition to nearby bus stops)</p>
                 <p>New tabbed navigation means less time finding your stop</p>
                 <p>Results loading got even (average 15%) faster, with 10 year old scripts being replaced with up to date ones.</p>
-                <p><i class="font-size:8px">*Searching by name requires a relatively recent phone made after 2021 otherwise it'll be very slow</i></p>
+                <p><i class="font-size:8px">*Searching by name requires a relatively recent phone made after 2021 otherwise it'll be very slow.</i></p>
+                <p><i class="font-size:8px">Recent browser required (must support ECMAScript 2022) for most functionality to work correctly.</i></p>
+
               </div>
 
               <p class="flow-text" style="font-size: 1.1rem; margin-top: 20px; margin-bottom: 20px;">
@@ -381,13 +388,8 @@
           </div>
         </div>
         
-        <div id="map-pane" class="view-pane">
-          <div style="padding:20px;"><h4>Map Canvas Base Layer</h4> <button 
-  class="btn filled" 
-  style="margin: 20px;" 
-  onclick="window.showResultsOverlay()">
-  <i class="material-icons left">bug_report</i> QA: Open Results Panel
-</button></div>
+        <div id="map-pane" class="view-pane active" style="display: flex; flex-direction: column; width: 100%; height: 100%;">
+          <div id="map" style="flex-grow: 1; width: 100%; height: 100%;"></div>
         </div>
 
         <div id="search-pane" class="view-pane">
