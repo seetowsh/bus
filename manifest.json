@@ -4,7 +4,7 @@
     "name": "See Tow Bus",
     "scope": "/",
     "display": "standalone",
-    "start_url": "https://bus.seetow.sg/app",
+    "start_url": "./app",
     "short_name": "See Tow Bus",
     "theme_color": "#000000",
     "description": "The most accurate bus app",
