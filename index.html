@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="manifest" href="manifest.json">
     <title>See Tow Bus</title>
     
     <link href="https://fonts.googleapis.com/css?family=Livvic|Nunito+Sans|Material+Icons&display=swap" rel="stylesheet">
@@ -377,6 +378,7 @@
 
     <script type="module" src="src/search-engine.js"></script>
     <script type="module" src="src/map-engine.js"></script>
+    <script type="module" src="src/favourites.js"></script>
 
   </head>
   <body>
@@ -410,9 +412,9 @@
           <div class="container" style="padding: 40px 20px; max-width: 600px;">
             <div class="card-content center-align">
               <i class="material-icons large" style="color: var(--md-sys-color-primary);">explore</i>
-              <h4>Welcome to the New See Tow Bus (v3.0)!</h4>
+              <h4>Welcome to the new See Tow Bus (v3.0)!</h4>
               <p class="flow-text" style="font-size: 1.1rem; margin-top: 20px;">
-                See Tow Bus turns 10 in 2026. We've completely overhauled the layout and added some new features to make navigating Singapore's bus network faster and more ergonomic.
+                See Tow Bus turns 10 in 2026. We've completely overhauled the layout and added some new features to make navigating Singapore's bus network even faster.
               </p>
               
               <div class="left-align" style="margin: 30px 0; padding: 20px; background: rgba(0,0,0,0.02); border-radius: 8px;">
@@ -454,7 +456,11 @@
         </div>
 
         <div id="fav-pane" class="view-pane">
-          <div style="padding:20px;"><h4>User Saved Favourites</h4></div>
+          <div class="container" style="padding-top: 24px; padding-bottom: 32px;">
+            <h4 style="font-family: Livvic; font-weight: 600; margin-bottom: 20px;">Your Favourites</h4>
+            
+            <div id="favourites-pane-content"></div>
+          </div>
         </div>
 
       </section>
@@ -469,7 +475,7 @@
         
         <li class="tab"><a href="#map-pane"><i class="material-icons">map</i><span>Map</span></a></li>
         <li class="tab"><a href="#search-pane"><i class="material-icons">search</i><span>Search</span></a></li>
-        <li class="tab"><a href="#fav-pane"><i class="material-icons">star</i><span>Favorites</span></a></li>
+        <li class="tab"><a href="#fav-pane"><i class="material-icons">star</i><span>Favourites</span></a></li>
       </ul>
     </footer>
 
@@ -501,6 +507,35 @@
     
     <script type="module">
       import { closeTimingPanel } from './src/transit-api.js';
+
+      // --- PROGRESSIVE WEB APP (PWA) SERVICE WORKER REGISTRATION ---
+        // Intuition: Safely checks browser capability, then fires the background thread 
+        // at the root scope so it can securely cache your application shell modules.
+        if ('serviceWorker' in navigator) {
+          window.addEventListener('load', () => {
+            navigator.serviceWorker.register('./pwabuilder-sw.js', { scope: './' })
+              .then((registration) => {
+                console.log('[PWA] ServiceWorker successfully mounted to scope:', registration.scope);
+              })
+              .catch((error) => {
+                console.error('[PWA] ServiceWorker installation crashed:', error);
+              });
+          });
+        }
+
+        // --- ONESIGNAL NOTIFICATION ENGINE (DISABLED FOR THIS RELEASE) ---
+        /*
+        navigator.serviceWorker.ready.then((registration) => {
+          console.log('Service Worker is ready, initializing OneSignal...');
+          window.OneSignalDeferred = window.OneSignalDeferred || [];
+          OneSignalDeferred.push(function(OneSignal) {
+            OneSignal.init({
+              appId: "b019c6f8-fd71-4f16-835b-0a755e2c29ea",
+              serviceWorkerPath: "pwabuilder-sw.js"
+            });
+          });
+        });
+        */
 
       document.addEventListener('DOMContentLoaded', () => {
         // Targets for layout tracking

@@ -1,5 +1,7 @@
 // src/transit-api.js
 
+import { isFavourite, toggleFavourite } from './favourites.js';
+
 // --- Private Module State Engine ---
 let activeStopId = null;
 let ltaServices = [];
@@ -37,7 +39,7 @@ function calculateArrivalTime(time, timenow) {
   const deltaMinutes = (targetTime - timenow) / 60000;
   const timeStr = minTommss(deltaMinutes);
   
-  return (timeStr.charAt(0) === "-") ? "Very soon!" : `${timeStr} mins`;
+  return (timeStr.charAt(0) === "-") ? "Arriving" : `${timeStr}\u00A0mins`;
 }
 
 // --- Semantic Design Tokens Map ---
@@ -148,8 +150,16 @@ function renderTimingTable() {
   if (!targetContainer) return;
 
   const meta = getStopMetadata(activeStopId);
-  const formattedStopId = activeStopId > 100000 ? "NUS" : activeStopId;
-  const currentTimestamp = new Date().toLocaleTimeString();
+    const formattedStopId = activeStopId > 100000 ? "NUS" : activeStopId;
+    const currentTimestamp = new Date().toLocaleTimeString();
+
+    // Check the active state against cookie records to set the initial button layout
+    const favourited = isFavourite(activeStopId);
+    const favIcon = favourited ? 'star' : 'star_border';
+    const favText = favourited ? 'Favourited' : 'Favourite';
+    const favStyle = favourited 
+      ? `background-color: color-mix(in srgb, var(--md-sys-color-primary) 12%, transparent) !important; border:1px solid var(--md-sys-color-primary) !important; color:var(--md-sys-color-primary) !important;`
+      : `border:1px solid var(--border-color); color:var(--text-color);`;
 
   let tableRowsHtml = [];
 
@@ -192,14 +202,16 @@ function renderTimingTable() {
       <p class="muted-text" style="margin:0 0 20px 0; font-size:1.1rem; opacity:0.6;">Stop ID: ${formattedStopId}</p>
       
       <div style="display:flex; gap:12px; margin-bottom:24px; flex-wrap:wrap;">
-        <a target="_blank" href="https://www.google.com/maps/?q=&layer=c&cbll=${meta.lat},${meta.lng}" class="btn waves-effect waves-light" style="background-color: var(--md-sys-color-primary); color: var(--md-sys-color-on-primary);"><i class="material-icons left">directions</i> Street View</a>
-        <button class="btn-flat waves-effect" id="overlay-fav-toggle" style="border:1px solid var(--border-color); color:var(--text-color);"><i class="material-icons left">star_border</i> Favourite</button>
+        <a target="_blank" href="https://www.google.com/maps/search/?api=1&query=${meta.lat},${meta.lng}" class="btn waves-effect waves-light" style="background-color: var(--md-sys-color-primary); color: var(--md-sys-color-on-primary);"><i class="material-icons left">directions</i>Map Directions</a>
+        
+        <button class="btn-flat waves-effect" id="overlay-fav-toggle" style="${favStyle}">
+          <i class="material-icons left">${favIcon}</i><span>${favText}</span>
+        </button>
       </div>
 
       <p class="muted-text" style="font-size:0.85rem; opacity:0.5; margin-bottom:8px;">Data fetched from server at: ${currentTimestamp}</p>
       
       <div style="width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch;">
-        
         <table class="striped">
           <thead>
             <tr>
@@ -213,10 +225,21 @@ function renderTimingTable() {
             ${tableRowsHtml.join("")}
           </tbody>
         </table>
-        
       </div>
       
+      <div style="margin-top: 32px; margin-bottom: 40px;">
+      </div>
     `;
+
+    const favBtn = document.getElementById('overlay-fav-toggle');
+      if (favBtn) {
+        favBtn.addEventListener('click', () => {
+          toggleFavourite(activeStopId);
+          
+          // Re-trigger rendering locally to flip button visuals smoothly at 60fps
+          renderTimingTable();
+        });
+      }
 
 
   // Start the 1Hz ticker updates immediately now that the fields are present in the DOM
