@@ -39,7 +39,7 @@ function calculateArrivalTime(time, timenow) {
   const deltaMinutes = (targetTime - timenow) / 60000;
   const timeStr = minTommss(deltaMinutes);
   
-  return (timeStr.charAt(0) === "-") ? "Arriving" : `${timeStr}\u00A0mins`;
+  return (timeStr.charAt(0) === "-") ? "Very\u00A0soon" : `${timeStr}\u00A0mins`;
 }
 
 // --- Semantic Design Tokens Map ---
@@ -122,15 +122,22 @@ function getStopMetadata(stopId) {
 async function fetchTimingsFromServer() {
   if (!activeStopId) return;
 
+  // 1. Identify if the stop is an NUS exclusive using your framework's 6-digit threshold
+  const isNusExclusive = Number(activeStopId) > 100000;
+
   const ltaUrl = `https://misty-king-3f2c.seetow.workers.dev/LTA?id=${activeStopId}`;
   const nusCode = NUS_STOP_DICT[activeStopId];
   const nusUrl = nusCode ? `https://misty-king-3f2c.seetow.workers.dev/NUS?id=${nusCode}` : null;
 
   try {
-    // Fire network fetch requests concurrently in the background pipeline
+    // 2. Wrap the LTA fetch in a conditional gateway inside Promise.all
     const [ltaRes, nusRes] = await Promise.all([
-      fetch(ltaUrl).then(r => r.json()).catch(() => ({ Services: [] })),
-      nusUrl ? fetch(nusUrl).then(r => r.json()).catch(() => null) : Promise.resolve(null)
+      !isNusExclusive 
+        ? fetch(ltaUrl).then(r => r.json()).catch(() => ({ Services: [] }))
+        : Promise.resolve({ Services: [] }), // Instantly resolve empty array without hitting network
+      nusUrl 
+        ? fetch(nusUrl).then(r => r.json()).catch(() => null) 
+        : Promise.resolve(null)
     ]);
 
     ltaServices = ltaRes.Services || [];
@@ -202,10 +209,10 @@ function renderTimingTable() {
       <p class="muted-text" style="margin:0 0 20px 0; font-size:1.1rem; opacity:0.6;">Stop ID: ${formattedStopId}</p>
       
       <div style="display:flex; gap:12px; margin-bottom:24px; flex-wrap:wrap;">
-        <a target="_blank" href="https://www.google.com/maps/search/?api=1&query=${meta.lat},${meta.lng}" class="btn waves-effect waves-light" style="background-color: var(--md-sys-color-primary); color: var(--md-sys-color-on-primary);"><i class="material-icons left">directions</i>Map Directions</a>
+        <a target="_blank" href="https://maps.google.com.sg/maps?q=&layer=c&cbll=${meta.lat},${meta.lng}" class="btn waves-effect waves-light" style="background-color: var(--md-sys-color-primary); color: var(--md-sys-color-on-primary);"><i class="material-icons left">directions</i> Map Directions</a>
         
         <button class="btn-flat waves-effect" id="overlay-fav-toggle" style="${favStyle}">
-          <i class="material-icons left">${favIcon}</i><span>${favText}</span>
+          <i class="material-icons left">${favIcon}</i><span> ${favText}</span>
         </button>
       </div>
 
