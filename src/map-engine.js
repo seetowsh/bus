@@ -1,5 +1,6 @@
 // src/map-engine.js
 import { openTimingPanel } from './transit-api.js';
+import { fetchGeoJSON } from './data-provider.js';
 
 let mapInstance = null;
 
@@ -20,14 +21,28 @@ function getThemeColor() {
   return resolvedColor || '#ff7800'; // Fallback to classic orange if resolution slips
 }
 
+export function invalidateMapSize() {
+  if (mapInstance) {
+    mapInstance.invalidateSize();
+  }
+}
+
+/**
+ * Re-triggers device geolocation lookup and centers the map
+ */
+export function reCenterUserLocation() {
+  if (mapInstance) {
+    mapInstance.locate({ setView: true, maxZoom: 17 });
+  }
+}
+
 /**
  * Initializes the Leaflet map and plots the GeoJSON single-source layer
  */
-export function initializeMap() {
+export async function initializeMap() {
   const mapContainer = document.getElementById('map');
   if (!mapContainer) return;
 
-  // 1. Instatiate the core Leaflet Map viewport
   mapInstance = L.map('map', {
     center: { lat: 1.290270, lng: 103.851959 },
     zoom: 17,
@@ -37,17 +52,28 @@ export function initializeMap() {
       new L.TileLayer("https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}", {
         bounds: [[1.506417, 103.552020], [1.199572, 104.058765]],
         subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
-        attribution: '© 2026 Google, SLA',
+        attribution: '© 2022 Google, SLA',
       })
     ]
   });
 
-  // Handle errors gracefully without stalling the UI main threads
-  mapInstance.on('locationerror', (err) => {
-    console.warn("Map geo-location track skipped:", err.message);
+  // Native Location Control FAB
+  const LocateControl = L.Control.extend({
+    options: { position: 'bottomright' },
+    onAdd: function() {
+      const btn = L.DomUtil.create('button', 'btn-floating btn-large waves-effect waves-light');
+      btn.innerHTML = '<i class="material-icons">my_location</i>';
+      btn.style.cssText = 'background-color: var(--md-sys-color-primary, #0061a4); color: white; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 3px 6px rgba(0,0,0,0.3);';
+      btn.title = "Re-center my location";
+      btn.onclick = (e) => {
+        e.stopPropagation();
+        reCenterUserLocation();
+      };
+      return btn;
+    }
   });
+  mapInstance.addControl(new LocateControl());
 
-  // Automatically focus the map wrapper to the user's current spatial position
   mapInstance.locate({ setView: true, minZoom: 15 });
 
   // 2. Resolve the dynamic theme color token

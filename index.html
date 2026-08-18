@@ -511,6 +511,7 @@
     
     <script type="module">
       import { closeTimingPanel } from './src/transit-api.js';
+      import { invalidateMapSize } from './src/map-engine.js';
 
       // --- PROGRESSIVE WEB APP (PWA) SERVICE WORKER REGISTRATION ---
         // Intuition: Safely checks browser capability, then fires the background thread 
@@ -548,16 +549,22 @@
         const resultsPanel = document.getElementById('results-panel');
         const closeResultsBtn = document.getElementById('close-results-btn');
 
-        // Global View Transition Coordinator
+        // Update your global view switcher
         window.switchAppView = (targetPaneId) => {
           viewPanes.forEach(pane => {
             if (pane.id === targetPaneId) {
               pane.classList.add('active');
             } else if (pane.id !== 'map-pane') {
-              // Keep map pane structurally appended but drop visual layer
               pane.classList.remove('active');
             }
           });
+
+          // Force Leaflet to recalculate canvas sizing when Map Pane becomes active
+          if (targetPaneId === 'map-pane') {
+            setTimeout(() => {
+              invalidateMapSize();
+            }, 150);
+          }
 
           // Sync Desktop Sidebar UI elements status
           sidebarItems.forEach(item => {
