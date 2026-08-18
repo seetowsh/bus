@@ -433,7 +433,7 @@
               Please continue to report issues on GitHub or the usual channels.
               </p>
 
-              <button class="btn filled btn-large" style="width:100%;" onclick="window.switchAppView('map-pane')">Ok can</button>
+              <button id="welcome-dismiss-btn" class="btn filled btn-large" style="width:100%;">Ok can</button>
             </div>
           </div>
         </div>
@@ -509,107 +509,100 @@
     <script src="https://cdn.jsdelivr.net/npm/@materializecss/materialize@2.3.3/dist/js/materialize.min.js"></script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-JRBX99XR10"></script>
     
+    <!-- Replace the main <script type="module"> block at the bottom of index.html -->
     <script type="module">
       import { closeTimingPanel } from './src/transit-api.js';
       import { invalidateMapSize } from './src/map-engine.js';
 
-      // --- PROGRESSIVE WEB APP (PWA) SERVICE WORKER REGISTRATION ---
-        // Intuition: Safely checks browser capability, then fires the background thread 
-        // at the root scope so it can securely cache your application shell modules.
-        if ('serviceWorker' in navigator) {
-          window.addEventListener('load', () => {
-            navigator.serviceWorker.register('./pwabuilder-sw.js', { scope: './' })
-              .then((registration) => {
-                console.log('[PWA] ServiceWorker successfully mounted to scope:', registration.scope);
-              })
-              .catch((error) => {
-                console.error('[PWA] ServiceWorker installation crashed:', error);
-              });
+      // --- TOP-LEVEL GLOBAL VIEW SWITCHER ---
+      // Assigned immediately at module evaluation so it exists on window at all times
+      window.switchAppView = (targetPaneId) => {
+        const viewPanes = document.querySelectorAll('.view-pane');
+        const sidebarItems = document.querySelectorAll('.sidebar-nav-menu .collection-item');
+
+        viewPanes.forEach(pane => {
+          if (pane.id === targetPaneId) {
+            pane.classList.add('active');
+          } else if (pane.id !== 'map-pane') {
+            pane.classList.remove('active');
+          }
+        });
+
+        if (targetPaneId === 'map-pane' && typeof invalidateMapSize === 'function') {
+          setTimeout(() => invalidateMapSize(), 150);
+        }
+
+        sidebarItems.forEach(item => {
+          if (item.getAttribute('data-target') === targetPaneId) {
+            item.classList.add('active');
+          } else {
+            item.classList.remove('active');
+          }
+        });
+
+        const tabsElem = document.getElementById('mobile-tabs-nav');
+        if (tabsElem && typeof M !== 'undefined' && M.Tabs) {
+          const tabInstance = M.Tabs.getInstance(tabsElem);
+          if (tabInstance) tabInstance.select(targetPaneId);
+        }
+      };
+
+      // High-Performance Overlay Controls
+      window.showResultsOverlay = () => {
+        const panel = document.getElementById('results-panel');
+        if (panel) panel.classList.add('active');
+      };
+
+      window.hideResultsOverlay = () => {
+        const panel = document.getElementById('results-panel');
+        if (panel) panel.classList.remove('active');
+        closeTimingPanel();
+      };
+
+      // Service Worker Registration
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('./pwabuilder-sw.js', { scope: './' })
+            .catch(err => console.error('[PWA] Registration failed:', err));
+        });
+      }
+
+      // --- DOM EVENT BINDINGS ---
+      document.addEventListener('DOMContentLoaded', () => {
+        const sidebarItems = document.querySelectorAll('.sidebar-nav-menu .collection-item');
+        const closeResultsBtn = document.getElementById('close-results-btn');
+        const welcomeDismissBtn = document.getElementById('welcome-dismiss-btn');
+
+        // Welcome Pane button binding
+        if (welcomeDismissBtn) {
+          welcomeDismissBtn.addEventListener('click', () => window.switchAppView('map-pane'));
+        }
+
+        // Sidebar selection tracking
+        sidebarItems.forEach(item => {
+          item.addEventListener('click', () => {
+            window.switchAppView(item.getAttribute('data-target'));
+          });
+        });
+
+        // Close button for timing overlay
+        if (closeResultsBtn) {
+          closeResultsBtn.addEventListener('click', window.hideResultsOverlay);
+        }
+
+        // Initialize Materialize Components
+        const mobileTabs = document.getElementById('mobile-tabs-nav');
+        if (mobileTabs && typeof M !== 'undefined' && M.Tabs) {
+          M.Tabs.init(mobileTabs, {
+            onShow: (tabContentElement) => {
+              if (tabContentElement?.id) window.switchAppView(tabContentElement.id);
+            }
           });
         }
 
-        // --- ONESIGNAL NOTIFICATION ENGINE (DISABLED FOR THIS RELEASE) ---
-        /*
-        navigator.serviceWorker.ready.then((registration) => {
-          console.log('Service Worker is ready, initializing OneSignal...');
-          window.OneSignalDeferred = window.OneSignalDeferred || [];
-          OneSignalDeferred.push(function(OneSignal) {
-            OneSignal.init({
-              appId: "b019c6f8-fd71-4f16-835b-0a755e2c29ea",
-              serviceWorkerPath: "pwabuilder-sw.js"
-            });
-          });
-        });
-        */
-
-      document.addEventListener('DOMContentLoaded', () => {
-        // Targets for layout tracking
-        const viewPanes = document.querySelectorAll('.view-pane');
-        const sidebarItems = document.querySelectorAll('.sidebar-nav-menu .collection-item');
-        const resultsPanel = document.getElementById('results-panel');
-        const closeResultsBtn = document.getElementById('close-results-btn');
-
-        // Update your global view switcher
-        window.switchAppView = (targetPaneId) => {
-          viewPanes.forEach(pane => {
-            if (pane.id === targetPaneId) {
-              pane.classList.add('active');
-            } else if (pane.id !== 'map-pane') {
-              pane.classList.remove('active');
-            }
-          });
-
-          // Force Leaflet to recalculate canvas sizing when Map Pane becomes active
-          if (targetPaneId === 'map-pane') {
-            setTimeout(() => {
-              invalidateMapSize();
-            }, 150);
-          }
-
-          // Sync Desktop Sidebar UI elements status
-          sidebarItems.forEach(item => {
-            if (item.getAttribute('data-target') === targetPaneId) {
-              item.classList.add('active');
-            } else {
-              item.classList.remove('active');
-            }
-          });
-
-          // Sync Mobile Tabs UI elements status
-          const tabInstance = M.Tabs.getInstance(document.getElementById('mobile-tabs-nav'));
-          if (tabInstance) {
-            tabInstance.select(targetPaneId);
-          }
-        };
-
-        // Wire up Desktop Sidebar selection tracking
-        sidebarItems.forEach(item => {
-          item.addEventListener('click', () => {
-            const target = item.getAttribute('data-target');
-            window.switchAppView(target);
-          });
-        });
-
-        // Initialize Materialize Mobile Navigation tabs configuration
-        M.Tabs.init(document.getElementById('mobile-tabs-nav'), {
-          onShow: (tabContentElement) => {
-            // Trigger dynamic sync when mobile elements are swiped/tapped
-            window.switchAppView(tabContentElement.id);
-          }
-        });
-
-        // High-Performance Overlay Controls
-        window.showResultsOverlay = () => { resultsPanel.classList.add('active'); };
-        window.hideResultsOverlay = () => { resultsPanel.classList.remove('active'); };
-        closeResultsBtn.addEventListener('click', window.hideResultsOverlay);
-
-        // Global Auto-Initialization for leftover Materialize component triggers
-        M.AutoInit();
-
-        window.hideResultsOverlay = () => { 
-          resultsPanel.classList.remove('active');
-          closeTimingPanel(); // Kills background tasks instantly
-        };
+        if (typeof M !== 'undefined' && M.AutoInit) {
+          M.AutoInit();
+        }
       });
     </script>
   </body>
