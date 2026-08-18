@@ -1,6 +1,5 @@
 // src/map-engine.js
 import { openTimingPanel } from './transit-api.js';
-import { fetchGeoJSON } from './data-provider.js';
 
 let mapInstance = null;
 
